@@ -3,10 +3,9 @@ import { CommonModule, NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import Swal from 'sweetalert2';
-
 import { finalize } from 'rxjs';
-
 import { MainService } from '../services/main.service';
+import { AlertService } from '../../shared/alert.service';
 
 @Component({
   selector: 'app-telegram',
@@ -30,7 +29,8 @@ export class TelegramComponent {
 
   constructor(
     private mainService: MainService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private alert: AlertService
   ) {
     this.getTelegram();
   }
@@ -39,7 +39,7 @@ export class TelegramComponent {
     this.ModalForm = this.fb.group({
       type: ['', [Validators.required]],
       name: ['', Validators.required],
-      link: ['', [Validators.required]],
+      link: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)[^\s$.?#].[^\s]*$/gm)]],
       admin_name: ['', [Validators.required]],
       admin_number: ['', [Validators.required]],
       admin_email: ['', [Validators.required, Validators.email]],
@@ -136,24 +136,37 @@ export class TelegramComponent {
 
   addTelegram() {
     if (this.ModalForm.invalid || this.isLoading) return;
+    
+    this.isSubmit = true;
     this.isLoading = true;
 
     const payload = this.ModalForm.value;
     payload.admin_number = String(payload.admin_number);
 
     this.mainService.addtelegram(payload).pipe(finalize(() => {
-      this.isSubmit = false;
       this.isLoading = false;
-      this.showModal = false;
     })).subscribe({
       next: (res: any) => {
         this.msgSuccess(res.message);
+        this.showModal = false;
+        this.getTelegram();
+      },
+      error: (err: any) => {
+        const errorMessage = err.error?.message || "something wrong, try again later."
+        this.alert.error(errorMessage);
       }
     })
   }
 
+  
   onSubmit() {
-    if (this.editData) this.updateTelegram();
-    else this.addTelegram();
+    this.isSubmit = true;
+    if (this.ModalForm.invalid) {
+      this.ModalForm.markAllAsTouched();
+      return;
+    }
+
+    this.editData ? this.updateTelegram() : this.addTelegram();
   }
+
 }

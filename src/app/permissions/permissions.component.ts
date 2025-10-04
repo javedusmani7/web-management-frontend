@@ -19,7 +19,9 @@ export class PermissionsComponent implements OnInit {
     'MotherPanel': ['ADD_PANEL', 'EDIT_PANEL', 'VIEW_PANEL', 'DELETE_PANEL'],
     'Websites': ['ADD_WEBSITE', 'EDIT_WEBSITE', 'VIEW_WEBSITE', ''],
     'Important Information': ['', 'EDIT_INFO', 'VIEW_INFO', ''],
-    'Statements': ['','','VIEW_STATEMENT','']
+    'Statements': ['','','VIEW_STATEMENT',''],
+    'Telegrams': ['ADD_TELEGRAM', 'EDIT_TELEGRAM', 'VIEW_TELEGRAM', ''],
+    'Whatsapp': ['ADD_WHATSAPP', 'EDIT_WHATSAPP', 'VIEW_WHATSAPP', '']
   };
   userPermissions: string[] = [];
   userId: string = '';

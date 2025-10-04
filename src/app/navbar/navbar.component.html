@@ -21,6 +21,7 @@
               <li><a class="dropdown-item fw-bold" routerLink="/saba-detail">SABA Account</a></li>
               <li><a class="dropdown-item fw-bold" routerLink="/international-detail">International Account</a></li> -->
               <li><a class="dropdown-item fw-bold" routerLink="/other-account">Casino & Sports Account</a></li>
+              <li><a class="dropdown-item fw-bold" routerLink="/telegram">Telegram</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown" *ngIf="hasPermission('VIEW_CUSTOMER') || hasPermission('VIEW_PANEL')">
@@ -53,9 +54,6 @@
           </li> -->
           <li class="nav-item" *ngIf="hasPermission('VIEW_STATEMENT')">
             <a class="nav-link fw-bold" routerLinkActive="active" aria-current="page" routerLink="statements">Statements</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link fw-bold" routerLinkActive="active" aria-current="page" routerLink="telegram">Telegram</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{userName}}</a>
