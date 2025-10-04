@@ -1,0 +1,71 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
+                    <li class="breadcrumb-item">
+                        <a class="link-body-emphasis text-decoration-none" href="#">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        International Accounts
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="card border-primary">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>International Account List</h4>
+                </div>
+                <div class="col-md-6" *ngIf="canAddAccount">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-primary me-md-2" (click)="openModal()" type="button">Add International</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body table-group-divider">
+            <div class="table-responsive">
+                <table class="table table-bordered border-primary table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Account Name</th>
+                            <th scope="col">Mobile Number</th>
+                            <th *ngIf="canEditAccount || CanDeleteAccount" scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        @for(item of accounts; let i=$index; track item.company_name)
+                        {
+                            <tr>
+                                <th scope="row">{{i+1}}</th>
+                                <td>{{item.company_name}}</td>
+                                <td>{{item.account_name}}</td>
+                                <td>{{item.number}}</td>
+                                <td *ngIf="canEditAccount || CanDeleteAccount">
+                                    <div class="d-flex gap-2 col-4 mx-auto">
+                                        <button class="btn btn-primary" *ngIf="canEditAccount" (click)="Edit(item)" type="button">Edit</button>
+                                        <button class="btn btn-danger" *ngIf="CanDeleteAccount" (click)="Delete(item)" type="button">Delete</button>
+                                      </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<app-account-modal [title]="'International'" [Type]="Type" [showServerSelect]="false"
+[editData]="EditData" (refresh)="refreshAccounts()">
+
+</app-account-modal>

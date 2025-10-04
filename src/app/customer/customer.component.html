@@ -1,0 +1,100 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
+                    <li class="breadcrumb-item">
+                        <a class="link-body-emphasis text-decoration-none" href="#">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Customer
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="card border-primary">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Customer List</h4>
+                </div>
+                <div class="col-md-6" *ngIf="canAddCust">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-primary me-md-2" (click)="AddCustModal()" type="button">Add Customer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body table-group-divider">
+            <div class="table-responsive">
+                <table class="table table-bordered border-primary table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Customer Name</th>
+                            <th *ngIf="canEditCust || canDeleteCust" scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        @for(item of customers; let i=$index; track item.name)
+                        {
+                            <tr>
+                                <th scope="row">{{i+1}}</th>
+                                <td>{{item.name}}</td>
+                                <td *ngIf="canEditCust || canDeleteCust">
+                                    <div class="d-flex gap-2 col-4 mx-auto">
+                                        <button *ngIf="canEditCust" class="btn btn-primary" (click)="EditCustomer(item)" type="button">Edit</button>
+                                        <button *ngIf="canDeleteCust" class="btn btn-danger" (click)="deleteCustomer(item)" type="button">Delete</button>
+                                      </div>
+                                </td>
+                            </tr>
+                        }                       
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade show" id="exampleModal" [class.d-block]="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">{{editMode ? 'Edit Customer' : 'Add Customer'}}</h1>
+          <button type="button" class="btn-close" (click)="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row" [formGroup]="CustomerFormModel" (ngSubmit)="onSubmit()" novalidate>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="user-name" class="fw-bold col-form-label">Name:</label>
+                        <input type="text" formControlName="name" class="form-control" id="user-name" [ngClass]="{
+                            'is-valid': CustomerFormModel.get('name')?.valid && (CustomerFormModel.get('name')?.touched || CustomerFormModel.get('name')?.dirty || IsSubmit),
+                            'is-invalid': CustomerFormModel.get('name')?.invalid && (CustomerFormModel.get('name')?.touched || CustomerFormModel.get('name')?.dirty || IsSubmit)
+                          }">
+                          <div *ngIf="CustomerFormModel.get('name') && CustomerFormModel.get('name')?.invalid" class="invalid-feedback">
+                            <div *ngIf="CustomerFormModel.get('name')?.errors?.['required']">Name is required.</div>
+                            <div *ngIf="CustomerFormModel.get('name')?.errors?.['maxlength']">Name cannot be more than 20 characters long.</div>
+                            
+                            <div *ngIf="CustomerFormModel.get('name')?.errors?.['alphanumeric']">Special Character Not Allowed</div>
+                            <div *ngIf="CustomerFormModel.get('name')?.errors?.['NameTaken']">Name is already Used</div>
+                        </div>
+                      </div>
+                </div>  
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fw-bold" (click)="closeModal()" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary fw-bold">{{editMode ? 'Save changes' : 'Add Customer'}}</button>
+                  </div>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>

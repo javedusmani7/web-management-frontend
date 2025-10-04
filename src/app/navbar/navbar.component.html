@@ -1,0 +1,132 @@
+<nav class="navbar navbar-expand-lg custom-bg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">Management System</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul *ngIf="isLogin" class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item" *ngIf="hasPermission('VIEW_USER')">
+                <a class="nav-link fw-bold" routerLinkActive="active" aria-current="page" routerLink="/users">Users</a>
+            </li>
+          <li class="nav-item dropdown" *ngIf="hasPermission('VIEW_ACCOUNT')">
+            <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Account Setting
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item fw-bold" routerLink="/server-detail">Server Account</a></li>
+              <li><a class="dropdown-item fw-bold" routerLink="/cloudflare-detail">CloudFlare Account</a></li>
+              <li><a class="dropdown-item fw-bold" routerLink="/domain-detail">Domain Manager</a></li>
+              <!-- <li><a class="dropdown-item fw-bold" routerLink="/awc-detail">AWC Account</a></li>
+              <li><a class="dropdown-item fw-bold" routerLink="/saba-detail">SABA Account</a></li>
+              <li><a class="dropdown-item fw-bold" routerLink="/international-detail">International Account</a></li> -->
+              <li><a class="dropdown-item fw-bold" routerLink="/other-account">Casino & Sports Account</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown" *ngIf="hasPermission('VIEW_CUSTOMER') || hasPermission('VIEW_PANEL')">
+            <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Customer
+            </a>
+            <ul class="dropdown-menu">
+              <li *ngIf="hasPermission('VIEW_CUST')"><a class="dropdown-item fw-bold" routerLink="/customer-detail">Add Customer</a></li>
+              <li *ngIf="hasPermission('VIEW_PANEL')"><a class="dropdown-item fw-bold" routerLink="/panel-detail">Add MotherPanel</a></li>
+            </ul>
+          </li>
+          <!-- <li class="nav-item" *ngIf="hasPermission('VIEW_WEBSITE')">
+            <a class="nav-link fw-bold" routerLinkActive="active" aria-current="page" routerLink="/website-detail">Website Setting</a>
+          </li> -->
+          <li class="nav-item dropdown" *ngIf="hasPermission('VIEW_WEBSITE')">
+            <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Website Setting
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item fw-bold" routerLink="/website-detail">Website Detail</a></li>
+              <li><a class="dropdown-item fw-bold" routerLink="/important-information">Important Info</a></li>
+              <li><a class="dropdown-item fw-bold" routerLink="/server-settings">New Server</a></li>
+            </ul>
+          </li>
+          <!-- <li class="nav-item" >
+            <a class="nav-link fw-bold" routerLinkActive="active" aria-current="page" routerLink="/server-settings">Server Settings</a>
+          </li>
+          <li class="nav-item" *ngIf="hasPermission('VIEW_INFO')">
+            <a class="nav-link fw-bold" routerLinkActive="active" aria-current="page" routerLink="/important-information">Important Information</a>
+          </li> -->
+          <li class="nav-item" *ngIf="hasPermission('VIEW_STATEMENT')">
+            <a class="nav-link fw-bold" routerLinkActive="active" aria-current="page" routerLink="statements">Statements</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{userName}}</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item fw-bold" (click)="CPassword()">Change Password</a></li>
+              <li><a class="dropdown-item fw-bold" style="cursor: pointer;" (click)="onLogout()">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+  <div class="modal fade show" id="exampleModal" [class.d-block]="passModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">Change Password</h1>
+          <button type="button" class="btn-close" (click)="closePassModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row" [formGroup]="PassFormModel" (ngSubmit)="onUpdate()" novalidate>
+                
+                <div class="col-md-6" >
+                    <div class="mb-3">
+                        <label for="user-password" class="fw-bold col-form-label">Your Password</label>
+                        <input type="text" formControlName="password" class="form-control" id="user-password" [ngClass]="{
+                            'is-valid': PassFormModel.get('password')?.valid && (PassFormModel.get('password')?.touched || PassFormModel.get('password')?.dirty || passButtonClicked),
+                            'is-invalid': PassFormModel.get('password')?.invalid && (PassFormModel.get('password')?.touched || PassFormModel.get('password')?.dirty || passButtonClicked)
+                          }">
+                          <div *ngIf="PassFormModel.get('password') && PassFormModel.get('password')?.invalid" class="invalid-feedback">
+                            <div *ngIf="PassFormModel.get('password')?.errors?.['required']">Password is required.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="new-password" class="fw-bold col-form-label">New Password</label>
+                        <input type="text" formControlName="newpassword" class="form-control" id="new-password" [ngClass]="{
+                            'is-valid':PassFormModel.get('newpassword')?.valid && (PassFormModel.get('newpassword')?.touched || PassFormModel.get('newpassword')?.dirty || passButtonClicked),
+                            'is-invalid': PassFormModel.get('newpassword')?.invalid && (PassFormModel.get('newpassword')?.touched || PassFormModel.get('newpassword')?.dirty || passButtonClicked)
+                          }">
+                          <div *ngIf="PassFormModel.get('newpassword') && PassFormModel.get('newpassword')?.invalid" class="invalid-feedback">
+                            <div *ngIf="PassFormModel.get('newpassword')?.errors?.['required']">New Password is required.</div>
+                            <div *ngIf="PassFormModel.get('newpassword')?.errors?.['passwordStrength']">Password must be at least 8 characters long and contain at least one letter and one number.</div>
+                          
+                        </div>
+                    </div>
+                </div>   
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="confirm-password" class="fw-bold col-form-label">Confirm Password</label>
+                        <input type="text" formControlName="confirm_password" class="form-control" id="confirm-password" [ngClass]="{
+                            'is-valid':PassFormModel.get('confirm_password')?.valid && (PassFormModel.get('confirm_password')?.touched || PassFormModel.get('confirm_password')?.dirty || passButtonClicked), 'is-invalid': PassFormModel.get('confirm_password')?.invalid && (PassFormModel.get('confirm_password')?.touched || PassFormModel.get('confirm_password')?.dirty || passButtonClicked)
+                          }">
+                          <div *ngIf="PassFormModel.get('confirm_password') && PassFormModel.get('confirm_password')?.invalid" class="invalid-feedback">
+                            <div *ngIf="PassFormModel.get('confirm_password')?.errors?.['required']">Confirm Password is required.</div>
+                            <div *ngIf="PassFormModel.get('confirm_password')?.errors?.['passwordStrength']">Password must be at least 8 characters long and contain at least one letter and one number.</div>
+                            
+                        </div>
+                    </div>
+                </div>   
+                <div *ngIf="PassFormModel.errors?.['passwordMismatch'] && PassFormModel.get('confirm_password')?.touched"  class="inv-feedback">
+                    New password and confirm password do not match.
+                  </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fw-bold" (click)="closePassModal()" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary fw-bold">Update Password</button>
+                  </div>   
+            </form>
+        </div>
+        
+      </div>
+    </div>
+  </div>

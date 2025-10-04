@@ -1,0 +1,24 @@
+/* You can add global styles to this file, and also import other style files */
+.card-header
+{
+    background-color: #184e5d !important;
+    color: #fff !important
+}
+
+.modal-header{
+    background-color: #184e5d;
+    color: #fff;
+}
+
+.modal-footer
+{
+    background-color: #184e5d !important;
+}
+
+.modal-header .btn-close{
+    
+}
+
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+    color: yellow;
+}

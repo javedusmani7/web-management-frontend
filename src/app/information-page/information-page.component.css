@@ -1,0 +1,18 @@
+.custom-header
+{
+    background: #184e5d;
+    color: #fff;
+    padding-left: 10px;
+    margin: 0px;
+    line-height: 41px;
+}
+
+.left-td {
+    color: #fff;
+    background-color: #a3af45;
+}
+
+.text-start
+{
+    padding-left: 10px;
+}

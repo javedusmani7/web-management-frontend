@@ -1,0 +1,233 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
+                    <li class="breadcrumb-item">
+                        <a class="link-body-emphasis text-decoration-none" href="#">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Important Information
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="card border-primary">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Important Information</h4>
+                </div>
+            </div>
+        </div>
+        <div class="card-body table-group-divider">
+            <div class="row">
+                
+                <div class="col-md-2">
+                    <select class="form-select" (change)="GetWebsite($event)" aria-label="Default select example">
+                        <option value="">Select MotherPanel</option>
+                        @for(pan of panels;let i=$index; track pan.name)
+                        {
+                            <option value="{{pan._id}}">{{pan.name}}</option>
+                        }
+                      </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" (change)="WebsiteD($event)" aria-label="Default select example">
+                        <option value="">Select Website</option>
+                        @for(web of websites; let i=$index; track web[i])
+                        {
+                            <option value="{{web}}">{{web}}</option>
+                        }
+                      </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" [disabled]="!isAllSelected()" (click)="ViewData()" class="btn btn-primary me-2 btn-md">View</button>
+                    <button type="button" [disabled]="!isAllSelected()" (click)="EditPage()" class="btn btn-info btn-md">Edit Detail</button>
+                </div>
+            </div>
+
+            <div class="row mt-5" *ngIf="viewDetail">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <h4 class="custom-header">All Link Information</h4>
+                        <table class="table table-striped table-bordered border-primary">
+                                <tbody>
+                                <tr  >
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">USER MAIN LINK</td>
+                                    <td class="fw-bold text-start text-capitalize">{{details.web_main_link}}</td>
+                                </tr>
+                                <tr  >
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">USER ID 1</td>
+                                    <td class="fw-bold text-start text-capitalize" >{{details.userLinkId}}</td>
+                                </tr>
+                                <tr  >
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">USER PASSWORD 1</td>
+                                    <td class="fw-bold text-start text-capitalize" >{{details.userLinkPassword}}</td>
+                                </tr>
+                                <tr  >
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">USER ID 2</td>
+                                    <td class="fw-bold text-start text-capitalize" >{{details.userLinkId2}}</td>
+                                </tr>
+                                <tr  >
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">USER PASSWORD 2</td>
+                                    <td class="fw-bold text-start text-capitalize" >{{details.userLinkPassword2}}</td>
+                                </tr>
+                                <tr  >
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">USER ID 3</td>
+                                    <td class="fw-bold text-start text-capitalize" >{{details.userLinkId3}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">USER PASSWORD 3</td>
+                                    <td class="fw-bold text-start text-capitalize" >{{details.userLinkPassword3}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">MAIN MGT LINK</td>
+                                    <td class="fw-bold text-start text-capitalize" >{{details.web_mgt_link}}</td>
+                                </tr>
+                                <tr  >
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">MGT ID</td>
+                                    <td class="fw-bold text-start text-capitalize" >{{details.mgtLinkId}}</td>
+                                </tr>
+                                <tr  >
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">MGT PASSWORD</td>
+                                    <td class="fw-bold text-start text-capitalize" >{{details.mgtLinkPassword}}</td>
+                                </tr>
+                                <!-- <tr  >
+                                    <td class="fw-bold text-start text-capitalize" style="width: 20%;">WITH MGT LINK</td>
+                                    <td class="fw-bold text-start text-capitalize" >{{details.web_mgt_link}}</td>
+                                </tr> -->
+                                <tr  >
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">USER ALTERNATIVE LINK</td>
+                                    <td class="fw-bold text-start" >
+                                            
+                                                <ng-container *ngFor="let url of UserlinksArray">
+                                                    <a class="d-inline text-decoration-none" [href]="'https://' + url" target="_blank">{{ url }}</a>,
+                                                </ng-container>
+                                        
+                                        
+                                        <div class="d-inline float-end text-capitalize">
+                                            <button type="button" (click)="CopyServer(details.userAlternativeLink.join(', '))" class="btn btn-primary me-1 btn-sm">COPY FOR SERVER</button>
+                                            <button type="button" (click)="copyNormal(details.userAlternativeLink.join(', '))" class="btn btn-secondary btn-sm">COPY NORMAL</button>
+                                        </div>
+                                    
+                                    </td>
+                                </tr>
+                                <tr  >
+                                    <td class="fw-bold text-start left-td text-capitalize" style="width: 20%;">MGT ALTERNATIVE LINK</td>
+                                    <td class="fw-bold text-start " >
+                                        <ng-container *ngFor="let url of ManagementLinkArray">
+                                            <a class="d-inline text-decoration-none" [href]="'https://' + url" target="_blank">{{ url }}</a>,
+                                        </ng-container>
+
+                                        <div class="d-inline float-end text-capitalize">
+                                            <button type="button" (click)="CopyServer(details.mgtAlternativeLink.join(','))" class="btn btn-primary me-1 btn-sm">COPY FOR SERVER</button>
+                                            <button type="button" (click)="copyNormal(details.mgtAlternativeLink.join(','))" class="btn btn-secondary btn-sm">COPY NORMAL</button>
+                                        </div>
+                                    </td>
+                                </tr>                                    
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  <!-- Modal -->
+  <div class="modal fade show" id="exampleModal" [class.d-block]="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">Link Information</h1>
+          <button type="button" class="btn-close" (click)="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row" [formGroup]="InfoForm" (ngSubmit)="OnSubmit()"  novalidate>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="user-name" class="fw-bold col-form-label">User Main Link:</label>
+                        <input type="text" formControlName="web_main_link" class="form-control" id="user-name">
+                      </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="user-id" class="fw-bold col-form-label">User ID 1:</label>
+                        <input type="text" formControlName="userLinkId" class="form-control" id="user-id">
+                      </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="user-pass" class="fw-bold col-form-label">User Password 1:</label>
+                        <input type="text" formControlName="userLinkPassword" class="form-control" id="user-pass">
+                      </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="user-id1" class="fw-bold col-form-label">User ID 2:</label>
+                        <input type="text" formControlName="userLinkId2" class="form-control" id="user-id1">
+                      </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="user-pass1" class="fw-bold col-form-label">User Password 2:</label>
+                        <input type="text" formControlName="userLinkPassword2" class="form-control" id="user-pass1">
+                      </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="user-id2" class="fw-bold col-form-label">User ID 3:</label>
+                        <input type="text" formControlName="userLinkId3" class="form-control" id="user-id2">
+                      </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="user-pass2" class="fw-bold col-form-label">User Password 3:</label>
+                        <input type="text" formControlName="userLinkPassword3" class="form-control" id="user-pass2">
+                      </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="mgt-name" class="fw-bold col-form-label">Main Mgt Link:</label>
+                        <input type="text" formControlName="web_mgt_link" class="form-control" id="mgt-name">
+                      </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="mgt-id" class="fw-bold col-form-label">Mgt ID:</label>
+                        <input type="text" formControlName="mgtLinkId" class="form-control" id="mgt-id">
+                      </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="mgt-pass" class="fw-bold col-form-label">Mgt Password:</label>
+                        <input type="text" formControlName="mgtLinkPassword" class="form-control" id="mgt-pass">
+                      </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="alt-user" class="fw-bold col-form-label">Alternate User Link:</label>
+                        <input type="text" formControlName="userAlternativeLink" autocomplete="off" class="form-control" id="alt-user">
+                      </div>
+                </div>
+                <!-- <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="alt-mgt" class="fw-bold col-form-label">Alternate Mgt Link:</label>
+                        <input type="text" formControlName="mgtAlternativeLink" class="form-control" id="alt-mgt">
+                      </div>
+                </div> -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fw-bold" (click)="closeModal()" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary fw-bold">Save changes</button>
+                  </div>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>

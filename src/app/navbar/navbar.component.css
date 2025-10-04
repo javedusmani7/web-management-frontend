@@ -1,0 +1,15 @@
+.custom-bg{
+    background-color: rgb(60,100,141) !important;
+}
+
+.custom-bg .navbar-brand{
+    color: #fff;
+}
+
+.nav-link{
+    color: #fff;
+}
+
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+    color: rgb(61 208 33);
+}

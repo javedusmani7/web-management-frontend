@@ -1,0 +1,44 @@
+import { Routes } from '@angular/router';
+import { UserComponent } from './user/user.component';
+import { ServerAccountComponent } from './server-account/server-account.component';
+import { CloudflareAccountComponent } from './cloudflare-account/cloudflare-account.component';
+import { DomainManagerComponent } from './domain-manager/domain-manager.component';
+import { AwcaccountComponent } from './awcaccount/awcaccount.component';
+import { SabaaccountComponent } from './sabaaccount/sabaaccount.component';
+import { InternationalAccountComponent } from './international-account/international-account.component';
+import { CustomerComponent } from './customer/customer.component';
+import { MotherPanelComponent } from './mother-panel/mother-panel.component';
+import { WebsiteComponent } from './website/website.component';
+import { AddWebsiteComponent } from './add-website/add-website.component';
+import { EditwebsiteComponent } from './editwebsite/editwebsite.component';
+import { InformationPageComponent } from './information-page/information-page.component';
+import { StatementsComponent } from './statements/statements.component';
+import { LoginComponent } from './login/login.component';
+import { authGuard } from './auth.guard';
+import { HomeComponent } from './home/home.component';
+import { PermissionsComponent } from './permissions/permissions.component';
+import { permissionGuard } from './permission.guard';
+import { OtherAccountsComponent } from './other-accounts/other-accounts.component';
+import { ServerSettingsComponent } from './server-settings/server-settings.component';
+
+export const routes: Routes = [
+    {path: 'login', component: LoginComponent},
+    {path: '',component:HomeComponent,canActivate:[authGuard]},
+    {path: 'users',title: 'User Detail', component: UserComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_USER' }},
+    {path: 'permission/:id', component: PermissionsComponent},
+    {path: 'server-detail', component: ServerAccountComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_ACCOUNT' }},
+    {path: 'cloudflare-detail', component: CloudflareAccountComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_ACCOUNT' }},
+    {path: 'domain-detail', component: DomainManagerComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_ACCOUNT' }},
+    {path: 'awc-detail', component: AwcaccountComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_ACCOUNT' }},
+    {path: 'saba-detail', component: SabaaccountComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_ACCOUNT' }},
+    {path: 'international-detail', component: InternationalAccountComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_ACCOUNT' }},
+    {path: 'other-account', component: OtherAccountsComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_ACCOUNT' }},
+    {path: 'customer-detail', component: CustomerComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_CUST' }},
+    {path: 'panel-detail', component: MotherPanelComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_PANEL' }},
+    {path: 'website-detail', component: WebsiteComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_WEBSITE' }},
+    {path: 'website/add', component: AddWebsiteComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'ADD_WEBSITE' }},
+    {path: 'website/edit/:id', component: EditwebsiteComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'EDIT_WEBSITE' }},
+    {path: 'server-settings', component: ServerSettingsComponent,canActivate:[authGuard,permissionGuard]},
+    {path: 'important-information', component: InformationPageComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_INFO' }},
+    {path: 'statements', component: StatementsComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_STATEMENT' }}
+];

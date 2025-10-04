@@ -1,0 +1,63 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
+                    <li class="breadcrumb-item">
+                        <a class="link-body-emphasis text-decoration-none" href="/">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Users Permission 
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Permissions For  {{userName}}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive m-t-15">
+                <table class="table table-bordered table-striped custom-table">
+                    <thead>
+                        <tr>
+                            <th>Module Permission</th>
+                            <th class="text-center">Add</th>
+                            <th class="text-center">Edit</th>
+                            <th class="text-center">View</th>
+                            <th class="text-center">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(module of permissions | keyvalue:originalOrder; track module)
+                        {
+                            <tr>
+                                <td>{{module.key}}</td>
+                                @for(permission of module.value; track permission)
+                                {
+                                    <td class="text-center">
+                                        <label class="custom_check" *ngIf="permission">
+                                            <input type="checkbox" [checked]="isChecked(permission)" (change)="togglePermission(permission)">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                        
+                    </tbody>
+                </table>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary float-end" (click)="savePermissions()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

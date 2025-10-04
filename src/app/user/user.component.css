@@ -1,0 +1,6 @@
+.inv-feedback {
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    color: var(--bs-form-invalid-color);
+}

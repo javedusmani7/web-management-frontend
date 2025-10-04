@@ -1,0 +1,338 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
+                    <li class="breadcrumb-item">
+                        <a class="link-body-emphasis text-decoration-none" href="#">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Casino & Sports Accounts
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="card border-primary">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>{{MasterList ? 'Master' : 'Agent'}} Account List</h4>
+                </div>
+                <div class="col-md-2" *ngIf="canAddAccount">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-primary me-md-2" (click)="AgentModal()" type="button">Add Agent</button>
+                    </div>
+                </div>
+                <div class="col-md-2" *ngIf="canAddAccount">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-primary me-md-2" (click)="MastersList()" type="button">Master List</button>
+                    </div>
+                </div>
+                <div class="col-md-2" *ngIf="canAddAccount">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-warning me-md-2" (click)="AgentList()"  type="button">Agent List</button>
+                    </div>
+                </div>
+                <div class="col-md-2" *ngIf="canAddAccount">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-info me-md-2" (click)="openModal()" type="button">Add Master</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body table-group-divider" [ngClass]="{ 'd-none': !MasterList, 'd-block': MasterList }">
+            <div class="table-responsive">
+                <table class="table table-bordered border-primary table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Account Name</th>
+                            <th scope="col">Login URL</th>
+                            <th scope="col">Email</th>
+                            <th *ngIf="canEditAccount || CanDeleteAccount" scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        @for(item of accounts; let i=$index; track item)
+                        {
+                            <tr>
+                                <th scope="row">{{i+1}}</th>
+                                <td>{{item.company_name}}</td>
+                                <td>{{item.master_account_name}}</td>
+                                <td>{{item.account_url}}</td>
+                                <td>{{item.email}}</td>
+                                <td *ngIf="canEditAccount || CanDeleteAccount">
+                                    <div class="d-flex gap-2 col-4 mx-auto">
+                                        <button class="btn btn-primary" *ngIf="canEditAccount" (click)="Edit(item)" type="button">Edit</button>
+                                        <button class="btn btn-danger" *ngIf="CanDeleteAccount" (click)="Delete(item)" type="button">Delete</button>
+                                      </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="card-body table-group-divider" [ngClass]="{ 'd-none': !showAgentList, 'd-block': showAgentList }">
+            <div class="table-responsive">
+                <table class="table table-bordered border-primary table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Master Name</th>
+                            <th scope="col">Agent Name</th>
+                            <th scope="col">Agent Id</th>
+                            <!-- <th *ngIf="canEditAccount || CanDeleteAccount" scope="col">Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        @for(ag of agents; let i=$index; track ag)
+                        {
+                            <tr>
+                                <th scope="row">{{i+1}}</th>
+                                <td>{{ag.company_name}}</td>
+                                <td>{{ag.master_account_name.master_account_name}}</td>
+                                <td>{{ag.agent_name}}</td>
+                                <td>{{ag.user_id}}</td>
+                                <!-- <td *ngIf="canEditAccount || CanDeleteAccount">
+                                    <div class="d-flex gap-2 col-4 mx-auto">
+                                        <button class="btn btn-primary" *ngIf="canEditAccount" (click)="Edit(ag)" type="button">Edit</button>
+                                        <button class="btn btn-danger" *ngIf="CanDeleteAccount" (click)="Delete(ag)" type="button">Delete</button>
+                                      </div>
+                                </td> -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade show" id="exampleModal" [class.d-block]="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">{{editMode? 'Edit' : 'Add'}} Master Account</h1>
+          <button type="button" class="btn-close" (click)="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row" [formGroup]="ModalForm" (ngSubmit)="onSubmit()" novalidate>
+                
+                    <div class="col-md-8">
+                        <label for="inputState" class="form-label fw-bold">Select Company</label>
+                        <select id="inputState" formControlName="company_name" class="form-select" [ngClass]="{
+                          'is-valid': ModalForm.get('company_name')?.valid && (ModalForm.get('company_name')?.touched || ModalForm.get('company_name')?.dirty || isSubmit),
+                          'is-invalid': ModalForm.get('company_name')?.invalid && (ModalForm.get('company_name')?.touched || ModalForm.get('company_name')?.dirty || isSubmit)
+                        }">>
+                          <option value="">Choose...</option>
+                          <option value="awc">AWC</option>
+                          <option value="saba">Saba</option>
+                          <option value="int">International</option>
+                        </select>
+                        <div *ngIf="ModalForm.get('company_name')?.invalid" class="invalid-feedback">
+                          <div *ngIf="ModalForm.get('company_name')?.errors?.['required']">Company is required.</div>
+                        </div>
+                    </div>
+                          
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="user-name" class="fw-bold col-form-label">Account Name:</label>
+                        <input type="text" formControlName="master_account_name" class="form-control" id="user-name" [ngClass]="{
+                          'is-valid': ModalForm.get('master_account_name')?.valid && (ModalForm.get('master_account_name')?.touched || ModalForm.get('master_account_name')?.dirty || isSubmit),
+                          'is-invalid': ModalForm.get('master_account_name')?.invalid && (ModalForm.get('master_account_name')?.touched || ModalForm.get('master_account_name')?.dirty || isSubmit)
+                        }">
+                        <div *ngIf="ModalForm.get('master_account_name')?.invalid" class="invalid-feedback">
+                          <div *ngIf="ModalForm.get('master_account_name')?.errors?.['required']">Account Name is required.</div>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                      <label for="person-name" class="fw-bold col-form-label">Login URL:</label>
+                      <input type="text" formControlName="account_url" class="form-control" id="person-name" [ngClass]="{
+                        'is-valid': ModalForm.get('account_url')?.valid && (ModalForm.get('account_url')?.touched || ModalForm.get('account_url')?.dirty || isSubmit),
+                        'is-invalid': ModalForm.get('account_url')?.invalid && (ModalForm.get('account_url')?.touched || ModalForm.get('account_url')?.dirty || isSubmit)
+                      }">
+                      <div *ngIf="ModalForm.get('account_url')?.invalid" class="invalid-feedback">
+                        <div *ngIf="ModalForm.get('account_url')?.errors?.['required']">Account URL is required.</div>
+                      </div>
+                    </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="user-email" class="fw-bold col-form-label">Email:</label>
+                    <input type="email" formControlName="email" class="form-control" id="user-email" [ngClass]="{
+                      'is-valid': ModalForm.get('email')?.valid && (ModalForm.get('email')?.touched || ModalForm.get('email')?.dirty || isSubmit),
+                      'is-invalid': ModalForm.get('email')?.invalid && (ModalForm.get('email')?.touched || ModalForm.get('email')?.dirty || isSubmit)
+                    }">
+                    <div *ngIf="ModalForm.get('email') && ModalForm.get('email')?.invalid" class="invalid-feedback">
+                      <div *ngIf="ModalForm.get('email')?.errors?.['required']">Email is required.</div>
+                      <div *ngIf="ModalForm.get('email')?.errors?.['email'] && !ModalForm.get('email')?.errors?.['required']">Invalid Email Format.</div>
+                    </div>
+                </div>
+            </div>      
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="user-number" class="fw-bold col-form-label">UserId</label>
+                        <input type="text" formControlName="user_id" class="form-control" id="user-number" [ngClass]="{
+                          'is-valid': ModalForm.get('user_id')?.valid && (ModalForm.get('user_id')?.touched || ModalForm.get('user_id')?.dirty || isSubmit),
+                          'is-invalid': ModalForm.get('user_id')?.invalid && (ModalForm.get('user_id')?.touched || ModalForm.get('user_id')?.dirty || isSubmit)
+                        }">
+                        <div *ngIf="ModalForm.get('user_id')?.invalid" class="invalid-feedback">
+                          <div *ngIf="ModalForm.get('user_id')?.errors?.['required']">UserId is required.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                      <label for="user-password" class="fw-bold col-form-label">Password</label>
+                      <input type="text" formControlName="account_password" class="form-control" id="user-password" [ngClass]="{
+                        'is-valid': ModalForm.get('account_password')?.valid && (ModalForm.get('account_password')?.touched || ModalForm.get('account_password')?.dirty || isSubmit),
+                        'is-invalid': ModalForm.get('account_password')?.invalid && (ModalForm.get('account_password')?.touched || ModalForm.get('account_password')?.dirty || isSubmit)
+                      }">
+                      <div *ngIf="ModalForm.get('account_password') && ModalForm.get('account_password')?.invalid" class="invalid-feedback">
+                        <div *ngIf="ModalForm.get('account_password')?.errors?.['required']">Password is required.</div>
+                        <div *ngIf="ModalForm.get('account_password')?.errors?.['minLength']">Password must be at least 6 characters long.</div>
+                      </div>
+                  </div>
+              </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" (click)="closeModal()" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary fw-bold">{{editMode ? 'Save changes' : 'Add'}}</button>
+                </div>    
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade show" id="exampleModal" [class.d-block]="showAgentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">{{editMode? 'Edit' : 'Add'}}  Agent</h1>
+          <button type="button" class="btn-close" (click)="closeAgentModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row" [formGroup]="AgentForm" (ngSubmit)="AgentSubmit()" novalidate>
+                
+                    <div class="col-md-8">
+                        <label for="inputState" class="form-label fw-bold">Select Company</label>
+                        <select id="inputState" (change)="AgentCompany($event)" formControlName="company_name" class="form-select" [ngClass]="{
+                          'is-valid': AgentForm.get('company_name')?.valid && (AgentForm.get('company_name')?.touched || AgentForm.get('company_name')?.dirty || isAgnetSubmit),
+                          'is-invalid': AgentForm.get('company_name')?.invalid && (AgentForm.get('company_name')?.touched || ModalForm.get('company_name')?.dirty || isAgnetSubmit)
+                        }">>
+                          <option value="">Choose...</option>
+                          <option value="awc">AWC</option>
+                          <option value="saba">Saba</option>
+                          <option value="int">International</option>
+                        </select>
+                        <div *ngIf="AgentForm.get('company_name')?.invalid" class="invalid-feedback">
+                          <div *ngIf="AgentForm.get('company_name')?.errors?.['required']">Company is required.</div>
+                        </div>
+                    </div>
+                          
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="master-name" class="fw-bold col-form-label">Master Account:</label>
+                        <select id="master-name" (change)="MasterWeb($event)" formControlName="master_account_name" class="form-select" [ngClass]="{
+                            'is-valid': AgentForm.get('master_account_name')?.valid && (AgentForm.get('master_account_name')?.touched || ModalForm.get('master_account_name')?.dirty || isAgnetSubmit),
+                            'is-invalid': AgentForm.get('master_account_name')?.invalid && (AgentForm.get('master_account_name')?.touched || ModalForm.get('master_account_name')?.dirty || isAgnetSubmit)
+                          }">
+                            <option value="">Choose...</option>
+                            @for(ms of masterList; track ms)
+                            {
+                                <option value="{{ms._id}}">{{ms.master_account_name}}</option>
+                            }
+                          </select>
+                        <div *ngIf="AgentForm.get('master_account_name')?.invalid" class="invalid-feedback">
+                          <div *ngIf="AgentForm.get('master_account_name')?.errors?.['required']">Account Name is required.</div>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                      <label for="website-name" class="fw-bold col-form-label">Website Name:</label>
+                      <select id="website-name" formControlName="website_name" class="form-select" [ngClass]="{
+                        'is-valid': AgentForm.get('website_name')?.valid && (AgentForm.get('website_name')?.touched || AgentForm.get('website_name')?.dirty || isAgnetSubmit),
+                        'is-invalid': ModalForm.get('website_name')?.invalid && (AgentForm.get('website_name')?.touched || AgentForm.get('website_name')?.dirty || isAgnetSubmit)
+                      }">
+                        <option value="">Choose...</option>
+                            @for(web of websList; track web)
+                            {
+                                <option value="{{web}}">{{web}}</option>
+                            }
+                      </select>
+                      <div *ngIf="AgentForm.get('website_name')?.invalid" class="invalid-feedback">
+                        <div *ngIf="AgentForm.get('website_name')?.errors?.['required']">Website Name is required.</div>
+                      </div>
+                    </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="agent-name" class="fw-bold col-form-label">Agent Name</label>
+                    <input type="text" formControlName="agent_name" class="form-control" id="agent-name" [ngClass]="{
+                      'is-valid': AgentForm.get('agent_name')?.valid && (AgentForm.get('agent_name')?.touched || AgentForm.get('agent_name')?.dirty || isAgnetSubmit),
+                      'is-invalid': AgentForm.get('agent_name')?.invalid && (AgentForm.get('agent_name')?.touched || AgentForm.get('agent_name')?.dirty || isAgnetSubmit)
+                    }">
+                    <div *ngIf="AgentForm.get('agent_name')?.invalid" class="invalid-feedback">
+                      <div *ngIf="AgentForm.get('agent_name')?.errors?.['required']">Agent Name is required.</div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="user-number" class="fw-bold col-form-label">UserId</label>
+                        <input type="text" formControlName="user_id" class="form-control" id="user-number" [ngClass]="{
+                          'is-valid': AgentForm.get('user_id')?.valid && (AgentForm.get('user_id')?.touched || AgentForm.get('user_id')?.dirty || isAgnetSubmit),
+                          'is-invalid': AgentForm.get('user_id')?.invalid && (AgentForm.get('user_id')?.touched || AgentForm.get('user_id')?.dirty || isAgnetSubmit)
+                        }">
+                        <div *ngIf="AgentForm.get('user_id')?.invalid" class="invalid-feedback">
+                          <div *ngIf="AgentForm.get('user_id')?.errors?.['required']">UserId is required.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                      <label for="user-password" class="fw-bold col-form-label">Password</label>
+                      <input type="text" formControlName="account_password" class="form-control" id="user-password" [ngClass]="{
+                        'is-valid': AgentForm.get('account_password')?.valid && (AgentForm.get('account_password')?.touched || AgentForm.get('account_password')?.dirty || isAgnetSubmit),
+                        'is-invalid': AgentForm.get('account_password')?.invalid && (AgentForm.get('account_password')?.touched || AgentForm.get('account_password')?.dirty || isAgnetSubmit)
+                      }">
+                      <div *ngIf="AgentForm.get('account_password') && AgentForm.get('account_password')?.invalid" class="invalid-feedback">
+                        <div *ngIf="AgentForm.get('account_password')?.errors?.['required']">Password is required.</div>
+                        <div *ngIf="AgentForm.get('account_password')?.errors?.['minLength']">Password must be at least 6 characters long.</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="back-number" class="fw-bold col-form-label">CallBack URL</label>
+                    <input type="text" formControlName="backoffice_url" class="form-control" id="back-number" [ngClass]="{
+                      'is-valid': AgentForm.get('backoffice_url')?.valid && (AgentForm.get('backoffice_url')?.touched || AgentForm.get('backoffice_url')?.dirty || isAgnetSubmit),
+                      'is-invalid': AgentForm.get('backoffice_url')?.invalid && (AgentForm.get('backoffice_url')?.touched || AgentForm.get('backoffice_url')?.dirty || isAgnetSubmit)
+                    }">
+                    <div *ngIf="AgentForm.get('backoffice_url')?.invalid" class="invalid-feedback">
+                      <div *ngIf="AgentForm.get('backoffice_url')?.errors?.['required']">BackOffice URL is required.</div>
+                    </div>
+                </div>
+            </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" (click)="closeAgentModal()" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary fw-bold">{{editMode ? 'Save changes' : 'Add'}}</button>
+                </div>    
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>

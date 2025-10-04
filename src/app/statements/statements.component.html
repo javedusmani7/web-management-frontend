@@ -1,0 +1,63 @@
+<div class="container-fluid">
+    <div *ngIf="isLoading" class="row d-flex justify-content-center">
+      <div class="spinner-border text-danger m-5" role="status">
+      </div>
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div *ngIf="!isLoading" class="row mt-4">
+      <div class="col-lg-12 col-md-12 col-xs-12">
+        <div class="col-md-12 col-xs-12 mgb-10">
+          <h2 class="headtext">Activity Logs</h2>
+        </div>
+        <div class="col-md-2 mgb-10 mb-2" *ngIf="userfilter">
+          <select class="form-select" (change)="LogUser($event)"  aria-label="Default select example">
+              <option value="">Select User</option>
+              @for(usr of user; track usr)
+              {
+                <option value="{{usr.userId}}">{{usr.userId}}</option>
+              }
+            </select>
+      </div>
+        <div class="col-md-12 col-xs-12">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th class="center pd1p">#</th>
+                  <th>Username</th>
+                  <th>Action</th>
+                  <th>Description</th>
+                  <th>IP</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of logs | paginate: { itemsPerPage: 10, currentPage: p } ; let i = index">
+                  <td style="width:5%">{{i+1}}</td>
+                  <td style="width:15%"><span class="">{{item.user}}</span></td>
+                  <td style="width:15%">{{item.action}}</td>
+                  <td style="width:40%">{{item.remarks}}</td>
+                  <td style="width:10%">{{item.ip}}</td>
+                  <td style="width:15%">{{item.createdAt | date:'MM/dd/yyyy hh:mm:ss a'}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls *ngIf="logs.length>0" (pageChange)="p = $event"></pagination-controls>
+            <!-- <ul class="pagination">
+                <li class="page-item ">
+                  <span class="page-link">Previous</span>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active" aria-current="page">
+                  <span class="page-link">2</span>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">Next</a>
+                </li>
+              </ul> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
