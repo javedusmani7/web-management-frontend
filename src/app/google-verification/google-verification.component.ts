@@ -5,6 +5,7 @@ import { NgIf, CommonModule } from '@angular/common';
 
 import { MainService } from '../services/main.service';
 import { PatternRestrictDirective } from '../services/pattern-restrict.directive';
+import { UserService } from '../services/user.service';
 import { VALIDATION_PATTERNS } from '../services/constant/constant';
 
 @Component({
@@ -35,6 +36,7 @@ export class GoogleVerificationComponent {
     private fb: FormBuilder,
     private router: Router,
     public api: MainService,
+    private userService: UserService
   ) {
     const nav = router.getCurrentNavigation();
     this.loginData = nav?.extras.state?.['data'];
@@ -47,7 +49,7 @@ export class GoogleVerificationComponent {
   }
 
   ngOnInit(): void {
-    if (this.loginData?.userId) {
+    if (this.loginData?.userId) { 
       this.hasGooleSetup();
     }
 
@@ -81,7 +83,7 @@ export class GoogleVerificationComponent {
     }
     this.api.verifyGoogleOtp(payload).subscribe({
       next: (res: any) => {
-        console.log(res);        
+        this.userService.saveAuthData(res);       
       }
     })
   }
@@ -92,7 +94,6 @@ export class GoogleVerificationComponent {
     }
     this.api.generategoogleAuthQR(payload).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.secret = response?.data?.secret;
         this.issuer = response?.data?.issuer;
         this.email = response?.data?.email;
@@ -116,7 +117,6 @@ export class GoogleVerificationComponent {
   }
 
   openGoogleSetup() {
-    
     this.showGoogleModal = true;
   }
 

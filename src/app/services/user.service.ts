@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
+
 import * as CryptoJS from 'crypto-js';
+
+import { environment } from '../../environments/environment';
 
 
 const Backend_URL = environment.apiUrl+'/auth';
@@ -54,8 +57,7 @@ export class UserService {
   }
 
   saveAuthData(authData: any)
-  {
-    
+  {      
     this.token = authData.token;
     const expiresInDuration = authData.expiresIn;
     this.setAuthTimer(expiresInDuration);
