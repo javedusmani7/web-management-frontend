@@ -113,6 +113,7 @@ input,
   border: 1px solid black;
   max-height: 90vh;
   overflow-y: auto;
+  scrollbar-width: none;
 }
 
 .modal-header {
