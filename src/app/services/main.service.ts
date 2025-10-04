@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
+import { environment } from '../../environments/environment';
 
 const Backend_URL_Custom = environment.apiUrl+'/custom';
 const Backend_URL_Account = environment.apiUrl+'/account';
@@ -171,5 +173,29 @@ export class MainService {
   AgentAccountList()
   {
     return this.http.get(Backend_URL_Account+'/agent-account-list');
+  }
+
+  getServerAccountList() {
+    return this.http.get(Backend_URL_Account+'/account-list/server');
+  }
+
+  getCloudAccountList() {
+    return this.http.get(Backend_URL_Account+'/account-list/cloud');
+  }
+
+  getDomainAccountList() {
+    return this.http.get(Backend_URL_Account+'/account-list/domain');
+  }
+
+  getCompanyAccountList() {
+    return this.http.get(Backend_URL_Account+'/company-lists');
+  }
+
+  getCompanyMasterAccountList(data: any) {
+    return this.http.get(Backend_URL_Account+`/master-account-lists/company/${data}`);
+  }
+
+  getAgentAccountList(data: any) {
+    return this.http.get(Backend_URL_Account+`/agent-account-lists/company/awc/master_account/${data}`);
   }
 }
