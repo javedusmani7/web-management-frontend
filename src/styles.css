@@ -21,4 +21,6 @@
 
 .btn-close{
     filter: invert(1) brightness(3) !important;
+    border: 1px solid !important;
+    opacity: var(--bs-btn-close-focus-opacity) !important;
 }
