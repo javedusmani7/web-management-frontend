@@ -23,7 +23,8 @@
                 </div>
                 <div class="col-md-6" *ngIf="canAddPanel">
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button class="btn btn-primary me-md-2" (click)="AddPanelModal()" type="button">Add MotherPanel</button>
+                        <button class="btn btn-primary me-md-2" (click)="AddPanelModal()" type="button">Add
+                            MotherPanel</button>
                     </div>
                 </div>
             </div>
@@ -41,16 +42,18 @@
                     <tbody class="table-group-divider">
                         @for(item of panels; let i=$index; track item.name)
                         {
-                            <tr>
-                                <th scope="row">{{i+1}}</th>
-                                <td>{{item.name}}</td>
-                                <td *ngIf="canEditPanel || canDeletePanel">
-                                    <div class="d-flex gap-2 col-4 mx-auto">
-                                        <button *ngIf="canEditPanel" class="btn btn-primary" (click)="EditPanel(item)" type="button">Edit</button>
-                                        <button *ngIf="canDeletePanel" class="btn btn-danger" (click)="deletePanel(item)" type="button">Delete</button>
-                                      </div>
-                                </td>
-                            </tr>
+                        <tr>
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{item.name}}</td>
+                            <td *ngIf="canEditPanel || canDeletePanel">
+                                <div class="d-flex gap-2 col-4 mx-auto">
+                                    <button *ngIf="canEditPanel" class="btn btn-primary" (click)="EditPanel(item)"
+                                        type="button">Edit</button>
+                                    <button *ngIf="canDeletePanel" class="btn btn-danger" (click)="deletePanel(item)"
+                                        type="button">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -62,38 +65,225 @@
 
 
 
-  
-  <!-- Modal -->
-  <div class="modal fade show" id="exampleModal" [class.d-block]="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<!-- Modal -->
+<div class="modal fade show" id="exampleModal" [class.d-block]="showModal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">{{editMode ? "Edit" : 'Add'}} MotherPanel</h1>
-          <button type="button" class="btn-close" (click)="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form class="row" [formGroup]="PanelFormModel" (ngSubmit)="onSubmit()" novalidate>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="user-name" class="fw-bold col-form-label">Name:</label>
-                        <input type="text" formControlName="name" class="form-control" id="user-name" [ngClass]="{
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">{{editMode ? "Edit" : 'Add'}} MotherPanel
+                </h1>
+                <button type="button" class="btn-close" (click)="closeModal()" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row" [formGroup]="PanelFormModel" (ngSubmit)="onSubmit()" novalidate>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="user-name" class="fw-bold col-form-label">Name:</label>
+                            <input type="text" formControlName="name" class="form-control" id="user-name" [ngClass]="{
                             'is-valid': PanelFormModel.get('name')?.valid && (PanelFormModel.get('name')?.touched || PanelFormModel.get('name')?.dirty || IsSubmit),
                             'is-invalid': PanelFormModel.get('name')?.invalid && (PanelFormModel.get('name')?.touched || PanelFormModel.get('name')?.dirty || IsSubmit)
                           }">
-                        <div *ngIf="PanelFormModel.get('name') && PanelFormModel.get('name')?.invalid" class="invalid-feedback">
-                            <div *ngIf="PanelFormModel.get('name')?.errors?.['required']">Name is required.</div>
-                            <div *ngIf="PanelFormModel.get('name')?.errors?.['maxlength']">Name cannot be more than 20 characters long.</div>
-                            <div *ngIf="PanelFormModel.get('name')?.errors?.['alphanumeric']">Special Character Not Allowed</div>
-                            <div *ngIf="PanelFormModel.get('name')?.errors?.['NameTaken']">Name is already Used</div>
+                            <div *ngIf="PanelFormModel.get('name') && PanelFormModel.get('name')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="PanelFormModel.get('name')?.errors?.['required']">Name is required.</div>
+                                <div *ngIf="PanelFormModel.get('name')?.errors?.['maxlength']">Name cannot be more than
+                                    20 characters long.</div>
+                                <div *ngIf="PanelFormModel.get('name')?.errors?.['alphanumeric']">Special Character Not
+                                    Allowed</div>
+                                <div *ngIf="PanelFormModel.get('name')?.errors?.['NameTaken']">Name is already Used
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                </div>  
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary fw-bold" (click)="closeModal()" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary fw-bold">{{editMode ? 'Save changes' : 'Add'}}</button>
-                  </div>
-              </form>
+                    </div>
+                    <!-- INPUT - 2 -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="user-name" class="fw-bold col-form-label">URL Address1:</label>
+                            <input type="text" formControlName="url_address1" class="form-control" id="user-name"
+                                [ngClass]="{
+                            'is-valid': PanelFormModel.get('url_address1')?.valid && (PanelFormModel.get('url_address1')?.touched || PanelFormModel.get('url_address1')?.dirty || IsSubmit),
+                            'is-invalid': PanelFormModel.get('url_address1')?.invalid && (PanelFormModel.get('url_address1')?.touched || PanelFormModel.get('url_address1')?.dirty || IsSubmit)
+                          }">
+                            <div *ngIf="PanelFormModel.get('url_address1') && PanelFormModel.get('url_address1')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="PanelFormModel.get('url_address1')?.errors?.['required']">URL Address1 is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INPUT - 3 -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="user-name" class="fw-bold col-form-label">URL Address2:</label>
+                            <input type="text" formControlName="url_address2" class="form-control" id="user-name"
+                                [ngClass]="{
+                            'is-valid': PanelFormModel.get('url_address2')?.valid && (PanelFormModel.get('url_address2')?.touched || PanelFormModel.get('url_address2')?.dirty || IsSubmit),
+                            'is-invalid': PanelFormModel.get('url_address2')?.invalid && (PanelFormModel.get('url_address2')?.touched || PanelFormModel.get('url_address2')?.dirty || IsSubmit)
+                          }">
+                            <div *ngIf="PanelFormModel.get('url_address2') && PanelFormModel.get('url_address2')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="PanelFormModel.get('url_address2')?.errors?.['required']">URL Address2 is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- INPUT - 4 -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="user-name" class="fw-bold col-form-label">Country:</label>
+                            <input type="text" formControlName="country" class="form-control" id="user-name" [ngClass]="{
+                            'is-valid': PanelFormModel.get('country')?.valid && (PanelFormModel.get('country')?.touched || PanelFormModel.get('country')?.dirty || IsSubmit),
+                            'is-invalid': PanelFormModel.get('country')?.invalid && (PanelFormModel.get('country')?.touched || PanelFormModel.get('country')?.dirty || IsSubmit)
+                          }">
+                            <div *ngIf="PanelFormModel.get('country') && PanelFormModel.get('country')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="PanelFormModel.get('country')?.errors?.['required']">Country is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INPUT - 5 -->
+                    <div class="col-md-12 mb-3">
+                        <label for="inputState" class="form-label fw-bold">Select Server Company</label>
+                        <select id="inputState" formControlName="server_account" class="form-select" [ngClass]="{
+                          'is-valid': IsSubmit && PanelFormModel.get('server_account')?.valid,
+                          'is-invalid': IsSubmit && PanelFormModel.get('server_account')?.invalid
+                        }">
+                            <option value="">Choose...</option>
+                            @for(option of serverAccountOption; track option._id) {
+                            <option [value]="option._id">
+                                {{option?.name}}
+                            </option>
+                            }
+                        </select>
+                        <div *ngIf="PanelFormModel.get('server_account')?.invalid && (PanelFormModel.get('server_account')?.touched || PanelFormModel.get('server_account')?.dirty)"
+                            class="invalid-feedback">
+                            <div *ngIf="PanelFormModel.get('server_account')?.errors?.['required']">Server account is
+                                required.</div>
+                        </div>
+                    </div>
+
+                    <!-- INPUT - 6 -->
+                    <div class="col-md-12 mb-3">
+                        <label for="inputState" class="form-label fw-bold">Select Cloudflore Company</label>
+                        <select id="inputState" formControlName="cloudflore_account" class="form-select" [ngClass]="{
+                          'is-valid': IsSubmit && PanelFormModel.get('cloudflore_account')?.valid,
+                          'is-invalid': IsSubmit && PanelFormModel.get('cloudflore_account')?.invalid
+                        }">
+                            <option value="">Choose...</option>
+                            @for(option of cloudAccountOption; track option._id) {
+                            <option [value]="option._id">
+                                {{option?.name}}
+                            </option>
+                            }
+                        </select>
+                        <div *ngIf="PanelFormModel.get('cloudflore_account')?.invalid && (PanelFormModel.get('cloudflore_account')?.touched || PanelFormModel.get('cloudflore_account')?.dirty)"
+                            class="invalid-feedback">
+                            <div *ngIf="PanelFormModel.get('cloudflore_account')?.errors?.['required']">Cloudflore
+                                company is required.</div>
+                        </div>
+                    </div>
+
+                    <!-- INPUT - 7 -->
+                    <div class="col-md-12 mb-3">
+                        <label for="inputState" class="form-label fw-bold">Select Domain Company</label>
+                        <select id="inputState" formControlName="domain_account" class="form-select" [ngClass]="{
+                          'is-valid': IsSubmit && PanelFormModel.get('domain_account')?.valid,
+                          'is-invalid': IsSubmit && PanelFormModel.get('domain_account')?.invalid
+                        }">
+                            <option value="">Choose...</option>
+                            @for(option of domainAccountOption; track option._id) {
+                            <option [value]="option._id">
+                                {{option?.name}}
+                            </option>
+                            }
+                        </select>
+                        <div *ngIf="PanelFormModel.get('domain_account')?.invalid && (PanelFormModel.get('domain_account')?.touched || PanelFormModel.get('domain_account')?.dirty)"
+                            class="invalid-feedback">
+                            <div *ngIf="PanelFormModel.get('domain_account')?.errors?.['required']">Domain company is
+                                required.</div>
+                        </div>
+                    </div>
+
+                    <!-- INPUT - 8 -->
+                    <div class="col-md-12 mb-3">
+                        <label for="inputState" class="form-label fw-bold">Select Company</label>
+                        <select id="inputState" formControlName="company_name"
+                            (input)="onCompanyNameChange($event.target)" class="form-select" [ngClass]="{
+                          'is-valid': IsSubmit && PanelFormModel.get('company_name')?.valid,
+                          'is-invalid': IsSubmit && PanelFormModel.get('company_name')?.invalid
+                        }">
+                            <option value="">Choose...</option>
+                            @for(option of companyOption; track option) {
+                            <option [value]="option">
+                                {{option}}
+                            </option>
+                            }
+                        </select>
+                        <div *ngIf="PanelFormModel.get('company_name')?.invalid && (PanelFormModel.get('company_name')?.touched || PanelFormModel.get('company_name')?.dirty)"
+                            class="invalid-feedback">
+                            <div *ngIf="PanelFormModel.get('company_name')?.errors?.['required']">Company is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INPUT - 9 -->
+                    <div class="col-md-12 mb-3">
+                        <label for="inputState" class="form-label fw-bold">Select Master</label>
+                        <select id="inputState" formControlName="company_master_account" (input)="onMasterChange($event.target)" class="form-select" [ngClass]="{
+                          'is-valid': IsSubmit && PanelFormModel.get('company_master_account')?.valid,
+                          'is-invalid': IsSubmit && PanelFormModel.get('company_master_account')?.invalid
+                        }">
+                            <option value="">Choose...</option>
+                            @for(option of masterAccountOption; track option) {
+                            <option [value]="option._id">
+                                {{option.name}}
+                            </option>
+                            }
+                        </select>
+                        <div *ngIf="PanelFormModel.get('company_master_account')?.invalid && (PanelFormModel.get('company_master_account')?.touched || PanelFormModel.get('company_master_account')?.dirty)"
+                            class="invalid-feedback">
+                            <div *ngIf="PanelFormModel.get('company_master_account')?.errors?.['required']">Master is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INPUT - 10 -->
+                    <div class="col-md-12 mb-3">
+                        <label for="inputState" class="form-label fw-bold">Select Agent</label>
+                        <select id="inputState" formControlName="company_agent_account" class="form-select" [ngClass]="{
+                          'is-valid': IsSubmit && PanelFormModel.get('company_agent_account')?.valid,
+                          'is-invalid': IsSubmit && PanelFormModel.get('company_agent_account')?.invalid
+                        }">
+                            <option value="">Choose...</option>
+                            @for(option of agentAccountOption; track option) {
+                            <option [value]="option._id">
+                                {{option.name}}
+                            </option>
+                            }
+                        </select>
+                        <div *ngIf="PanelFormModel.get('company_agent_account')?.invalid && (PanelFormModel.get('company_agent_account')?.touched || PanelFormModel.get('company_agent_account')?.dirty)"
+                            class="invalid-feedback">
+                            <div *ngIf="PanelFormModel.get('company_agent_account')?.errors?.['required']">Agent is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary fw-bold" (click)="closeModal()"
+                            data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary fw-bold">{{editMode ? 'Save changes' :
+                            'Add'}}</button>
+                    </div>
+                </form>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
