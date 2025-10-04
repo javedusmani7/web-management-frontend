@@ -86,7 +86,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="col-md-6">
             <div class="mb-3">
               <label for="google-auth-email" class="fw-bold col-form-label">Google Authenticator Email</label>
@@ -98,8 +98,7 @@
                 [ngClass]="{
                   'is-valid': isSubmit && ModalForm.get('google_authenticator_email')?.valid,
                   'is-invalid': isSubmit && ModalForm.get('google_authenticator_email')?.invalid
-                }" 
-                placeholder="Enter Google Authenticator Email"
+                }"
               >
               <div *ngIf="ModalForm.get('google_authenticator_email')?.invalid && (ModalForm.get('google_authenticator_email')?.touched || ModalForm.get('google_authenticator_email')?.dirty || isSubmit)" class="invalid-feedback">
                 <div *ngIf="ModalForm.get('google_authenticator_email')?.errors?.['email']">Invalid Email Format.</div>

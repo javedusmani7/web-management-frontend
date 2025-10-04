@@ -46,6 +46,7 @@ export class OtherAccountsComponent implements OnInit {
       account_url: new FormControl('', Validators.required),
       account_password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       email: new FormControl('', [Validators.required, Validators.email]),
+      google_authenticator_email: new FormControl('', [Validators.required, Validators.email, ValidatorService.gmailValidator]),
       user_id: new FormControl('', Validators.required),
       company_name: new FormControl('', Validators.required)
     })
