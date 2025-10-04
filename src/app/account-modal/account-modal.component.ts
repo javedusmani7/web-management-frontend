@@ -47,6 +47,7 @@ export class AccountModalComponent implements OnInit  {
       personname: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       email: ['', [Validators.required, Validators.email]],
+      google_authenticator_email: ['', [Validators.email, ValidatorService.gmailValidator]],
       number: ['', Validators.required],
       hiddenTitle: [this.Type]
     });
@@ -75,6 +76,7 @@ export class AccountModalComponent implements OnInit  {
         personname: this.editData.person_name,
         password: this.editData.account_password,
         email: this.editData.account_email,
+        google_authenticator_email: this.editData.google_authenticator_email || '',
         number: this.editData.number,
         hiddenTitle: this.Type,
       };

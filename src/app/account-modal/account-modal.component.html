@@ -1,116 +1,149 @@
 <!-- Modal -->
-  <div class="modal fade show" id="exampleModal" [class.d-block]="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">{{editData? 'Edit' : 'Add'}} {{ title }}</h1>
-          <button type="button" class="btn-close" (click)="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form class="row" [formGroup]="ModalForm" (ngSubmit)="onSubmit()" novalidate>
-                @if(showCompanyName)
-                {
-                    <div class="col-md-8">
-                        <div class="mb-3">
-                            <label for="company-name" class="fw-bold col-form-label">Company Name:</label>
-                            <input type="text" value="{{CompanyValue}}" formControlName="companyName" class="form-control" id="company-name" [ngClass]="{
+<div class="modal fade show" id="exampleModal" [class.d-block]="showModal" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">{{editData? 'Edit' : 'Add'}} {{ title }}</h1>
+        <button type="button" class="btn-close" (click)="closeModal()" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="row" [formGroup]="ModalForm" (ngSubmit)="onSubmit()" novalidate>
+          @if(showCompanyName)
+          {
+          <div class="col-md-8">
+            <div class="mb-3">
+              <label for="company-name" class="fw-bold col-form-label">Company Name:</label>
+              <input type="text" value="{{CompanyValue}}" formControlName="companyName" class="form-control"
+                id="company-name" [ngClass]="{
                               'is-valid': ModalForm.get('companyName')?.valid && (ModalForm.get('companyName')?.touched || ModalForm.get('companyName')?.dirty || isSubmit),
                               'is-invalid': ModalForm.get('companyName')?.invalid && (ModalForm.get('companyName')?.touched || ModalForm.get('companyName')?.dirty || isSubmit)
                             }">
-                            <div *ngIf="ModalForm.get('companyName')?.invalid " class="invalid-feedback">
-                              <div *ngIf="ModalForm.get('companyName')?.errors?.['required']">Company Name is required.</div>
-                              <div *ngIf="ModalForm.get('companyName')?.errors?.['alphanumeric']">Special Character Not Allowed</div>
-                            </div>
-                          </div>
-                    </div>
-                }
-                @if(showServerSelect)
-                {
-                    <div class="col-md-8">
-                        <label for="inputState" class="form-label fw-bold">Select Server Company</label>
-                        <select id="inputState" formControlName="serverCompany" class="form-select" [ngClass]="{
+              <div *ngIf="ModalForm.get('companyName')?.invalid " class="invalid-feedback">
+                <div *ngIf="ModalForm.get('companyName')?.errors?.['required']">Company Name is required.</div>
+                <div *ngIf="ModalForm.get('companyName')?.errors?.['alphanumeric']">Special Character Not Allowed</div>
+              </div>
+            </div>
+          </div>
+          }
+          @if(showServerSelect)
+          {
+          <div class="col-md-8">
+            <label for="inputState" class="form-label fw-bold">Select Server Company</label>
+            <select id="inputState" formControlName="serverCompany" class="form-select" [ngClass]="{
                           'is-valid': isSubmit && ModalForm.get('serverCompany')?.valid,
                           'is-invalid': isSubmit && ModalForm.get('serverCompany')?.invalid
                         }">>
-                          <option value="">Choose...</option>
-                          <option value="linode">Linode</option>
-                          <option value="aws">AWS</option>
-                          <option value="digital">Digital Ocean</option>
-                          <option value="python">Python</option>
-                          <option value="redis">Redis</option>
-                          <option value="mongo">Mongo</option>
-                        </select>
-                        <div *ngIf="ModalForm.get('serverCompany')?.invalid && (ModalForm.get('serverCompany')?.touched || ModalForm.get('serverCompany')?.dirty)" class="invalid-feedback">
-                          <div *ngIf="ModalForm.get('serverCompany')?.errors?.['required']">Server Company is required.</div>
-                        </div>
-                    </div>
-                }           
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="user-name" class="fw-bold col-form-label">Account Name:</label>
-                        <input type="text" formControlName="accountName" class="form-control" id="user-name" [ngClass]="{
+              <option value="">Choose...</option>
+              <option value="linode">Linode</option>
+              <option value="aws">AWS</option>
+              <option value="digital">Digital Ocean</option>
+              <option value="python">Python</option>
+              <option value="redis">Redis</option>
+              <option value="mongo">Mongo</option>
+            </select>
+            <div
+              *ngIf="ModalForm.get('serverCompany')?.invalid && (ModalForm.get('serverCompany')?.touched || ModalForm.get('serverCompany')?.dirty)"
+              class="invalid-feedback">
+              <div *ngIf="ModalForm.get('serverCompany')?.errors?.['required']">Server Company is required.</div>
+            </div>
+          </div>
+          }
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="user-name" class="fw-bold col-form-label">Account Name:</label>
+              <input type="text" formControlName="accountName" class="form-control" id="user-name" [ngClass]="{
                           'is-valid': ModalForm.get('accountName')?.valid && (ModalForm.get('accountName')?.touched || ModalForm.get('accountName')?.dirty || isSubmit),
                           'is-invalid': ModalForm.get('accountName')?.invalid && (ModalForm.get('accountName')?.touched || ModalForm.get('accountName')?.dirty || isSubmit)
                         }">
-                        <div *ngIf="ModalForm.get('accountName')?.invalid" class="invalid-feedback">
-                          <div *ngIf="ModalForm.get('accountName')?.errors?.['required']">Account Name is required.</div>
-                        </div>
-                      </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                      <label for="person-name" class="fw-bold col-form-label">Person Name:</label>
-                      <input type="text" formControlName="personname" class="form-control" id="person-name">
-                      <div *ngIf="ModalForm.get('personname')?.invalid" class="invalid-feedback">
-                        <div *ngIf="ModalForm.get('personname')?.errors?.['required']">Person Name is required.</div>
-                      </div>
-                    </div>
+              <div *ngIf="ModalForm.get('accountName')?.invalid" class="invalid-feedback">
+                <div *ngIf="ModalForm.get('accountName')?.errors?.['required']">Account Name is required.</div>
               </div>
-              <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="user-email" class="fw-bold col-form-label">Email:</label>
-                    <input type="email" formControlName="email" class="form-control" id="user-email" [ngClass]="{
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="person-name" class="fw-bold col-form-label">Person Name:</label>
+              <input type="text" formControlName="personname" class="form-control" id="person-name">
+              <div *ngIf="ModalForm.get('personname')?.invalid" class="invalid-feedback">
+                <div *ngIf="ModalForm.get('personname')?.errors?.['required']">Person Name is required.</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="user-email" class="fw-bold col-form-label">Email:</label>
+              <input type="email" formControlName="email" class="form-control" id="user-email" [ngClass]="{
                       'is-valid': isSubmit && ModalForm.get('email')?.valid,
                       'is-invalid': isSubmit && ModalForm.get('email')?.invalid
                     }">
-                    <div *ngIf="ModalForm.get('email') && ModalForm.get('email')?.invalid && (ModalForm.get('email')?.touched || ModalForm.get('email')?.dirty)" class="invalid-feedback">
-                      <div *ngIf="ModalForm.get('email')?.errors?.['required']">Email is required.</div>
-                      <div *ngIf="ModalForm.get('email')?.errors?.['email']">Invalid Email Format.</div>
-                    </div>
-                </div>
-            </div>                   
-                <input type="hidden" formControlName="hiddenTitle" value="">             
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="user-number" class="fw-bold col-form-label">Mobile Number</label>
-                        <input type="number" formControlName="number" class="form-control" id="user-number" [ngClass]="{
+              <div
+                *ngIf="ModalForm.get('email') && ModalForm.get('email')?.invalid && (ModalForm.get('email')?.touched || ModalForm.get('email')?.dirty)"
+                class="invalid-feedback">
+                <div *ngIf="ModalForm.get('email')?.errors?.['required']">Email is required.</div>
+                <div *ngIf="ModalForm.get('email')?.errors?.['email']">Invalid Email Format.</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="google-auth-email" class="fw-bold col-form-label">Google Authenticator Email</label>
+              <input 
+                type="email" 
+                id="google-auth-email" 
+                formControlName="google_authenticator_email" 
+                class="form-control" 
+                [ngClass]="{
+                  'is-valid': isSubmit && ModalForm.get('google_authenticator_email')?.valid,
+                  'is-invalid': isSubmit && ModalForm.get('google_authenticator_email')?.invalid
+                }" 
+                placeholder="Enter Google Authenticator Email"
+              >
+              <div *ngIf="ModalForm.get('google_authenticator_email')?.invalid && (ModalForm.get('google_authenticator_email')?.touched || ModalForm.get('google_authenticator_email')?.dirty || isSubmit)" class="invalid-feedback">
+                <div *ngIf="ModalForm.get('google_authenticator_email')?.errors?.['email']">Invalid Email Format.</div>
+                <div *ngIf="ModalForm.get('google_authenticator_email')?.errors?.['gmailDomain']">Only Gmail addresses are allowed.</div>
+              </div>
+            </div>
+          </div>
+
+          <input type="hidden" formControlName="hiddenTitle" value="">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="user-number" class="fw-bold col-form-label">Mobile Number</label>
+              <input type="number" formControlName="number" class="form-control" id="user-number" [ngClass]="{
                           'is-valid': isSubmit && ModalForm.get('number')?.valid,
                           'is-invalid': isSubmit && ModalForm.get('number')?.invalid
                         }">
-                        <div *ngIf="ModalForm.get('number')?.invalid && (ModalForm.get('number')?.touched || ModalForm.get('number')?.dirty)" class="invalid-feedback">
-                          <div *ngIf="ModalForm.get('number')?.errors?.['required']">Number is required.</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                      <label for="user-password" class="fw-bold col-form-label">Password</label>
-                      <input type="password" formControlName="password" class="form-control" id="user-password" [ngClass]="{
+              <div
+                *ngIf="ModalForm.get('number')?.invalid && (ModalForm.get('number')?.touched || ModalForm.get('number')?.dirty)"
+                class="invalid-feedback">
+                <div *ngIf="ModalForm.get('number')?.errors?.['required']">Number is required.</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="user-password" class="fw-bold col-form-label">Password</label>
+              <input type="password" formControlName="password" class="form-control" id="user-password" [ngClass]="{
                         'is-valid': ModalForm.get('password')?.valid && (ModalForm.get('password')?.touched || ModalForm.get('password')?.dirty || isSubmit),
                         'is-invalid': ModalForm.get('password')?.invalid && (ModalForm.get('password')?.touched || ModalForm.get('password')?.dirty || isSubmit)
                       }">
-                      <div *ngIf="ModalForm.get('password') && ModalForm.get('password')?.invalid" class="invalid-feedback">
-                        <div *ngIf="ModalForm.get('password')?.errors?.['required']">Password is required.</div>
-                        <div *ngIf="ModalForm.get('password')?.errors?.['minLength']">Password must be at least 6 characters long.</div>
-                      </div>
-                  </div>
+              <div *ngIf="ModalForm.get('password') && ModalForm.get('password')?.invalid" class="invalid-feedback">
+                <div *ngIf="ModalForm.get('password')?.errors?.['required']">Password is required.</div>
+                <div *ngIf="ModalForm.get('password')?.errors?.['minLength']">Password must be at least 6 characters
+                  long.</div>
               </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary fw-bold" (click)="closeModal()" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary fw-bold">{{editData ? 'Save changes' : 'Add'}}</button>
-                </div>    
-            </form>
-        </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary fw-bold" (click)="closeModal()"
+              data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary fw-bold">{{editData ? 'Save changes' : 'Add'}}</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
