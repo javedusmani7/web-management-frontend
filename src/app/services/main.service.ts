@@ -185,4 +185,16 @@ export class MainService {
   verifyGoogleOtp(data: any) {
     return this.http.post(Backend_URL + '/google-auth/verify-google-otp', data);
   }
+
+  addtelegram(data: any) {
+    return this.http.post(Backend_URL + '/telegram/add', data);
+  }
+
+  updateTelegram(data: any) {
+    return this.http.post(Backend_URL + '/telegram/update', data);
+  }
+
+  getTelegram() {
+    return this.http.get(Backend_URL + '/telegram/lists');
+  }
 }

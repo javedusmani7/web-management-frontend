@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MainService } from '../services/main.service';
+
 import Swal from 'sweetalert2';
+
+import { MainService } from '../services/main.service';
 import { ValidatorService } from '../services/validator.service';
 
 @Component({
