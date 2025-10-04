@@ -43,23 +43,34 @@
                     <tbody class="table-group-divider">
                         @for(item of user; let i=$index; track item.userId)
                         {
-                            <tr>
-                                <th scope="row">{{i+1}}</th>
-                                <td>{{item.name}}</td>
-                                <td>{{item.userId}}</td>
-                                <td>{{item.number}}</td>
-                                <td *ngIf="canEditUser || canDeleteUser">
-                                    <div class="d-flex gap-2 mx-auto justify-content-end">
-                                        <button *ngIf="userLevel=='1'" class="btn btn-sm btn-primary" (click)="Password(item)" type="button"><fa-icon [icon]="faKey"></fa-icon> Password</button>
-                                        <button *ngIf="userLevel=='1' && item.status" class="btn btn-sm btn-warning" type="button" (click)="Inactive(item)"> <fa-icon [icon]="faBan"></fa-icon>Inactive</button>
-                                        <button *ngIf="userLevel === '1' && !item.status" class="btn btn-sm btn-success" type="button" (click)="Activate(item)"><fa-icon [icon]="faCheckCircle"></fa-icon>Activate
-                                        </button>
-                                        <button *ngIf="userLevel == '1'" class="btn btn-sm btn-success" routerLink="/permission/{{item._id}}" routerLinkActive="router-link-active"   type="button"><fa-icon [icon]="faLock"></fa-icon>Permissions</button>
-                                        <button *ngIf="canEditUser" class="btn btn-sm btn-primary" (click)="EditUser(item)" type="button"><fa-icon [icon]="faPencilAlt"></fa-icon>Edit</button>
-                                        <button *ngIf="canDeleteUser" class="btn btn-sm btn-danger" (click)="deleteUser(item)" type="button"><fa-icon [icon]="faTrashAlt"></fa-icon>Delete</button>
-                                      </div>
-                                </td>
-                            </tr>
+                        <tr>
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{item.name}}</td>
+                            <td>{{item.userId}}</td>
+                            <td>{{item.number}}</td>
+                            <td *ngIf="canEditUser || canDeleteUser">
+                                <div class="d-flex gap-2 mx-auto justify-content-end">
+                                    <button *ngIf="userLevel=='1'" class="btn btn-sm btn-primary"
+                                        (click)="Password(item)" type="button"><fa-icon [icon]="faKey"></fa-icon>
+                                        Password</button>
+                                    <button *ngIf="userLevel=='1' && item.status" class="btn btn-sm btn-warning"
+                                        type="button" (click)="Inactive(item)"> <fa-icon
+                                            [icon]="faBan"></fa-icon>Inactive</button>
+                                    <button *ngIf="userLevel === '1' && !item.status" class="btn btn-sm btn-success"
+                                        type="button" (click)="Activate(item)"><fa-icon
+                                            [icon]="faCheckCircle"></fa-icon>Activate
+                                    </button>
+                                    <button *ngIf="userLevel == '1'" class="btn btn-sm btn-success"
+                                        routerLink="/permission/{{item._id}}" routerLinkActive="router-link-active"
+                                        type="button"><fa-icon [icon]="faLock"></fa-icon>Permissions</button>
+                                    <button *ngIf="canEditUser" class="btn btn-sm btn-primary" (click)="EditUser(item)"
+                                        type="button"><fa-icon [icon]="faPencilAlt"></fa-icon>Edit</button>
+                                    <button *ngIf="canDeleteUser" class="btn btn-sm btn-danger"
+                                        (click)="deleteUser(item)" type="button"><fa-icon
+                                            [icon]="faTrashAlt"></fa-icon>Delete</button>
+                                </div>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -71,161 +82,224 @@
 
 
 
-  
-  <!-- Modal -->
-  <div class="modal fade show" id="exampleModal" [class.d-block]="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<!-- Modal -->
+<div class="modal fade show" id="exampleModal" [class.d-block]="showModal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">{{ editMode ? 'Edit User' : 'Add User' }}</h1>
-          <button type="button" class="btn-close" (click)="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form class="row" [formGroup]="UserFormModel" (ngSubmit)="onSubmit()" novalidate>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="user-name" class="fw-bold col-form-label">Name:</label>
-                        <input type="text" formControlName="user_name" class="form-control" id="user-name" [ngClass]="{
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">{{ editMode ? 'Edit User' : 'Add User' }}
+                </h1>
+                <button type="button" class="btn-close" (click)="closeModal()" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row" [formGroup]="UserFormModel" (ngSubmit)="onSubmit()" novalidate>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="user-name" class="fw-bold col-form-label">Name:</label>
+                            <input type="text" formControlName="user_name" class="form-control" id="user-name"
+                                [ngClass]="{
                             'is-valid':  UserFormModel.get('user_name')?.valid && (UserFormModel.get('user_name')?.touched || UserFormModel.get('user_name')?.dirty || submitButtonClicked), 'is-invalid': UserFormModel.get('user_name')?.invalid && (UserFormModel.get('user_name')?.touched || UserFormModel.get('user_name')?.dirty || submitButtonClicked)
                           }">
-                        <div *ngIf="UserFormModel.get('user_name') && UserFormModel.get('user_name')?.invalid" class="invalid-feedback">
-                            <div *ngIf="UserFormModel.get('user_name')?.errors?.['required']">Name is required.</div>
-                            <div *ngIf="UserFormModel.get('user_name')?.errors?.['minlength']">Name must be at least 6 characters long.</div>
-                            <div *ngIf="UserFormModel.get('user_name')?.errors?.['maxlength']">Name cannot be more than 20 characters long.</div>
-                            <div *ngIf="UserFormModel.get('user_name')?.errors?.['alphanumeric']">Special Character Not Allowed</div>
+                            <div *ngIf="UserFormModel.get('user_name') && UserFormModel.get('user_name')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="UserFormModel.get('user_name')?.errors?.['required']">Name is required.
+                                </div>
+                                <div *ngIf="UserFormModel.get('user_name')?.errors?.['minlength']">Name must be at least
+                                    6 characters long.</div>
+                                <div *ngIf="UserFormModel.get('user_name')?.errors?.['maxlength']">Name cannot be more
+                                    than 20 characters long.</div>
+                                <div *ngIf="UserFormModel.get('user_name')?.errors?.['alphanumeric']">Special Character
+                                    Not Allowed</div>
+                            </div>
                         </div>
-                      </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="user-email" class="fw-bold col-form-label">Email:</label>
-                        <input type="email" formControlName="user_email" class="form-control" id="user-email" [ngClass]="{
-                            'is-valid': UserFormModel.get('user_email')?.valid && (UserFormModel.get('user_email')?.touched || UserFormModel.get('user_email')?.dirty || submitButtonClicked),
-                            'is-invalid': UserFormModel.get('user_email')?.invalid && (UserFormModel.get('user_email')?.touched || UserFormModel.get('user_email')?.dirty || submitButtonClicked)
-                          }">
-                          <div *ngIf="UserFormModel.get('user_email') && UserFormModel.get('user_email')?.invalid" class="invalid-feedback">
-                            <div *ngIf="UserFormModel.get('user_email')?.errors?.['required']">Email is required.</div>
-                            <div *ngIf="UserFormModel.get('user_email')?.errors?.['email']">Not a Valid Email.</div>
-                            <div *ngIf="UserFormModel.get('user_email')?.errors?.['EmailTaken']">Email is already taken</div>
-                          </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="user-id" class="fw-bold col-form-label">User Id:</label>
-                        <input type="text" formControlName="userId" class="form-control" id="user-id" [ngClass]="{
+                    <div class="col-md-6 position-relative">
+                        <div class="mb-3">
+                            <label for="user-email" class="fw-bold col-form-label">Email:</label>
+                                <input type="email" formControlName="user_email" class="form-control" id="user-email"
+                                    [ngClass]="{
+                                    'is-valid': UserFormModel.get('user_email')?.valid && (UserFormModel.get('user_email')?.touched || UserFormModel.get('user_email')?.dirty || submitButtonClicked),
+                                    'is-invalid': UserFormModel.get('user_email')?.invalid && (UserFormModel.get('user_email')?.touched || UserFormModel.get('user_email')?.dirty || submitButtonClicked)
+                                }">
+                                <div class="checkboxes switch-box">
+                                    <label class="switch">
+                                        <input type="checkbox" formControlName="emailVerification" />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            <div *ngIf="UserFormModel.get('user_email') && UserFormModel.get('user_email')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="UserFormModel.get('user_email')?.errors?.['required']">Email is required.
+                                </div>
+                                <div *ngIf="UserFormModel.get('user_email')?.errors?.['email']">Not a Valid Email.</div>
+                                <div *ngIf="UserFormModel.get('user_email')?.errors?.['EmailTaken']">Email is already
+                                    taken</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="user-id" class="fw-bold col-form-label">User Id:</label>
+                            <input type="text" formControlName="userId" class="form-control" id="user-id" [ngClass]="{
                             'is-valid': UserFormModel.get('userId')?.valid && (UserFormModel.get('userId')?.touched || UserFormModel.get('userId')?.dirty || submitButtonClicked),
                             'is-invalid': UserFormModel.get('userId')?.invalid && (UserFormModel.get('userId')?.touched || UserFormModel.get('userId')?.dirty || submitButtonClicked)
                           }">
-                          <div *ngIf="UserFormModel.get('userId') && UserFormModel.get('userId')?.invalid" class="invalid-feedback">
-                            <div *ngIf="UserFormModel.get('userId')?.errors?.['required']">UserId is required.</div>
-                                <div *ngIf="UserFormModel.get('userId')?.errors?.['minlength']">UserId must be at least 6 characters long.</div>
-                                <div *ngIf="UserFormModel.get('userId')?.errors?.['maxlength']">UserId cannot be more than 20 characters long.</div>
-                                <div *ngIf="UserFormModel.get('userId')?.errors?.['alphanumeric']">Special Character Not Allowed</div>
-                                <div *ngIf="UserFormModel.get('userId')?.errors?.['userIdTaken']">User Id is already taken</div>
+                            <div *ngIf="UserFormModel.get('userId') && UserFormModel.get('userId')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="UserFormModel.get('userId')?.errors?.['required']">UserId is required.</div>
+                                <div *ngIf="UserFormModel.get('userId')?.errors?.['minlength']">UserId must be at least
+                                    6 characters long.</div>
+                                <div *ngIf="UserFormModel.get('userId')?.errors?.['maxlength']">UserId cannot be more
+                                    than 20 characters long.</div>
+                                <div *ngIf="UserFormModel.get('userId')?.errors?.['alphanumeric']">Special Character Not
+                                    Allowed</div>
+                                <div *ngIf="UserFormModel.get('userId')?.errors?.['userIdTaken']">User Id is already
+                                    taken</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6" *ngIf="!editMode">
-                    <div class="mb-3">
-                        <label for="user-password" class="fw-bold col-form-label">Password</label>
-                        <input type="text" *ngIf="!editMode" formControlName="password" class="form-control" id="user-password" [ngClass]="{
+                    <div class="col-md-6" *ngIf="!editMode">
+                        <div class="mb-3">
+                            <label for="user-password" class="fw-bold col-form-label">Password</label>
+                            <input type="password" *ngIf="!editMode" formControlName="password" class="form-control"
+                                id="user-password" [ngClass]="{
                             'is-valid': UserFormModel.get('password')?.valid && (UserFormModel.get('password')?.touched || UserFormModel.get('password')?.dirty || submitButtonClicked),
                             'is-invalid': UserFormModel.get('password')?.invalid && (UserFormModel.get('password')?.touched || UserFormModel.get('password')?.dirty || submitButtonClicked)
                           }">
-                          <div *ngIf="UserFormModel.get('password') && UserFormModel.get('password')?.invalid" class="invalid-feedback">
-                            <div *ngIf="UserFormModel.get('password')?.errors?.['required']">Password is required.</div>
-                            <div *ngIf="UserFormModel.get('password')?.errors?.['passwordStrength']">Password must be at least 8 characters long and contain at least one letter and one number.</div>
-                          </div>
+                            <div *ngIf="UserFormModel.get('password') && UserFormModel.get('password')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="UserFormModel.get('password')?.errors?.['required']">Password is required.
+                                </div>
+                                <div *ngIf="UserFormModel.get('password')?.errors?.['passwordStrength']">Password must
+                                    be at least 8 characters long and contain at least one letter and one number.</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="user-number" class="fw-bold col-form-label">Mobile Number</label>
-                        <input type="text" formControlName="number" class="form-control" id="user-number" [ngClass]="{
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="user-number" class="fw-bold col-form-label">Mobile Number</label>
+                            <input type="text" formControlName="number" class="form-control" id="user-number" [ngClass]="{
                             'is-valid':UserFormModel.get('number')?.valid && (UserFormModel.get('number')?.touched || UserFormModel.get('number')?.dirty || submitButtonClicked),
                             'is-invalid': UserFormModel.get('number')?.invalid && (UserFormModel.get('number')?.touched || UserFormModel.get('number')?.dirty || submitButtonClicked)
                           }">
-                          <div *ngIf="UserFormModel.get('number') && UserFormModel.get('number')?.invalid" class="invalid-feedback">
-                            <div *ngIf="UserFormModel.get('number')?.errors?.['required']">Number is required.</div>
-                                <div *ngIf="UserFormModel.get('number')?.errors?.['minlength']">Number must be at least 10 characters long.</div>
-                                <div *ngIf="UserFormModel.get('number')?.errors?.['maxlength']">Number cannot be more than 20 characters long.</div>
-                                <div *ngIf="UserFormModel.get('number')?.errors?.['NumberTaken']">Number is already taken</div>
+                            <div *ngIf="UserFormModel.get('number') && UserFormModel.get('number')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="UserFormModel.get('number')?.errors?.['required']">Number is required.</div>
+                                <div *ngIf="UserFormModel.get('number')?.errors?.['minlength']">Number must be at least
+                                    10 characters long.</div>
+                                <div *ngIf="UserFormModel.get('number')?.errors?.['maxlength']">Number cannot be more
+                                    than 20 characters long.</div>
+                                <div *ngIf="UserFormModel.get('number')?.errors?.['NumberTaken']">Number is already
+                                    taken</div>
+                            </div>
                         </div>
                     </div>
-                </div>   
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary fw-bold" (click)="closeModal()" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary fw-bold">{{ editMode ? 'Save Changes' : 'Add User' }}</button>
-                  </div>   
-            </form>
+
+                    <div class="col-md-6 position-relative">
+                        <div class="mb-3">
+                            <label for="user-email" class="fw-bold col-form-label">Google Verification:</label>
+                                <div class="checkboxes switch-box">
+                                    <label class="switch">
+                                        <input type="checkbox" formControlName="googleAuthVerification" />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary fw-bold" (click)="closeModal()"
+                            data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary fw-bold">{{ editMode ? 'Save Changes' : 'Add User'
+                            }}</button>
+                    </div>
+                </form>
+            </div>
+
         </div>
-        
-      </div>
     </div>
-  </div>
+</div>
 
 
-    <!-- Modal -->
-    <div class="modal fade show" id="exampleModal" [class.d-block]="passModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
+<!-- Modal -->
+<div class="modal fade show" id="exampleModal" [class.d-block]="passModal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">Change Password</h1>
-              <button type="button" class="btn-close" (click)="closePassModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">Change Password</h1>
+                <button type="button" class="btn-close" (click)="closePassModal()" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form class="row" [formGroup]="PassFormModel" (ngSubmit)="onUpdate()" novalidate>
-                    
+
                     <div class="col-md-6" *ngIf="!editMode">
                         <div class="mb-3">
                             <label for="user-password" class="fw-bold col-form-label">Your Password</label>
-                            <input type="text" *ngIf="!editMode" formControlName="password" class="form-control" id="user-password" [ngClass]="{
+                            <input type="text" *ngIf="!editMode" formControlName="password" class="form-control"
+                                id="user-password" [ngClass]="{
                                 'is-valid': PassFormModel.get('password')?.valid && (PassFormModel.get('password')?.touched || PassFormModel.get('password')?.dirty || passButtonClicked),
                                 'is-invalid': PassFormModel.get('password')?.invalid && (PassFormModel.get('password')?.touched || PassFormModel.get('password')?.dirty || passButtonClicked)
                               }">
-                              <div *ngIf="PassFormModel.get('password') && PassFormModel.get('password')?.invalid" class="invalid-feedback">
-                                <div *ngIf="PassFormModel.get('password')?.errors?.['required']">Password is required.</div>
+                            <div *ngIf="PassFormModel.get('password') && PassFormModel.get('password')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="PassFormModel.get('password')?.errors?.['required']">Password is required.
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="new-password" class="fw-bold col-form-label">New Password</label>
-                            <input type="text" formControlName="newpassword" class="form-control" id="new-password" [ngClass]="{
+                            <input type="text" formControlName="newpassword" class="form-control" id="new-password"
+                                [ngClass]="{
                                 'is-valid':PassFormModel.get('newpassword')?.valid && (PassFormModel.get('newpassword')?.touched || PassFormModel.get('newpassword')?.dirty || passButtonClicked),
                                 'is-invalid': PassFormModel.get('newpassword')?.invalid && (PassFormModel.get('newpassword')?.touched || PassFormModel.get('newpassword')?.dirty || passButtonClicked)
                               }">
-                              <div *ngIf="PassFormModel.get('newpassword') && PassFormModel.get('newpassword')?.invalid" class="invalid-feedback">
-                                <div *ngIf="PassFormModel.get('newpassword')?.errors?.['required']">New Password is required.</div>
-                                <div *ngIf="PassFormModel.get('newpassword')?.errors?.['passwordStrength']">Password must be at least 8 characters long and contain at least one letter and one number.</div>
-                              
+                            <div *ngIf="PassFormModel.get('newpassword') && PassFormModel.get('newpassword')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="PassFormModel.get('newpassword')?.errors?.['required']">New Password is
+                                    required.</div>
+                                <div *ngIf="PassFormModel.get('newpassword')?.errors?.['passwordStrength']">Password
+                                    must be at least 8 characters long and contain at least one letter and one number.
+                                </div>
+
                             </div>
                         </div>
-                    </div>   
+                    </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="confirm-password" class="fw-bold col-form-label">Confirm Password</label>
-                            <input type="text" formControlName="confirm_password" class="form-control" id="confirm-password" [ngClass]="{
+                            <input type="text" formControlName="confirm_password" class="form-control"
+                                id="confirm-password" [ngClass]="{
                                 'is-valid':PassFormModel.get('confirm_password')?.valid && (PassFormModel.get('confirm_password')?.touched || PassFormModel.get('confirm_password')?.dirty || passButtonClicked), 'is-invalid': PassFormModel.get('confirm_password')?.invalid && (PassFormModel.get('confirm_password')?.touched || PassFormModel.get('confirm_password')?.dirty || passButtonClicked)
                               }">
-                              <div *ngIf="PassFormModel.get('confirm_password') && PassFormModel.get('confirm_password')?.invalid" class="invalid-feedback">
-                                <div *ngIf="PassFormModel.get('confirm_password')?.errors?.['required']">Confirm Password is required.</div>
-                                <div *ngIf="PassFormModel.get('confirm_password')?.errors?.['passwordStrength']">Password must be at least 8 characters long and contain at least one letter and one number.</div>
-                                
+                            <div *ngIf="PassFormModel.get('confirm_password') && PassFormModel.get('confirm_password')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="PassFormModel.get('confirm_password')?.errors?.['required']">Confirm
+                                    Password is required.</div>
+                                <div *ngIf="PassFormModel.get('confirm_password')?.errors?.['passwordStrength']">
+                                    Password must be at least 8 characters long and contain at least one letter and one
+                                    number.</div>
+
                             </div>
                         </div>
-                    </div>   
-                    <div *ngIf="PassFormModel.errors?.['passwordMismatch'] && PassFormModel.get('confirm_password')?.touched"  class="inv-feedback">
+                    </div>
+                    <div *ngIf="PassFormModel.errors?.['passwordMismatch'] && PassFormModel.get('confirm_password')?.touched"
+                        class="inv-feedback">
                         New password and confirm password do not match.
-                      </div>
+                    </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary fw-bold" (click)="closePassModal()" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary fw-bold" (click)="closePassModal()"
+                            data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary fw-bold">Update Password</button>
-                      </div>   
+                    </div>
                 </form>
             </div>
-            
-          </div>
+
         </div>
-      </div>
+    </div>
+</div>

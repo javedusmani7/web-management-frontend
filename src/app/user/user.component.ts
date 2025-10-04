@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserService } from '../services/user.service';
-import Swal from 'sweetalert2';
-import { ValidatorService } from '../services/validator.service';
 import { RouterLink } from '@angular/router';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faLock, faPencilAlt, faTrashAlt, faBan, faCheckCircle, faKey } from '@fortawesome/free-solid-svg-icons';
+
+import Swal from 'sweetalert2';
+
+import { UserService } from '../services/user.service';
+import { ValidatorService } from '../services/validator.service';
 
 @Component({
   selector: 'app-user',
@@ -65,7 +68,9 @@ export class UserComponent implements OnInit {
         validators:[Validators.required, Validators.minLength(10), Validators.maxLength(15)],
         asyncValidators: [],
         updateOn:'blur'
-      }) 
+      }),
+      googleAuthVerification: new FormControl(false),
+      emailVerification: new FormControl(false),
     });
 
     this.PassFormModel = new FormGroup({
@@ -136,7 +141,7 @@ export class UserComponent implements OnInit {
   }
 
   EditUser(item: any)
-  {
+  {    
     this.editMode = true;
     this.editIndex = this.user.findIndex((u: any) => u._id === item._id);
 
@@ -152,7 +157,9 @@ export class UserComponent implements OnInit {
         user_name: userData.name,
         user_email: userData.email,
         userId: userData.userId,
-        number: userData.number
+        number: userData.number,
+        emailVerification: userData.loginPermission.emailVerification,
+        googleAuthVerification: userData.loginPermission.googleAuthVerification
       });
       this.UserFormModel.get('password')?.clearValidators();
       this.UserFormModel.get('password')?.updateValueAndValidity();
@@ -232,7 +239,7 @@ export class UserComponent implements OnInit {
   }
 
   onSubmit()
-  {
+  {    
     this.submitButtonClicked = true;
     if(this.UserFormModel.valid)
       {
