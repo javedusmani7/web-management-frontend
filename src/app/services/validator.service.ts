@@ -55,4 +55,13 @@ export class ValidatorService {
       return valid ? null : { 'invalidIpAddress': { value: control.value } };
     };
   }
+
+  static gmailValidator(control: AbstractControl): { [key: string]: any } | null {
+    if (!control.value) {
+      return null; // Don't validate empty values here
+    }
+    const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const valid = gmailPattern.test(control.value);
+    return valid ? null : { 'gmailDomain': true };
+  }
 }
