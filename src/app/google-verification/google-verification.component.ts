@@ -76,7 +76,7 @@ export class GoogleVerificationComponent {
   submit() {
     const payload: any = {
       id: this.loginData.userId,
-      otp: Number(this.otpForm.value.otp.join(''))
+      otp: this.otpForm.value.otp.join('')
     }
     if (this.secret) {
       payload.secret = this.secret;
