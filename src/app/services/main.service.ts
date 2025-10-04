@@ -6,25 +6,24 @@ import { catchError } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
-const Backend_URL_Custom = environment.apiUrl+'/custom';
-const Backend_URL_Account = environment.apiUrl+'/account';
-const Backend_URL_Website = environment.apiUrl+'/website';
+const Backend_URL_Custom = environment.apiUrl + '/custom';
+const Backend_URL_Account = environment.apiUrl + '/account';
+const Backend_URL_Website = environment.apiUrl + '/website';
+const Backend_URL = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
 export class MainService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  addCustomer(data:any)
-  {
-    return this.http.post(Backend_URL_Custom+'/add-customer',data);
+  addCustomer(data: any) {
+    return this.http.post(Backend_URL_Custom + '/add-customer', data);
   }
 
-  getCustomer()
-  {
-    return this.http.get(Backend_URL_Custom+'/customer-list');
+  getCustomer() {
+    return this.http.get(Backend_URL_Custom + '/customer-list');
   }
 
   CheckCustName(panelName: string): Observable<{ isTaken: boolean }> {
@@ -38,29 +37,24 @@ export class MainService {
     );
   }
 
-  UpdateCustomer(data: any)
-  {
-    return this.http.post(Backend_URL_Custom+'/update-cust', data);
+  UpdateCustomer(data: any) {
+    return this.http.post(Backend_URL_Custom + '/update-cust', data);
   }
 
-  deleteCustomer(data: any)
-  {
-    return this.http.post(Backend_URL_Custom+'/delete-cust',data);
+  deleteCustomer(data: any) {
+    return this.http.post(Backend_URL_Custom + '/delete-cust', data);
   }
 
-  addPanel(data:any)
-  {
-    return this.http.post(Backend_URL_Custom+'/add-panel',data);
+  addPanel(data: any) {
+    return this.http.post(Backend_URL_Custom + '/add-panel', data);
   }
 
-  getPanel()
-  {
-    return this.http.get(Backend_URL_Custom+'/panel-list');
+  getPanel() {
+    return this.http.get(Backend_URL_Custom + '/panel-list');
   }
 
-  UpdatePanel(data: any)
-  {
-    return this.http.post(Backend_URL_Custom+'/update-panel', data);
+  UpdatePanel(data: any) {
+    return this.http.post(Backend_URL_Custom + '/update-panel', data);
   }
 
   CheckPanelName(panelName: string): Observable<{ isTaken: boolean }> {
@@ -75,127 +69,120 @@ export class MainService {
   }
 
 
-  deletePanel(data: any)
-  {
-    return this.http.post(Backend_URL_Custom+'/delete-panel',data);
+  deletePanel(data: any) {
+    return this.http.post(Backend_URL_Custom + '/delete-panel', data);
   }
 
-  addAccount(data: any)
-  {
-    return this.http.post(Backend_URL_Account+'/add-account',data);
+  addAccount(data: any) {
+    return this.http.post(Backend_URL_Account + '/add-account', data);
   }
 
-  AccountList(type: any)
-  {
-    return this.http.get(Backend_URL_Account+'/account-list/'+type);
+  AccountList(type: any) {
+    return this.http.get(Backend_URL_Account + '/account-list/' + type);
   }
 
-  UpdateAccount(data:any)
-  {
-    return this.http.post(Backend_URL_Account+'/update-account', data);
+  UpdateAccount(data: any) {
+    return this.http.post(Backend_URL_Account + '/update-account', data);
   }
 
-  getAllAccounts()
-  {
-    return this.http.get(Backend_URL_Account+'/all-account');
+  getAllAccounts() {
+    return this.http.get(Backend_URL_Account + '/all-account');
   }
 
-  DeleteAccount(data: any)
-  {
-    return this.http.post(Backend_URL_Account+'/delete-account',data);
+  DeleteAccount(data: any) {
+    return this.http.post(Backend_URL_Account + '/delete-account', data);
   }
 
-  AddWebsite(data:any)
-  {
-    return this.http.post(Backend_URL_Website+'/add-website', data);
+  AddWebsite(data: any) {
+    return this.http.post(Backend_URL_Website + '/add-website', data);
   }
 
-  GetWebsite()
-  {
-    return this.http.get(Backend_URL_Website+'/get-website');
+  GetWebsite() {
+    return this.http.get(Backend_URL_Website + '/get-website');
   }
 
-  getWebsiteById(data: string)
-  {
-    return this.http.get(Backend_URL_Website+'/website-detail/'+data)
+  getWebsiteById(data: string) {
+    return this.http.get(Backend_URL_Website + '/website-detail/' + data)
   }
 
-  getWebsiteByMother(data:any)
-  {
-    return this.http.post(Backend_URL_Website+'/website-mother',data);
+  getWebsiteByMother(data: any) {
+    return this.http.post(Backend_URL_Website + '/website-mother', data);
   }
 
-  UpdateWebsite(data:any)
-  {
-    return this.http.post(Backend_URL_Website+'/update-website',data);
+  UpdateWebsite(data: any) {
+    return this.http.post(Backend_URL_Website + '/update-website', data);
   }
 
-  PanelByCustomer(c_id:any)
-  {
-    return this.http.post(Backend_URL_Website+'/getPanel',c_id);
+  PanelByCustomer(c_id: any) {
+    return this.http.post(Backend_URL_Website + '/getPanel', c_id);
   }
 
   getLogs() {
     return this.http.get(Backend_URL_Custom + '/getLogs');
   }
 
-  getUserLog(string:any)
-  {
-    return this.http.get(Backend_URL_Custom+'/getLog/'+string);
+  getUserLog(string: any) {
+    return this.http.get(Backend_URL_Custom + '/getLog/' + string);
   }
 
 
-  AddMasterAccount(data:any)
-  {
-    return this.http.post(Backend_URL_Account+'/addotherAccount',data);
+  AddMasterAccount(data: any) {
+    return this.http.post(Backend_URL_Account + '/addotherAccount', data);
   }
 
-  MasterAccountList()
-  {
-    return this.http.get(Backend_URL_Account+'/master-account-list');
+  MasterAccountList() {
+    return this.http.get(Backend_URL_Account + '/master-account-list');
   }
 
-  UpdateMasterAccount(data:any)
-  {
-    return this.http.post(Backend_URL_Account+'/update-master',data);
+  UpdateMasterAccount(data: any) {
+    return this.http.post(Backend_URL_Account + '/update-master', data);
   }
 
-  DeleteMasterAccount(data: any)
-  {
-    return this.http.post(Backend_URL_Account+'/delete-master-account',data);
+  DeleteMasterAccount(data: any) {
+    return this.http.post(Backend_URL_Account + '/delete-master-account', data);
   }
 
-  AddAgentAccount(data:any)
-  {
-    return this.http.post(Backend_URL_Account+'/addagentAccount',data);
+  AddAgentAccount(data: any) {
+    return this.http.post(Backend_URL_Account + '/addagentAccount', data);
   }
 
-  AgentAccountList()
-  {
-    return this.http.get(Backend_URL_Account+'/agent-account-list');
+  AgentAccountList() {
+    return this.http.get(Backend_URL_Account + '/agent-account-list');
   }
 
   getServerAccountList() {
-    return this.http.get(Backend_URL_Account+'/account-list/server');
+    return this.http.get(Backend_URL_Account + '/account-list/server');
   }
 
   getCloudAccountList() {
-    return this.http.get(Backend_URL_Account+'/account-list/cloud');
+    return this.http.get(Backend_URL_Account + '/account-list/cloud');
   }
 
   getDomainAccountList() {
-    return this.http.get(Backend_URL_Account+'/account-list/domain');
+    return this.http.get(Backend_URL_Account + '/account-list/domain');
   }
 
   getCompanyAccountList() {
-    return this.http.get(Backend_URL_Account+'/company-lists');
+    return this.http.get(Backend_URL_Account + '/company-lists');
   }
 
   getCompanyMasterAccountList(data: any) {
-    return this.http.get(Backend_URL_Account+`/master-account-lists/company/${data}`);
+    return this.http.get(Backend_URL_Account + `/master-account-lists/company/${data}`);
   }
 
   getAgentAccountList(data: any) {
-    return this.http.get(Backend_URL_Account+`/agent-account-lists/company/awc/master_account/${data}`);
+    return this.http.get(Backend_URL_Account + `/agent-account-lists/company/awc/master_account/${data}`);
+  }
+
+  hasGoogleSetup(data: any) {
+    return this.http.post(Backend_URL + '/google-auth/has-setup', data);
+  }
+
+  generategoogleAuthQR(data: any) {
+    return this.http.post(Backend_URL + '/google-auth/google-2fa', data);
+  }
+
+  verifyGoogleOtp(data: any) {
+    return this.http.post(Backend_URL + '/google-auth/verify-google-otp', data);
   }
 }

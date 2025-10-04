@@ -95,7 +95,7 @@
                 <div class="col-md-6">
                   <div class="mb-3">
                       <label for="user-password" class="fw-bold col-form-label">Password</label>
-                      <input type="text" formControlName="password" class="form-control" id="user-password" [ngClass]="{
+                      <input type="password" formControlName="password" class="form-control" id="user-password" [ngClass]="{
                         'is-valid': ModalForm.get('password')?.valid && (ModalForm.get('password')?.touched || ModalForm.get('password')?.dirty || isSubmit),
                         'is-invalid': ModalForm.get('password')?.invalid && (ModalForm.get('password')?.touched || ModalForm.get('password')?.dirty || isSubmit)
                       }">
