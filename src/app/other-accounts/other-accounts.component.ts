@@ -194,6 +194,12 @@ this.websList = this.websiteData.filter((d: any) => d.web_awc._id === master_id 
 
   AgentSubmit()
   {
+    //  // Set the static value for website_name before checking validity
+    // this.AgentForm.patchValue({
+    //   website_name: "test website" 
+    // });
+    
+    // console.log("AgentSubmit", this.AgentForm.valid);
     this.isAgnetSubmit = true;
     if (this.AgentForm.valid) {
         let data = this.AgentForm.value;
