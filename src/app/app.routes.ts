@@ -1,28 +1,34 @@
 import { Routes } from '@angular/router';
-import { UserComponent } from './user/user.component';
-import { ServerAccountComponent } from './server-account/server-account.component';
-import { CloudflareAccountComponent } from './cloudflare-account/cloudflare-account.component';
-import { DomainManagerComponent } from './domain-manager/domain-manager.component';
-import { AwcaccountComponent } from './awcaccount/awcaccount.component';
-import { SabaaccountComponent } from './sabaaccount/sabaaccount.component';
-import { InternationalAccountComponent } from './international-account/international-account.component';
-import { CustomerComponent } from './customer/customer.component';
-import { MotherPanelComponent } from './mother-panel/mother-panel.component';
-import { WebsiteComponent } from './website/website.component';
-import { AddWebsiteComponent } from './add-website/add-website.component';
-import { EditwebsiteComponent } from './editwebsite/editwebsite.component';
-import { InformationPageComponent } from './information-page/information-page.component';
-import { StatementsComponent } from './statements/statements.component';
-import { LoginComponent } from './login/login.component';
+
 import { authGuard } from './auth.guard';
-import { HomeComponent } from './home/home.component';
-import { PermissionsComponent } from './permissions/permissions.component';
 import { permissionGuard } from './permission.guard';
+
+import { AddWebsiteComponent } from './add-website/add-website.component';
+import { AwcaccountComponent } from './awcaccount/awcaccount.component';
+import { CloudflareAccountComponent } from './cloudflare-account/cloudflare-account.component';
+import { CustomerComponent } from './customer/customer.component';
+import { DomainManagerComponent } from './domain-manager/domain-manager.component';
+import { EditwebsiteComponent } from './editwebsite/editwebsite.component';
+import { EmailVerficationComponent } from './email-verfication/email-verfication.component';
+import { GoogleVerificationComponent } from './google-verification/google-verification.component';
+import { HomeComponent } from './home/home.component';
+import { InformationPageComponent } from './information-page/information-page.component';
+import { InternationalAccountComponent } from './international-account/international-account.component';
+import { LoginComponent } from './login/login.component';
+import { MotherPanelComponent } from './mother-panel/mother-panel.component';
 import { OtherAccountsComponent } from './other-accounts/other-accounts.component';
+import { PermissionsComponent } from './permissions/permissions.component';
+import { SabaaccountComponent } from './sabaaccount/sabaaccount.component';
+import { ServerAccountComponent } from './server-account/server-account.component';
 import { ServerSettingsComponent } from './server-settings/server-settings.component';
+import { StatementsComponent } from './statements/statements.component';
+import { UserComponent } from './user/user.component';
+import { WebsiteComponent } from './website/website.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
+    {path: 'email-verification', component: EmailVerficationComponent},
+    {path: 'google-verification', component: GoogleVerificationComponent},
     {path: '',component:HomeComponent,canActivate:[authGuard]},
     {path: 'users',title: 'User Detail', component: UserComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_USER' }},
     {path: 'permission/:id', component: PermissionsComponent},

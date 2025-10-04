@@ -247,6 +247,7 @@ export class UserComponent implements OnInit {
 
         if(this.editMode)
         {
+          delete data.password;          
           this.userService.UpdateUser({_id:this.user[this.editIndex!]._id, data}).subscribe({
             next: (res: any) => {
               this.showModal = false;
