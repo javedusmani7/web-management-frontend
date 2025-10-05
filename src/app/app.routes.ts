@@ -25,6 +25,7 @@ import { StatementsComponent } from './statements/statements.component';
 import { TelegramComponent } from './telegram/telegram.component';
 import { UserComponent } from './user/user.component';
 import { WebsiteComponent } from './website/website.component';
+import { WhatsappComponent } from './whatsapp/whatsapp.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -48,5 +49,6 @@ export const routes: Routes = [
     { path: 'server-settings', component: ServerSettingsComponent, canActivate: [authGuard, permissionGuard] },
     { path: 'important-information', component: InformationPageComponent, canActivate: [authGuard, permissionGuard], data: { permission: 'VIEW_INFO' } },
     { path: 'statements', component: StatementsComponent, canActivate: [authGuard, permissionGuard], data: { permission: 'VIEW_STATEMENT' } },
-    { path: 'telegram', component: TelegramComponent, canActivate: [authGuard]}
+    { path: 'telegram', component: TelegramComponent, canActivate: [authGuard]},
+    { path: 'whatsapp', component: WhatsappComponent, canActivate: [authGuard, permissionGuard], data: { permission: 'VIEW_WHATSAPP' }},
 ];

@@ -1,24 +1,22 @@
 import { Component } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
-import Swal from 'sweetalert2';
-import { finalize } from 'rxjs';
 import { MainService } from '../services/main.service';
 import { AlertService } from '../../shared/alert.service';
+import { finalize } from 'rxjs';
 
 @Component({
-  selector: 'app-telegram',
+  selector: 'app-whatsapp',
   standalone: true,
   imports: [
     NgIf,
     CommonModule,
     ReactiveFormsModule
   ],
-  templateUrl: './telegram.component.html',
-  styleUrl: './telegram.component.css'
+  templateUrl: './whatsapp.component.html',
+  styleUrl: './whatsapp.component.css'
 })
-export class TelegramComponent {
+export class WhatsappComponent {
   showModal: boolean = false;
   editData: boolean = false;
   isLoading = false;
@@ -32,10 +30,7 @@ export class TelegramComponent {
     private fb: FormBuilder,
     private alert: AlertService
   ) {
-    this.getTelegram();
-  }
-
-  ngOnInit(): void {
+    
     this.ModalForm = this.fb.group({
       type: ['', [Validators.required]],
       name: ['', Validators.required],
@@ -45,63 +40,30 @@ export class TelegramComponent {
       admin_email: ['', [Validators.required, Validators.email]],
       purpose: ['', Validators.required]
     });
+
+    this.getWhatsappData();
   }
 
-  getTelegram() {
-    this.mainService.getTelegram().subscribe({
+  ngOnInit(): void {
+  }
+
+  getWhatsappData() {
+    this.mainService.getWhatsapp().subscribe({
       next: (res: any) => {
         this.accounts = res.data
       }
     })
   }
 
-  Delete(item: any) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result: any) => {
-      if (result.isConfirmed) {
-        this.mainService.DeleteAccount({ id: item._id }).subscribe({
-          next: (res: any) => {
-            this.msgSuccess(res.message);
-          },
-          error: (e: any) => {
-            this.msgFailure();
-          }
-        })
-      }
-    })
-  }
-
-  msgSuccess(message: string) {
-    Swal.fire({
-      icon: 'success',
-      title: message,
-      showConfirmButton: false,
-      timer: 1500
-    })
-  }
-
-  msgFailure() {
-    Swal.fire({
-      icon: 'error',
-      title: 'Something Went Wrong!',
-      showConfirmButton: false,
-      timer: 1500
-    })
-  }
-
   openAddModule() {
+    this.ModalForm.reset();         // reset the form
+    this.isSubmit = false;          // reset validation tracking
     this.showModal = true;
     this.editData = false;
   }
 
   openEdit(data: any) {
+    this.ModalForm.reset();
     this.id = data?._id;
     this.showModal = true;
     this.editData = true;
@@ -116,41 +78,42 @@ export class TelegramComponent {
     })
   }
 
-  updateTelegram() {
+
+  updateWhatsapp() {
     if (this.ModalForm.invalid || this.isLoading) return;
     this.isLoading = true;
 
     const payload = { id: this.id, ...this.ModalForm.value }
     payload.admin_number = String(payload.admin_number);
 
-    this.mainService.updateTelegram(payload).pipe(finalize(() => {
+    this.mainService.updateWhatsapp(payload).pipe(finalize(() => {
       this.isSubmit = false;
       this.isLoading = false;
       this.showModal = false;
     })).subscribe({
       next: (res: any) => {
-        this.msgSuccess(res.message);
-        this.getTelegram();
+        this.alert.success(res.message);
+        this.getWhatsappData(); 
       }
     })
   }
 
-  addTelegram() {
+  addWhatsappp() {
     if (this.ModalForm.invalid || this.isLoading) return;
-    
+
     this.isSubmit = true;
     this.isLoading = true;
 
     const payload = this.ModalForm.value;
     payload.admin_number = String(payload.admin_number);
 
-    this.mainService.addtelegram(payload).pipe(finalize(() => {
+    this.mainService.addWhatsapp(payload).pipe(finalize(() => {
       this.isLoading = false;
     })).subscribe({
       next: (res: any) => {
-        this.msgSuccess(res.message);
+        this.alert.success(res.message);
         this.showModal = false;
-        this.getTelegram();
+        this.getWhatsappData();
       },
       error: (err: any) => {
         const errorMessage = err.error?.message || "something wrong, try again later."
@@ -159,7 +122,6 @@ export class TelegramComponent {
     })
   }
 
-  
   onSubmit() {
     this.isSubmit = true;
     if (this.ModalForm.invalid) {
@@ -167,7 +129,7 @@ export class TelegramComponent {
       return;
     }
 
-    this.editData ? this.updateTelegram() : this.addTelegram();
+    this.editData ? this.updateWhatsapp() : this.addWhatsappp();
   }
 
 }

@@ -197,4 +197,16 @@ export class MainService {
   getTelegram() {
     return this.http.get(Backend_URL + '/telegram/lists');
   }
+
+  getWhatsapp() {
+    return this.http.get(Backend_URL + '/whatsapp/lists');
+  }
+
+  addWhatsapp(data: any) {
+    return this.http.post(Backend_URL + '/whatsapp/add', data);
+  }
+
+  updateWhatsapp(data: any) {
+    return this.http.post(Backend_URL + '/whatsapp/update', data);
+  }
 }
