@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MainService } from '../services/main.service';
 import { AlertService } from '../../shared/alert.service';
 import { finalize } from 'rxjs';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-whatsapp',
@@ -24,19 +25,22 @@ export class WhatsappComponent {
   ModalForm!: FormGroup;
   isSubmit: boolean = false;
   id: string = '';
+  canAddAccount: boolean = false;
+  canEditAccount: boolean = false;
 
   constructor(
     private mainService: MainService,
+    private userservice: UserService,
     private fb: FormBuilder,
     private alert: AlertService
   ) {
     
     this.ModalForm = this.fb.group({
       type: ['', [Validators.required]],
-      name: ['', Validators.required],
+      name: ['', Validators.required, Validators.minLength(3)],
       link: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/)]],
       admin_name: ['', [Validators.required]],
-      admin_number: ['', [Validators.required]],
+      admin_number: ['', [Validators.required, Validators.minLength(10),Validators.maxLength(10)]],
       admin_email: ['', [Validators.required, Validators.email]],
       purpose: ['', Validators.required]
     });
@@ -45,6 +49,8 @@ export class WhatsappComponent {
   }
 
   ngOnInit(): void {
+    this.canAddAccount = this.userservice.hasPermission('ADD_WHATSAPP');
+    this.canEditAccount = this.userservice.hasPermission('EDIT_WHATSAPP');
   }
 
   getWhatsappData() {

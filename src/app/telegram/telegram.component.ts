@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { finalize } from 'rxjs';
 import { MainService } from '../services/main.service';
 import { AlertService } from '../../shared/alert.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-telegram',
@@ -26,9 +27,12 @@ export class TelegramComponent {
   ModalForm!: FormGroup;
   isSubmit: boolean = false;
   id: string = '';
+  canAddAccount: boolean = false;
+  canEditAccount: boolean = false;
 
   constructor(
     private mainService: MainService,
+    private userservice: UserService,
     private fb: FormBuilder,
     private alert: AlertService
   ) {
@@ -36,12 +40,15 @@ export class TelegramComponent {
   }
 
   ngOnInit(): void {
+    this.canAddAccount = this.userservice.hasPermission('ADD_TELEGRAM');
+    this.canEditAccount = this.userservice.hasPermission('EDIT_TELEGRAM');
+
     this.ModalForm = this.fb.group({
       type: ['', [Validators.required]],
-      name: ['', Validators.required],
+      name: ['', Validators.required, Validators.minLength(3)],
       link: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/)]],
       admin_name: ['', [Validators.required]],
-      admin_number: ['', [Validators.required]],
+      admin_number: ['', [Validators.required, Validators.minLength(10),Validators.maxLength(10)]],
       admin_email: ['', [Validators.required, Validators.email]],
       purpose: ['', Validators.required]
     });
@@ -52,47 +59,6 @@ export class TelegramComponent {
       next: (res: any) => {
         this.accounts = res.data
       }
-    })
-  }
-
-  Delete(item: any) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result: any) => {
-      if (result.isConfirmed) {
-        this.mainService.DeleteAccount({ id: item._id }).subscribe({
-          next: (res: any) => {
-            this.msgSuccess(res.message);
-          },
-          error: (e: any) => {
-            this.msgFailure();
-          }
-        })
-      }
-    })
-  }
-
-  msgSuccess(message: string) {
-    Swal.fire({
-      icon: 'success',
-      title: message,
-      showConfirmButton: false,
-      timer: 1500
-    })
-  }
-
-  msgFailure() {
-    Swal.fire({
-      icon: 'error',
-      title: 'Something Went Wrong!',
-      showConfirmButton: false,
-      timer: 1500
     })
   }
 
@@ -129,7 +95,7 @@ export class TelegramComponent {
       this.showModal = false;
     })).subscribe({
       next: (res: any) => {
-        this.msgSuccess(res.message);
+        this.alert.success(res.message);
         this.getTelegram();
       }
     })
@@ -148,7 +114,7 @@ export class TelegramComponent {
       this.isLoading = false;
     })).subscribe({
       next: (res: any) => {
-        this.msgSuccess(res.message);
+        this.alert.success(res.message);
         this.showModal = false;
         this.getTelegram();
       },
@@ -159,7 +125,6 @@ export class TelegramComponent {
     })
   }
 
-  
   onSubmit() {
     this.isSubmit = true;
     if (this.ModalForm.invalid) {

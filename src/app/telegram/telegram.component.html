@@ -21,10 +21,9 @@
                 <div class="col-md-6">
                     <h4>Telegram Account List</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="canAddAccount">
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button class="btn btn-primary me-md-2" type="button" (click)="openAddModule()">Add
-                            Telegram</button>
+                        <button class="btn btn-primary me-md-2" type="button" (click)="openAddModule()">Add Telegram</button>
                     </div>
                 </div>
             </div>
@@ -55,7 +54,7 @@
                             <td>{{item.admin_name}}</td>
                             <td>{{item.admin_number}}</td>
                             <td>{{item.admin_email}}</td>
-                            <td>
+                            <td *ngIf="canEditAccount">
                                 <div class="d-flex gap-2 col-4 mx-auto">
                                     <button class="btn btn-primary" type="button" (click)="openEdit(item)">Edit</button>
                                 </div>

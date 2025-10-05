@@ -49,6 +49,6 @@ export const routes: Routes = [
     { path: 'server-settings', component: ServerSettingsComponent, canActivate: [authGuard, permissionGuard] },
     { path: 'important-information', component: InformationPageComponent, canActivate: [authGuard, permissionGuard], data: { permission: 'VIEW_INFO' } },
     { path: 'statements', component: StatementsComponent, canActivate: [authGuard, permissionGuard], data: { permission: 'VIEW_STATEMENT' } },
-    { path: 'telegram', component: TelegramComponent, canActivate: [authGuard]},
+    { path: 'telegram', component: TelegramComponent, canActivate: [authGuard, permissionGuard], data: { permission: 'VIEW_TELEGRAM' }},
     { path: 'whatsapp', component: WhatsappComponent, canActivate: [authGuard, permissionGuard], data: { permission: 'VIEW_WHATSAPP' }},
 ];
