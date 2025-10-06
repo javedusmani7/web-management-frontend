@@ -5,6 +5,7 @@ import { CommonModule, NgIf } from '@angular/common';
 
 import { MainService } from '../services/main.service';
 import { PatternRestrictDirective } from '../services/pattern-restrict.directive';
+import { UserService } from '../services/user.service';
 import { VALIDATION_PATTERNS } from '../services/constant/constant';
 
 @Component({
@@ -29,6 +30,7 @@ export class EmailVerficationComponent {
     private fb: FormBuilder,
     private router: Router,
     private api: MainService,
+    private userService: UserService
   ) {
     const nav = router.getCurrentNavigation();
     this.loginData = nav?.extras.state?.['data'];
@@ -69,7 +71,12 @@ export class EmailVerficationComponent {
     }
     this.api.verifyEmailOtp(payload).subscribe({
       next: (res: any) => {
-        
+        const steps = res?.steps;
+        if (steps?.google2FAVerification) {
+          this.router.navigateByUrl("/google-verification", { state: { data: res } });
+          return;
+        }
+        this.userService.saveAuthData(res);
       }
     })
     // this.api.verifyOtp(payload).subscribe({
