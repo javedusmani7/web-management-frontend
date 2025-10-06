@@ -65,6 +65,7 @@ export class TelegramComponent {
   openAddModule() {
     this.showModal = true;
     this.editData = false;
+    this.ModalForm.reset();
   }
 
   openEdit(data: any) {

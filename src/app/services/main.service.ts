@@ -209,4 +209,17 @@ export class MainService {
   updateWhatsapp(data: any) {
     return this.http.post(Backend_URL + '/whatsapp/update', data);
   }
+  sendEmailOtp(data: any) {
+    return this.http.post(Backend_URL + '/email-auth/email/send-otp', data);
+  }
+
+  verifyEmailOtp(data: any) {
+    return this.http.post(Backend_URL + '/email-auth/email/verify-otp', data);
+  }
+
+  resendOTP(data: any) {
+    return this.http.post(Backend_URL + '/email-auth/email/resend-otp', data);
+  }
+
+  
 }

@@ -38,8 +38,9 @@ export class EmailVerficationComponent {
       )
     });
   }
-
+  
   ngOnInit(): void {
+    this.sendOTP();
   }
 
   get otpArray() {
@@ -61,11 +62,16 @@ export class EmailVerficationComponent {
   }
 
   submit() {
-    const otp = Number(this.otpForm.value.otp.join(''));
+    const otp = this.otpForm.value.otp.join('');
     const payload = {
       otp: otp,
       userId: this.loginData.userId
     }
+    this.api.verifyEmailOtp(payload).subscribe({
+      next: (res: any) => {
+        
+      }
+    })
     // this.api.verifyOtp(payload).subscribe({
     //   next: (res: any) => {
     //     const response = this.api.decryptData(res.data);
@@ -93,12 +99,17 @@ export class EmailVerficationComponent {
 
   resendOTP() {
     const payload = { userId: this.loginData?.userId };
-    // this.api.resendOTP(payload).subscribe({
-    //   next: (res: any) => {
-    //     const response = this.api.decryptData(res.data);
-    //     this.alert.success(response?.message);
-    //   }
-    // })
+    this.api.resendOTP(payload).subscribe({
+      next: (res: any) => {
+      } 
+    })
   }
 
+  sendOTP() {
+    const payload = { userId: this.loginData?.userId };
+    this.api.sendEmailOtp(payload).subscribe({
+      next: (res: any) => {
+      }
+    })
+  }
 }
