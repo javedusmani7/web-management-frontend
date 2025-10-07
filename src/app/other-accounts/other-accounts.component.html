@@ -67,6 +67,7 @@
               <td>{{item.email}}</td>
               <td *ngIf="canEditAccount || CanDeleteAccount">
                 <div class="d-flex gap-2 col-4 mx-auto">
+                  <button class="btn btn-primary" type="button" (click)="openPassword(item)">Password</button>
                   <button class="btn btn-primary" *ngIf="canEditAccount" (click)="Edit(item)"
                     type="button">Edit</button>
                   <button class="btn btn-danger" *ngIf="CanDeleteAccount" (click)="Delete(item)"
@@ -377,3 +378,6 @@
     </div>
   </div>
 </div>
+
+
+<app-show-password [showModal]="showPassword" [data]="passwordData" (close) = "closeModal2()"></app-show-password>

@@ -1,15 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import Swal from 'sweetalert2';
+
 import { MainService } from '../services/main.service';
 import { UserService } from '../services/user.service';
-import Swal from 'sweetalert2';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ValidatorService } from '../services/validator.service';
+import { ShowPasswordComponent } from "../show-password/show-password.component";
 
 @Component({
   selector: 'app-other-accounts',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ShowPasswordComponent],
   templateUrl: './other-accounts.component.html',
   styleUrl: './other-accounts.component.css'
 })
@@ -17,24 +20,25 @@ export class OtherAccountsComponent implements OnInit {
 
   showModal: boolean = false;
   MasterList: boolean = true;
-  showAgentList:boolean = false;
-  showAgentModal:boolean = false;
+  showAgentList: boolean = false;
+  showAgentModal: boolean = false;
   isAgnetSubmit: boolean = false;
-  isSubmit: boolean = false;editMode = false;
+  isSubmit: boolean = false; editMode = false;
   editIndex: number | null = null;
   ModalForm!: FormGroup;
   AgentForm !: FormGroup;
   selectedcompany: string = '';
   websiteData: any = [];
-  accounts:any = [];
-  masterList:any = [];
-  websList:any = [];
+  accounts: any = [];
+  masterList: any = [];
+  websList: any = [];
   agents: any = [];
   canAddAccount: boolean = false;
   canEditAccount: boolean = false;
   CanDeleteAccount: boolean = false;
-
-  constructor(private mainService: MainService, private userservice: UserService){}
+  showPassword: boolean = false;
+  passwordData: any;
+  constructor(private mainService: MainService, private userservice: UserService) { }
 
   ngOnInit(): void {
     this.canAddAccount = this.userservice.hasPermission('ADD_ACCOUNT');
@@ -42,7 +46,7 @@ export class OtherAccountsComponent implements OnInit {
     this.CanDeleteAccount = this.userservice.hasPermission('DELETE_ACCOUNT');
     this.GetAccounts();
     this.ModalForm = new FormGroup({
-      master_account_name: new FormControl('',[Validators.required, ValidatorService.alphanumeric]),
+      master_account_name: new FormControl('', [Validators.required, ValidatorService.alphanumeric]),
       account_url: new FormControl('', Validators.required),
       account_password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -52,7 +56,7 @@ export class OtherAccountsComponent implements OnInit {
     })
 
     this.AgentForm = new FormGroup({
-      master_account_name: new FormControl('',[Validators.required, ValidatorService.alphanumeric]),
+      master_account_name: new FormControl('', [Validators.required, ValidatorService.alphanumeric]),
       website_name: new FormControl('', Validators.required),
       backoffice_url: new FormControl('', Validators.required),
       account_password: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -62,39 +66,35 @@ export class OtherAccountsComponent implements OnInit {
     })
   }
 
-  GetAccounts()
-  {
+  GetAccounts() {
     this.mainService.MasterAccountList().subscribe({
-      next:(res:any)=>{
+      next: (res: any) => {
         this.accounts = res;
-      }, error:(e)=>{
+      }, error: (e) => {
         console.log(e)
       }
     })
   }
 
-  AgentList()
-  {
-    
+  AgentList() {
+
     this.mainService.AgentAccountList().subscribe({
-      next:(res:any)=>{
+      next: (res: any) => {
         this.agents = res;
         this.showAgentList = true;
         this.MasterList = false;
-      }, error:(e)=>{
+      }, error: (e) => {
         console.log(e)
       }
     })
   }
 
-  MastersList()
-  {
+  MastersList() {
     this.showAgentList = false;
-        this.MasterList = true;
+    this.MasterList = true;
   }
 
-  Delete(item: any)
-  {
+  Delete(item: any) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -105,12 +105,12 @@ export class OtherAccountsComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.mainService.DeleteMasterAccount({id: item._id}).subscribe({
-          next:(res:any)=>{
+        this.mainService.DeleteMasterAccount({ id: item._id }).subscribe({
+          next: (res: any) => {
             this.msgSuccess(res.message);
             this.GetAccounts();
           },
-          error:(e)=>{
+          error: (e) => {
             this.msgFailure();
           }
         })
@@ -118,17 +118,15 @@ export class OtherAccountsComponent implements OnInit {
     })
   }
 
-  Edit(item: any)
-  {
+  Edit(item: any) {
     this.editMode = true;
-    this.editIndex = this.accounts.findIndex((c:any) => c._id === item._id);
+    this.editIndex = this.accounts.findIndex((c: any) => c._id === item._id);
 
-    if(this.editIndex !== -1 && this.editIndex !== null)
-    {
+    if (this.editIndex !== -1 && this.editIndex !== null) {
       const CustomerData = this.accounts[this.editIndex];
       this.ModalForm.patchValue({
         master_account_name: CustomerData.master_account_name,
-        account_url:CustomerData.account_url,
+        account_url: CustomerData.account_url,
         account_password: CustomerData.account_password,
         email: CustomerData.email,
         user_id: CustomerData.user_id,
@@ -136,126 +134,117 @@ export class OtherAccountsComponent implements OnInit {
       });
       this.showModal = true;
     }
-    
+
   }
 
   openModal(): void {
     this.ModalForm.reset();
-    this.showModal = true; 
+    this.showModal = true;
   }
 
-  AgentModal(): void{
+  AgentModal(): void {
     this.AgentForm.reset();
     this.showAgentModal = true;
   }
 
-  closeAgentModal(): void{
+  closeAgentModal(): void {
     this.AgentForm.reset();
     this.showAgentModal = false;
   }
 
   closeModal(): void {
     this.ModalForm.reset();
-    this.showModal = false; 
+    this.showModal = false;
   }
 
-  AgentCompany(event:any)
-  {
+  AgentCompany(event: any) {
     this.selectedcompany = event.target.value;
 
-    this.masterList = this.accounts.filter((d:any) => d.company_name === this.selectedcompany);
+    this.masterList = this.accounts.filter((d: any) => d.company_name === this.selectedcompany);
 
   }
 
-  MasterWeb(event: any)
-  {
+  MasterWeb(event: any) {
     const master_id = event.target.value;
 
     this.mainService.GetWebsite().subscribe({
-      next:(res:any)=>{
+      next: (res: any) => {
         this.websiteData = res;
-          if(this.selectedcompany === 'awc')
-          {
-this.websList = this.websiteData.filter((d: any) => d.web_awc._id === master_id && d.platform !== "database").map((w:any) => w.website_name);
-          }
-          if(this.selectedcompany === 'saba')
-            {
-  this.websList = this.websiteData.filter((d: any) => d.web_saba._id === master_id && d.platform !== "database").map((w:any) => w.website_name);
-            }
-            if(this.selectedcompany === 'int')
-              {
-    this.websList = this.websiteData.filter((d: any) => d.web_int._id === master_id && d.platform !== "database").map((w:any) => w.website_name);
-              }      
-              
-      },error:(e)=>{
+        if (this.selectedcompany === 'awc') {
+          this.websList = this.websiteData.filter((d: any) => d.web_awc._id === master_id && d.platform !== "database").map((w: any) => w.website_name);
+        }
+        if (this.selectedcompany === 'saba') {
+          this.websList = this.websiteData.filter((d: any) => d.web_saba._id === master_id && d.platform !== "database").map((w: any) => w.website_name);
+        }
+        if (this.selectedcompany === 'int') {
+          this.websList = this.websiteData.filter((d: any) => d.web_int._id === master_id && d.platform !== "database").map((w: any) => w.website_name);
+        }
+
+      }, error: (e) => {
 
       }
     })
   }
 
-  AgentSubmit()
-  {
+  AgentSubmit() {
     //  // Set the static value for website_name before checking validity
     // this.AgentForm.patchValue({
     //   website_name: "test website" 
     // });
-    
+
     // console.log("AgentSubmit", this.AgentForm.valid);
     this.isAgnetSubmit = true;
     if (this.AgentForm.valid) {
-        let data = this.AgentForm.value;
-        this.mainService.AddAgentAccount(data).subscribe({
-          next:(res:any)=>{
-            this.isAgnetSubmit = false;
-            this.showAgentModal = false;
-            this.msgSuccess(res.message);
-            this.GetAccounts();
-          },
-          error:(e)=>{
-            this.isAgnetSubmit = false;
-            this.msgFailure();
-          }
-        })
+      let data = this.AgentForm.value;
+      this.mainService.AddAgentAccount(data).subscribe({
+        next: (res: any) => {
+          this.isAgnetSubmit = false;
+          this.showAgentModal = false;
+          this.msgSuccess(res.message);
+          this.GetAccounts();
+        },
+        error: (e) => {
+          this.isAgnetSubmit = false;
+          this.msgFailure();
+        }
+      })
 
     }
   }
-  
-  onSubmit()
-  {
+
+  onSubmit() {
     this.isSubmit = true;
     if (this.ModalForm.valid) {
-        let data = this.ModalForm.value;
-        if(this.editMode)
-          {
-            this.mainService.UpdateMasterAccount({_id:this.accounts[this.editIndex!]._id, data}).subscribe({
-              next: (res: any) => {
-                this.isSubmit = false;
-                this.showModal = false;
-                this.msgSuccess(res.message);
-                this.GetAccounts();
-              },
-              error: (e) => {
-                this.isSubmit = false;
-                this.msgFailure();
-              }
-            });
+      let data = this.ModalForm.value;
+      if (this.editMode) {
+        this.mainService.UpdateMasterAccount({ _id: this.accounts[this.editIndex!]._id, data }).subscribe({
+          next: (res: any) => {
+            this.isSubmit = false;
+            this.showModal = false;
+            this.msgSuccess(res.message);
+            this.GetAccounts();
+          },
+          error: (e) => {
+            this.isSubmit = false;
+            this.msgFailure();
           }
-          else
-          {
-            this.mainService.AddMasterAccount(data).subscribe({
-              next:(res:any)=>{
-                this.isSubmit = false;
-                this.showModal = false;
-                this.msgSuccess(res.message);
-                this.GetAccounts();
-              },
-              error:(e)=>{
-                this.isSubmit = false;
-                this.msgFailure();
-              }
-            })
+        });
+      }
+      else {
+        this.mainService.AddMasterAccount(data).subscribe({
+          next: (res: any) => {
+            this.isSubmit = false;
+            this.showModal = false;
+            this.msgSuccess(res.message);
+            this.GetAccounts();
+          },
+          error: (e) => {
+            this.isSubmit = false;
+            this.msgFailure();
           }
-        
+        })
+      }
+
     }
   }
 
@@ -277,5 +266,12 @@ this.websList = this.websiteData.filter((d: any) => d.web_awc._id === master_id 
     })
   }
 
+  openPassword(data: any) {
+    this.showPassword = true;
+    this.passwordData = data;
+  }
 
+  closeModal2() {
+    this.showPassword = false;
+  }
 }

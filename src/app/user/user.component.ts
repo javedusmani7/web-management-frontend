@@ -8,51 +8,55 @@ import { faLock, faPencilAlt, faTrashAlt, faBan, faCheckCircle, faKey } from '@f
 
 import Swal from 'sweetalert2';
 
+import { PatternRestrictDirective } from "../services/pattern-restrict.directive";
 import { UserService } from '../services/user.service';
 import { ValidatorService } from '../services/validator.service';
+import { VALIDATION_PATTERNS } from '../services/constant/constant';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,RouterLink, FontAwesomeModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FontAwesomeModule, PatternRestrictDirective],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
 export class UserComponent implements OnInit {
-   faLock = faLock;
+  faLock = faLock;
   faPencilAlt = faPencilAlt;
   faTrashAlt = faTrashAlt;
   faBan = faBan;
   faCheckCircle = faCheckCircle;
   faKey = faKey;
-  showModal: boolean = false;UserFormModel: FormGroup = new FormGroup({});
-  submitButtonClicked: boolean = false;user:any=[];
-  passButtonClicked:boolean = false;
+  showModal: boolean = false;
+  UserFormModel: FormGroup = new FormGroup({});
+  submitButtonClicked: boolean = false; user: any = [];
+  passButtonClicked: boolean = false;
   editMode = false;
   editIndex: number | null = null;
-  passIndex:number | null = null;
+  passIndex: number | null = null;
   currentEmail: string | null = null;
   currentUserId: string | null = null;
   currentNumber: string | null = null;
   canAddUser: boolean = false;
   canEditUser: boolean = false;
   canDeleteUser: boolean = false;
-  userLevel:any = '';
+  userLevel: any = '';
   passModal: boolean = false; PassFormModel: FormGroup = new FormGroup({});
+  pattern = VALIDATION_PATTERNS;
 
 
-  constructor(private userService: UserService){}
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     // this.userService.GetPermissions();
     // this.userService.getPermissionListner();
     this.userLevel = this.userService.getUserlevel();
     this.canAddUser = this.userService.hasPermission('ADD_USER');
-      this.canEditUser = this.userService.hasPermission('EDIT_USER');
-      this.canDeleteUser = this.userService.hasPermission('DELETE_USER');
+    this.canEditUser = this.userService.hasPermission('EDIT_USER');
+    this.canDeleteUser = this.userService.hasPermission('DELETE_USER');
 
     this.UserFormModel = new FormGroup({
-      user_name: new FormControl("", [Validators.required,Validators.minLength(6), Validators.maxLength(20), ValidatorService.alphanumeric]),
+      user_name: new FormControl("", [Validators.required, Validators.minLength(6), Validators.maxLength(20), ValidatorService.alphanumeric]),
       user_email: new FormControl("", {
         validators: [Validators.required, Validators.email],
         asyncValidators: [],
@@ -65,9 +69,9 @@ export class UserComponent implements OnInit {
       }),
       password: new FormControl("", []),
       number: new FormControl("", {
-        validators:[Validators.required, Validators.minLength(10), Validators.maxLength(15)],
+        validators: [Validators.required, Validators.minLength(10), Validators.maxLength(15)],
         asyncValidators: [],
-        updateOn:'blur'
+        updateOn: 'blur'
       }),
       googleAuthVerification: new FormControl(false),
       emailVerification: new FormControl(false),
@@ -75,12 +79,13 @@ export class UserComponent implements OnInit {
 
     this.PassFormModel = new FormGroup({
       password: new FormControl("", [Validators.required]),
-      newpassword: new FormControl("",[Validators.required, ValidatorService.passwordStrength()]),
-      confirm_password: new FormControl("",[Validators.required, ValidatorService.passwordStrength()])
-    },{
+      newpassword: new FormControl("", [Validators.required, ValidatorService.passwordStrength()]),
+      confirm_password: new FormControl("", [Validators.required, ValidatorService.passwordStrength()]),
+      googleOtp: new FormControl('', [Validators.minLength(6), Validators.required])
+    }, {
       validators: ValidatorService.passwordMatchValidator('newpassword', 'confirm_password')
     }
-  );
+    );
 
     if (this.editMode) {
       // If editing, password field should not be shown and should not be validated
@@ -93,37 +98,35 @@ export class UserComponent implements OnInit {
     }
 
     this.getUsers();
-      
+
   }
 
-  getUsers()
-  {
+  getUsers() {
     this.userService.getUsers().subscribe({
-      next:(res:any)=>{
+      next: (res: any) => {
         this.user = res;
-      }, error:(e) => {
-          console.log(e)
+      }, error: (e) => {
       }
     })
   }
 
-  AddUserModal()
-  {
+  AddUserModal() {
     this.editMode = false;
     this.UserFormModel.reset();
     this.updateAsyncValidators();
-    this.showModal = true;    
+    this.showModal = true;
+    if (this.UserFormModel.contains('googleOtp')) {
+      this.UserFormModel.removeControl('googleOtp');
+    }
   }
 
-  Password(item:any)
-  {
+  Password(item: any) {
     this.PassFormModel.reset();
     this.passIndex = this.user.findIndex((u: any) => u._id === item._id);
     this.passModal = true
   }
 
-  closeModal()
-  {
+  closeModal() {
     this.UserFormModel.reset();
     this.clearAsyncValidators();
     this.showModal = false;
@@ -133,15 +136,13 @@ export class UserComponent implements OnInit {
     this.currentNumber = null;
   }
 
-  closePassModal()
-  {
+  closePassModal() {
     this.PassFormModel.reset();
     this.passModal = false;
     this.passButtonClicked = false;
   }
 
-  EditUser(item: any)
-  {    
+  EditUser(item: any) {
     this.editMode = true;
     this.editIndex = this.user.findIndex((u: any) => u._id === item._id);
 
@@ -151,7 +152,7 @@ export class UserComponent implements OnInit {
       this.currentUserId = userData.userId;
       this.currentNumber = userData.number;
       // Clear previous async validators
-    this.clearAsyncValidators();
+      this.clearAsyncValidators();
 
       this.UserFormModel.patchValue({
         user_name: userData.name,
@@ -163,15 +164,20 @@ export class UserComponent implements OnInit {
       });
       this.UserFormModel.get('password')?.clearValidators();
       this.UserFormModel.get('password')?.updateValueAndValidity();
+      if (!this.UserFormModel.get('googleOtp')) {
+        this.UserFormModel.addControl('googleOtp', new FormControl('', [Validators.minLength(6), Validators.required]));
+      } else {
+        this.UserFormModel.get('googleOtp')?.reset();
+      }      
       this.updateAsyncValidators();
-      
+
       this.showModal = true;
     }
 
   }
 
   updateAsyncValidators() {
-    
+
     this.UserFormModel.get('userId')?.clearAsyncValidators();
     this.UserFormModel.get('user_email')?.setAsyncValidators(this.userService.validateUniqueEmail(this.currentEmail));
     this.UserFormModel.get('userId')?.clearAsyncValidators();
@@ -188,8 +194,7 @@ export class UserComponent implements OnInit {
     this.UserFormModel.updateValueAndValidity({ onlySelf: true, emitEvent: false });
   }
 
-  Inactive(item:any)
-  {
+  Inactive(item: any) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -200,12 +205,12 @@ export class UserComponent implements OnInit {
       confirmButtonText: 'Yes, Change it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.userService.UserStatus({id: item._id}).subscribe({
-          next:(res:any)=>{
+        this.userService.UserStatus({ id: item._id }).subscribe({
+          next: (res: any) => {
             this.msgSuccess(res.message);
             this.getUsers();
           },
-          error:(e)=>{
+          error: (e) => {
             this.msgFailure(e.error.message);
           }
         })
@@ -213,8 +218,7 @@ export class UserComponent implements OnInit {
     })
   }
 
-  Activate(item:any)
-  {
+  Activate(item: any) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -225,12 +229,12 @@ export class UserComponent implements OnInit {
       confirmButtonText: 'Yes, Change it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.userService.ActiveUser({id: item._id}).subscribe({
-          next:(res:any)=>{
+        this.userService.ActiveUser({ id: item._id }).subscribe({
+          next: (res: any) => {
             this.msgSuccess(res.message);
             this.getUsers();
           },
-          error:(e)=>{
+          error: (e) => {
             this.msgFailure(e.error.message);
           }
         })
@@ -238,50 +242,49 @@ export class UserComponent implements OnInit {
     })
   }
 
-  onSubmit()
-  {    
+  onSubmit() {
     this.submitButtonClicked = true;
-    if(this.UserFormModel.valid)
-      {
-        let data = this.UserFormModel.value;
-
-        if(this.editMode)
-        {
-          delete data.password;          
-          this.userService.UpdateUser({_id:this.user[this.editIndex!]._id, data}).subscribe({
-            next: (res: any) => {
-              this.showModal = false;
-              this.submitButtonClicked = false;
-              this.getUsers();
-              this.msgSuccess(res.message);
-            },
-            error: (e) => {
-              this.submitButtonClicked = false;
-              this.msgFailure(e.error.message);
-            }
-          });
-        }
-        else
-        {
-          this.userService.addUser(data).subscribe({
-            next:(res:any)=>{
-              this.showModal = false;
-              this.submitButtonClicked = false;
-              this.msgSuccess(res.message);
-              this.getUsers();
-            }, error:(e)=>{
-              this.submitButtonClicked = false;
-              this.msgFailure(e.error.message);
-            }
-          });
-        }
-          
+    if (this.UserFormModel.valid) {
+      let data = this.UserFormModel.value;
+      const googleOtp = this.UserFormModel.value.googleOtp;
+      delete data.googleOtp;
+      if (this.editMode) {
+        delete data.password;
+        const payload = {
+          _id: this.user[this.editIndex!]._id,
+          data: data,
+          googleOtp: googleOtp
+        }        
+        this.userService.UpdateUser(payload).subscribe({
+          next: (res: any) => {
+            this.showModal = false;
+            this.submitButtonClicked = false;
+            this.getUsers();
+            this.msgSuccess(res.message);
+          },
+          error: (e) => {
+            this.submitButtonClicked = false;
+            this.msgFailure(e.error.message);
+          }
+        });
       }
-    
+      else {
+        this.userService.addUser(data).subscribe({
+          next: (res: any) => {
+            this.showModal = false;
+            this.submitButtonClicked = false;
+            this.msgSuccess(res.message);
+            this.getUsers();
+          }, error: (e) => {
+            this.submitButtonClicked = false;
+            this.msgFailure(e.error.message);
+          }
+        });
+      }
+    }
   }
 
-  deleteUser(item: any)
-  {
+  deleteUser(item: any) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -292,12 +295,12 @@ export class UserComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.userService.deleteUser({id: item._id}).subscribe({
-          next:(res:any)=>{
+        this.userService.deleteUser({ id: item._id }).subscribe({
+          next: (res: any) => {
             this.msgSuccess(res.message);
             this.getUsers();
           },
-          error:(e)=>{
+          error: (e) => {
             this.msgFailure(e.error.message);
           }
         })
@@ -305,23 +308,27 @@ export class UserComponent implements OnInit {
     })
   }
 
-  onUpdate()
-  {
+  onUpdate() {
     this.passButtonClicked = true;
 
-    if(this.PassFormModel.valid)
-    {
+    if (this.PassFormModel.valid) {
+      const googleOtp = this.PassFormModel.value.googleOtp;
       let data = this.PassFormModel.value;
-      console.log()
-
-      this.userService.UpdatePassword({_id: this.user[this.passIndex!]._id,data}).subscribe({
-        next:(res:any)=>{
+      delete data.googleOtp;
+      
+      const payload = {
+        _id: this.user[this.passIndex!]._id,
+        data: data,
+        googleOtp
+      }      
+      this.userService.UpdatePassword(payload).subscribe({
+        next: (res: any) => {
           this.passModal = false;
           this.passButtonClicked = false;
           this.msgSuccess(res.message);
           this.getUsers();
         },
-        error:(e)=>{
+        error: (e) => {
           this.passButtonClicked = false;
           this.msgFailure(e.error.message);
         }

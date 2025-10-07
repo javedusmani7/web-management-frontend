@@ -221,5 +221,9 @@ export class MainService {
     return this.http.post(Backend_URL + '/email-auth/email/resend-otp', data);
   }
 
+  showPassword(data: any) {
+    return this.http.post(Backend_URL + '/account/show-password', data);
+  }
+
   
 }

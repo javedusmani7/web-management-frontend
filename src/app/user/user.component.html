@@ -119,17 +119,17 @@
                     <div class="col-md-6 position-relative">
                         <div class="mb-3">
                             <label for="user-email" class="fw-bold col-form-label">Email:</label>
-                                <input type="email" formControlName="user_email" class="form-control" id="user-email"
-                                    [ngClass]="{
+                            <input type="email" formControlName="user_email" class="form-control" id="user-email"
+                                [ngClass]="{
                                     'is-valid': UserFormModel.get('user_email')?.valid && (UserFormModel.get('user_email')?.touched || UserFormModel.get('user_email')?.dirty || submitButtonClicked),
                                     'is-invalid': UserFormModel.get('user_email')?.invalid && (UserFormModel.get('user_email')?.touched || UserFormModel.get('user_email')?.dirty || submitButtonClicked)
                                 }">
-                                <div class="checkboxes switch-box">
-                                    <label class="switch">
-                                        <input type="checkbox" formControlName="emailVerification" />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
+                            <div class="checkboxes switch-box">
+                                <label class="switch">
+                                    <input type="checkbox" formControlName="emailVerification" />
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
                             <div *ngIf="UserFormModel.get('user_email') && UserFormModel.get('user_email')?.invalid"
                                 class="invalid-feedback">
                                 <div *ngIf="UserFormModel.get('user_email')?.errors?.['required']">Email is required.
@@ -198,17 +198,33 @@
                         </div>
                     </div>
 
+                    <div class="col-md-6" *ngIf="editMode">
+                        <div class="mb-3">
+                            <label for="user-number" class="fw-bold col-form-label">Google OTP</label>
+                            <input [appPatternRestrict]="pattern.mobile" type="text" maxlength="6" formControlName="googleOtp" class="form-control"
+                                id="user-number" [ngClass]="{
+                            'is-valid':UserFormModel.get('googleOtp')?.valid && (UserFormModel.get('googleOtp')?.touched || UserFormModel.get('googleOtp')?.dirty || submitButtonClicked),
+                            'is-invalid': UserFormModel.get('googleOtp')?.invalid && (UserFormModel.get('googleOtp')?.touched || UserFormModel.get('googleOtp')?.dirty || submitButtonClicked)
+                          }">
+                            <div *ngIf="UserFormModel.get('googleOtp') && UserFormModel.get('googleOtp')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="UserFormModel.get('googleOtp')?.errors?.['required']">OTP is required.</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-6 position-relative">
                         <div class="mb-3">
                             <label for="user-email" class="fw-bold col-form-label">Google Verification:</label>
-                                <div class="checkboxes switch-box">
-                                    <label class="switch">
-                                        <input type="checkbox" formControlName="googleAuthVerification" />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
+                            <div class="checkboxes switch-box">
+                                <label class="switch">
+                                    <input type="checkbox" formControlName="googleAuthVerification" />
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
+                    
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary fw-bold" (click)="closeModal()"
                             data-bs-dismiss="modal">Close</button>
@@ -284,13 +300,27 @@
                                 <div *ngIf="PassFormModel.get('confirm_password')?.errors?.['passwordStrength']">
                                     Password must be at least 8 characters long and contain at least one letter and one
                                     number.</div>
-
                             </div>
                         </div>
                     </div>
                     <div *ngIf="PassFormModel.errors?.['passwordMismatch'] && PassFormModel.get('confirm_password')?.touched"
                         class="inv-feedback">
                         New password and confirm password do not match.
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="user-number" class="fw-bold col-form-label">Google OTP</label>
+                            <input [appPatternRestrict]="pattern.mobile" type="text" maxlength="6" formControlName="googleOtp" class="form-control"
+                                id="user-number" [ngClass]="{
+                            'is-valid':PassFormModel.get('googleOtp')?.valid && (PassFormModel.get('googleOtp')?.touched || PassFormModel.get('googleOtp')?.dirty || passButtonClicked),
+                            'is-invalid': PassFormModel.get('googleOtp')?.invalid && (PassFormModel.get('googleOtp')?.touched || PassFormModel.get('googleOtp')?.dirty || passButtonClicked)
+                          }">
+                            <div *ngIf="PassFormModel.get('googleOtp') && PassFormModel.get('googleOtp')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="PassFormModel.get('googleOtp')?.errors?.['required']">OTP is required.</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary fw-bold" (click)="closePassModal()"

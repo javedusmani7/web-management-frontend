@@ -40,7 +40,7 @@ export class EmailVerficationComponent {
       )
     });
   }
-  
+
   ngOnInit(): void {
     this.sendOTP();
   }
@@ -79,36 +79,14 @@ export class EmailVerficationComponent {
         this.userService.saveAuthData(res);
       }
     })
-    // this.api.verifyOtp(payload).subscribe({
-    //   next: (res: any) => {
-    //     const response = this.api.decryptData(res.data);
-    //     this.alert.success(response?.message);
-    //     if (this.loginData.steps.google2FAVerification) {
-    //       this.router.navigateByUrl("/auth/google-verification", { state: { data: { steps: this.loginData?.steps, userId: this.loginData?.userId } } });
-    //       return;
-    //     }
-    //     else {
-    //       this.api.generateToken({ _id: this.loginData?.userId || "" }).subscribe({
-    //         next: (res: any) => {
-    //           const response = this.api.decryptData(res.data);
-    //           this.api.setEncryptedData('token', response.token)
-    //           this.api.setEncryptedData('role', response.role)
-    //           this.api.setEncryptedData('_id', response._id)
-    //           this.api.setEncryptedData('userId', response.userId)
-    //           if (response?.admin) this.api.setEncryptedData('admin', response?.admin)
-    //           this.router.navigateByUrl("/")
-    //         }
-    //       })
-    //     }
-    //   }
-    // })
   }
 
   resendOTP() {
+    this.otpForm.reset();
     const payload = { userId: this.loginData?.userId };
     this.api.resendOTP(payload).subscribe({
       next: (res: any) => {
-      } 
+      }
     })
   }
 

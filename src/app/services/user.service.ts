@@ -246,8 +246,8 @@ export class UserService {
 
   UpdatePassword(data:any)
   {
-    const encrypt = this.encrypt(JSON.stringify(data));
-    return this.http.post(Backend_URL+'/updatepassword',{body_data: encrypt})
+    // const encrypt = this.encrypt(JSON.stringify(data));
+    return this.http.post(Backend_URL+'/updatepassword',data)
   }
 
   updatePermissions(userId: string, permissions: string[])

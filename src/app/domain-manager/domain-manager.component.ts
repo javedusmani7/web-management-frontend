@@ -1,48 +1,50 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import Swal from 'sweetalert2';
+
 import { AccountModalComponent } from '../account-modal/account-modal.component';
 import { MainService } from '../services/main.service';
-import Swal from 'sweetalert2';
 import { UserService } from '../services/user.service';
-import { CommonModule } from '@angular/common';
+import { ShowPasswordComponent } from "../show-password/show-password.component";
 
 @Component({
   selector: 'app-domain-manager',
   standalone: true,
-  imports: [CommonModule,AccountModalComponent],
+  imports: [CommonModule, AccountModalComponent, ShowPasswordComponent],
   templateUrl: './domain-manager.component.html',
   styleUrl: './domain-manager.component.css'
 })
 export class DomainManagerComponent implements OnInit {
 
   @ViewChild(AccountModalComponent) modal!: AccountModalComponent;
-  Type: string = 'domain';accounts: any = [];EditData: any = null;
+  Type: string = 'domain'; accounts: any = []; EditData: any = null;
   canAddAccount: boolean = false;
   canEditAccount: boolean = false;
   CanDeleteAccount: boolean = false;
   CompanyValue: string = '';
-
-  constructor(private mainService: MainService, private userservice: UserService){}
+  showPassword: boolean = false;
+  passwordData: any;
+  constructor(private mainService: MainService, private userservice: UserService) { }
 
   ngOnInit(): void {
     this.canAddAccount = this.userservice.hasPermission('ADD_ACCOUNT');
     this.canEditAccount = this.userservice.hasPermission('EDIT_ACCOUNT');
     this.CanDeleteAccount = this.userservice.hasPermission('DELETE_ACCOUNT');
-      this.GetAccounts();
+    this.GetAccounts();
   }
 
-  GetAccounts()
-  {
+  GetAccounts() {
     this.mainService.AccountList(this.Type).subscribe({
-      next:(res:any)=>{
-          this.accounts = res;
-      }, error:(e)=>{
+      next: (res: any) => {
+        this.accounts = res;
+      }, error: (e) => {
         console.log(e)
       }
     })
   }
 
-  Edit(item: any)
-  {
+  Edit(item: any) {
     this.EditData = { ...item };
     this.modal.openModal();
   }
@@ -55,7 +57,7 @@ export class DomainManagerComponent implements OnInit {
   //   // Manage modal state and any other related logic
   //   this.showModal = false; // Example: Manage showModal state if it exists in your component
   // }
-  
+
   // // Example of handling close event from AccountModalComponent
   // handleCloseModal(): void {
   //   this.closeModal(); // Manage modal state within this component
@@ -66,8 +68,7 @@ export class DomainManagerComponent implements OnInit {
   }
 
 
-  Delete(item: any)
-  {
+  Delete(item: any) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -78,12 +79,12 @@ export class DomainManagerComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.mainService.DeleteAccount({id: item._id}).subscribe({
-          next:(res:any)=>{
+        this.mainService.DeleteAccount({ id: item._id }).subscribe({
+          next: (res: any) => {
             this.msgSuccess(res.message);
             this.GetAccounts();
           },
-          error:(e)=>{
+          error: (e) => {
             this.msgFailure();
           }
         })
@@ -107,6 +108,15 @@ export class DomainManagerComponent implements OnInit {
       showConfirmButton: false,
       timer: 1500
     })
+  }
+
+  openPassword(data: any) {
+    this.showPassword = true;
+    this.passwordData = data;
+  }
+
+  closeModal() {
+    this.showPassword = false;
   }
 
 }

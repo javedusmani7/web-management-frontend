@@ -1,14 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import Swal from 'sweetalert2';
+
 import { AccountModalComponent } from '../account-modal/account-modal.component';
 import { MainService } from '../services/main.service';
-import Swal from 'sweetalert2';
 import { UserService } from '../services/user.service';
-import { CommonModule } from '@angular/common';
+import { ShowPasswordComponent } from "../show-password/show-password.component";
 
 @Component({
   selector: 'app-cloudflare-account',
   standalone: true,
-  imports: [CommonModule,AccountModalComponent],
+  imports: [CommonModule, AccountModalComponent, ShowPasswordComponent],
   templateUrl: './cloudflare-account.component.html',
   styleUrl: './cloudflare-account.component.css'
 })
@@ -21,6 +24,8 @@ export class CloudflareAccountComponent implements OnInit {
   canEditAccount: boolean = false;
   CanDeleteAccount: boolean = false;
   CompanyValue: string = 'Cloudflare';
+  showPassword: boolean = false;
+  passwordData: any;
   // showModal: boolean = false;
 
   constructor(private mainService: MainService, private userservice: UserService){}
@@ -118,5 +123,14 @@ export class CloudflareAccountComponent implements OnInit {
       showConfirmButton: false,
       timer: 1500
     })
+  }
+
+  openPassword(data: any) {
+    this.showPassword = true;
+    this.passwordData = data;
+  }
+
+  closeModal() {
+    this.showPassword = false;
   }
 }
