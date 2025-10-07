@@ -1,0 +1,867 @@
+<div class="container-fluid mb-4">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
+                    <li class="breadcrumb-item">
+                        <a class="link-body-emphasis text-decoration-none" href="#">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Other Website
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="card border-primary">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Add Other Website</h4>
+                </div>
+            </div>
+        </div>
+        <div class="card-body table-group-divider">
+            <form class="row" [formGroup]="WebForm" (ngSubmit)="onSubmitWeb()" novalidate>
+
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="select-platform" class="fw-bold col-form-label">Select Paltform:</label>
+                        <select id="select-platform" formControlName="platform" (change)="PaltformType($event)"
+                            class="form-select" [ngClass]="{
+                            'is-valid': IsSubmit &&  WebForm.get('platform')?.valid,
+                            'is-invalid': IsSubmit &&  WebForm.get('platform')?.invalid
+                          }">
+                            <option value="">Choose...</option>
+                            <option value="website">Website</option>
+                            <option value="database">Database</option>
+                        </select>
+                        <div *ngIf="WebForm.get('platform') && WebForm.get('platform')?.invalid"
+                            class="invalid-feedback">
+                            <div *ngIf="WebForm.get('platform')?.errors?.['required']">Paltform is required.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="select-type" class="fw-bold col-form-label">Select Website Type</label>
+                        <select id="select-type" formControlName="website_type" (change)="onPanelOrTypeChange()"
+                            class="form-select"
+                            [ngClass]="{'is-valid': IsSubmit && WebForm.get('website_type')?.valid, 'is-invalid': IsSubmit && WebForm.get('website_type')?.invalid }">
+                            <option value="">Choose...</option>
+                            <option value="java">Java</option>
+                            <option value="node">Node</option>
+                            <option value="javangular">Java+Angular</option>
+                            <option value="nodeangular">Node+Angular</option>
+                        </select>
+                        <div *ngIf="WebForm.get('website_type') && WebForm.get('website_type')?.invalid"
+                            class="invalid-feedback">
+                            <div *ngIf="WebForm.get('website_type')?.errors?.['required']">Website Type is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="website-name" class="fw-bold col-form-label">Website Name</label>
+                        <input type="text" formControlName="website_name" class="form-control" id="website-name" [ngClass]="{'is-valid': IsSubmit && WebForm.get('website_name')?.valid, 'is-invalid': IsSubmit && WebForm.get('website_name')?.invalid }">
+                        <div *ngIf="WebForm.get('website_name') && WebForm.get('website_name')?.invalid" class="invalid-feedback">
+                            <div *ngIf="WebForm.get('website_name')?.errors?.['required']">Website Name is required.</div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="website-name" class="fw-bold col-form-label">Website Name</label>
+                        <input type="text" formControlName="website_name" class="form-control" id="website-name"
+                            [ngClass]="{
+                            'is-valid': IsSubmit && WebForm.get('website_name')?.valid,
+                            'is-invalid': IsSubmit && WebForm.get('website_name')?.invalid
+                        }">
+                        <div *ngIf="WebForm.get('website_name')?.invalid" class="invalid-feedback">
+                            <div *ngIf="WebForm.get('website_name')?.errors?.['required']">Website Name is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Database Details -->
+                <div class="row" *ngIf="platformtypevalue === 'database' && show_db_fields">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="ip-add" class="fw-bold col-form-label">Database IP Address</label>
+                            <input type="text" formControlName="db_ip" class="form-control" id="ip-add"
+                                [ngClass]="{'is-valid': WebForm.get('db_ip')?.valid && (WebForm.get('db_ip')?.touched || WebForm.get('db_ip')?.dirty || IsSubmit ), 'is-invalid': WebForm.get('db_ip')?.invalid && (WebForm.get('db_ip')?.touched || WebForm.get('db_ip')?.dirty || IsSubmit ) }">
+                            <div *ngIf="WebForm.get('db_ip') && WebForm.get('db_ip')?.invalid" class="invalid-feedback">
+                                <div *ngIf="WebForm.get('db_ip')?.errors?.['required']">IP Address is required.</div>
+                                <div
+                                    *ngIf="WebForm.get('db_ip')?.errors?.['invalidIpAddress'] && !WebForm.get('db_ip')?.errors?.['required']">
+                                    Invalid Format.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="select-ubuntu" class="fw-bold col-form-label">Select Ubuntu Version</label>
+                            <select id="select-ubuntu" formControlName="db_ubutnu" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_ubutnu')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_ubutnu')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(ub_v of ubuntu_version; track ub_v)
+                                {
+                                <option value="{{ub_v}}">{{ub_v}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('db_ubutnu') && WebForm.get('db_ubutnu')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('db_ubutnu')?.errors?.['required']">Ubuntu Version is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="timezone" class="fw-bold col-form-label">TimeZone</label>
+                            <input type="text" formControlName="db_time_zone" class="form-control" id="timezone"
+                                [ngClass]="{'is-valid': WebForm.get('db_time_zone')?.valid && (WebForm.get('db_time_zone')?.touched || WebForm.get('db_time_zone')?.dirty || IsSubmit), 'is-invalid': WebForm.get('db_time_zone')?.invalid && (WebForm.get('db_time_zone')?.touched || WebForm.get('db_time_zone')?.dirty || IsSubmit) }">
+                            <div *ngIf="WebForm.get('db_time_zone') && WebForm.get('db_time_zone')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('db_time_zone')?.errors?.['required']">Timezone is required.
+                                </div>
+                                <div
+                                    *ngIf="WebForm.get('db_time_zone')?.errors?.['alphanumeric'] && !WebForm.get('db_time_zone')?.errors?.['required']">
+                                    Special Character Not Allowed</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="select-mongo" class="fw-bold col-form-label">Select Mongo Version</label>
+                            <select id="select-mongo" formControlName="db_version" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_version')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_version')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(mong_v of mongo_version; track mong_v)
+                                {
+                                <option value="{{mong_v}}">{{mong_v}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('db_version') && WebForm.get('db_version')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('db_version')?.errors?.['required']">Mongo Version is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="select-indexing" class="fw-bold col-form-label">Indexing Queries</label>
+                            <select id="select-indexing" formControlName="db_index" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_index')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_index')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('db_index') && WebForm.get('db_index')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('db_index')?.errors?.['required']">Indexing is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="select-grefana" class="fw-bold col-form-label">Prometheus Grafana</label>
+                            <select id="select-grefana" formControlName="db_grafana" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_grafana')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_grafana')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('db_grafana') && WebForm.get('db_grafana')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('db_grafana')?.errors?.['required']">This Field is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="select-auth" class="fw-bold col-form-label">DB Authentication</label>
+                            <select id="select-auth" formControlName="db_auth" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_auth')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_auth')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('db_auth') && WebForm.get('db_auth')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('db_auth')?.errors?.['required']">Authentication is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="select-firewall" class="fw-bold col-form-label">DB Firewall</label>
+                            <select id="select-firewall" formControlName="db_firewall" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_firewall')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_firewall')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('db_firewall') && WebForm.get('db_firewall')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('db_firewall')?.errors?.['required']">Firewall is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="log-clear" class="fw-bold col-form-label">Log Clear Date</label>
+                            <input type="datetime-local" formControlName="db_log" class="form-control" id="log-clear"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_log')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_log')?.invalid }">
+                            <div *ngIf="WebForm.get('db_log') && WebForm.get('db_log')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('db_log')?.errors?.['required']">Log Date is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="log-reset" class="fw-bold col-form-label">Hard Reset Date</label>
+                            <input type="datetime-local" formControlName="db_reset" class="form-control" id="log-reset"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_reset')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_reset')?.invalid }">
+                            <div *ngIf="WebForm.get('db_reset') && WebForm.get('db_reset')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('db_reset')?.errors?.['required']">Reset Date is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Website Details -->
+                <div class="row" *ngIf="platformtypevalue === 'website' && show_web_fields">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="technology" class="fw-bold col-form-label">Technologies</label>
+                            <input type="text" formControlName="web_technology" class="form-control" id="technology"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_technology')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_technology')?.invalid }">
+                            <div *ngIf="WebForm.get('web_technology') && WebForm.get('web_technology')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_technology')?.errors?.['required']">Technology is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="select-cloudflare" class="fw-bold col-form-label">Select Cloudflare
+                                Status</label>
+                            <select id="select-cloudflare" formControlName="web_cloud_s" (change)="cloudchange($event)"
+                                class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_cloud_s')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_cloud_s')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">YES</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('web_cloud_s') && WebForm.get('web_cloud_s')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_cloud_s')?.errors?.['required']">Cloudflare Status is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" [ngClass]="{'d-none': !show_cloud}">
+                        <div class="mb-3">
+                            <label for="select-cloudflare_ac" class="fw-bold col-form-label">Select Cloudflare
+                                Account</label>
+                            <select id="select-cloudflare_ac" formControlName="web_cloud_ac" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_cloud_ac')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_cloud_ac')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(cloud of cloudAccounts; track cloud)
+                                {
+                                <option value="{{cloud._id}}">{{cloud.account_name}}</option>
+                                }
+
+                            </select>
+                            <div *ngIf="WebForm.get('web_cloud_ac') && WebForm.get('web_cloud_ac')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_cloud_ac')?.errors?.['required']">Cloudflare Account is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="select-domain" class="fw-bold col-form-label">Select DomainManager</label>
+                            <select id="select-domain" formControlName="web_domain" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_domain')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_domain')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(dom of domainManager; track dom)
+                                {
+                                <option value="{{dom._id}}">{{dom.account_name}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_domain') && WebForm.get('web_domain')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_domain')?.errors?.['required']">Domain is required.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="select-domain-white" class="fw-bold col-form-label">Domain Whitelist</label>
+                            <select id="select-domain-white" formControlName="web_domain_whitelist" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_domain_whitelist')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_domain_whitelist')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('web_domain_whitelist') && WebForm.get('web_domain_whitelist')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_domain_whitelist')?.errors?.['required']">Domain WhiteList
+                                    is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="select-redis" class="fw-bold col-form-label">Redis WhiteList</label>
+                            <select id="select-redis" formControlName="web_redis_allow" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_redis_allow')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_redis_allow')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('web_redis_allow') && WebForm.get('web_redis_allow')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_redis_allow')?.errors?.['required']">Redis Status is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="user-link" class="fw-bold col-form-label">Website Link</label>
+                            <input type="text" formControlName="web_main_link" class="form-control" id="user-link"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_main_link')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_main_link')?.invalid }">
+                            <div *ngIf="WebForm.get('web_main_link') && WebForm.get('web_main_link')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_main_link')?.errors?.['required']">User Link is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <h4>Server Details</h4>
+                    <hr>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="project-name" class="fw-bold col-form-label">Project Name</label>
+                            <input type="text" formControlName="web_project_name" class="form-control" id="project-name"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_project_name')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_project_name')?.invalid }">
+                            <div *ngIf="WebForm.get('web_project_name') && WebForm.get('web_project_name')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_project_name')?.errors?.['required']">Project Name is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="server-name" class="fw-bold col-form-label">Server Name</label>
+                            <input type="text" formControlName="web_server_name" class="form-control" id="server-name"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_server_name')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_server_name')?.invalid }">
+                            <div *ngIf="WebForm.get('web_server_name') && WebForm.get('web_server_name')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_server_name')?.errors?.['required']">Server Name is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="comp-server" class="fw-bold col-form-label">Server Company</label>
+                            <select id="comp-server" (change)="SelectAccount($event)" formControlName="web_server_comp"
+                                class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_server_comp')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_server_comp')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(se_ac of server_account; track se_ac)
+                                {
+                                <option value="{{se_ac._id}}">{{se_ac.company_name}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_server_comp') && WebForm.get('web_server_comp')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_server_comp')?.errors?.['required']">Server Company is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="acc-server" class="fw-bold col-form-label">Server Account</label>
+                            <select id="acc-server" formControlName="web_server_acc" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_server_acc')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_server_acc')?.invalid }">
+                                <option selected>Choose...</option>
+                                @for(se_ac of server_account; track se_ac)
+                                {
+                                <option value="{{se_ac._id}}">{{se_ac.account_name}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_server_acc') && WebForm.get('web_server_acc')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_server_acc')?.errors?.['required']">Server Account is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="server-pass" class="fw-bold col-form-label">Server Password</label>
+                            <input type="text" formControlName="web_server_password" class="form-control"
+                                id="server-pass"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_server_password')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_server_password')?.invalid }">
+                            <div *ngIf="WebForm.get('web_server_password') && WebForm.get('web_server_password')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_server_password')?.errors?.['required']">Server Password is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="server-ip" class="fw-bold col-form-label">Server IP Address</label>
+                            <input type="text" formControlName="web_server_ip" class="form-control" id="server-ip"
+                                [ngClass]="{'is-valid': WebForm.get('web_server_ip')?.valid && (WebForm.get('web_server_ip')?.touched || WebForm.get('web_server_ip')?.dirty || IsSubmit ), 'is-invalid': WebForm.get('web_server_ip')?.invalid && (WebForm.get('web_server_ip')?.touched || WebForm.get('web_server_ip')?.dirty || IsSubmit) }">
+                            <div *ngIf="WebForm.get('web_server_ip') && WebForm.get('web_server_ip')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_server_ip')?.errors?.['required']">IP Address is required.
+                                </div>
+                                <div
+                                    *ngIf="WebForm.get('web_server_ip')?.errors?.['invalidIpAddress'] && !WebForm.get('web_server_ip')?.errors?.['required']">
+                                    Invalid Format.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="ubun-server" class="fw-bold col-form-label">Ubuntu Version</label>
+                            <select id="ubun-server" formControlName="web_ubuntu" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_ubuntu')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_ubuntu')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(ub_v of ubuntu_version; track ub_v)
+                                {
+                                <option value="{{ub_v}}">{{ub_v}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_ubuntu') && WebForm.get('web_ubuntu')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_ubuntu')?.errors?.['required']">Ubuntu Version is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="server-time" class="fw-bold col-form-label">TimeZone</label>
+                            <input type="text" formControlName="web_time_zone" class="form-control" id="server-time"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_time_zone')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_time_zone')?.invalid }">
+                            <div *ngIf="WebForm.get('web_time_zone') && WebForm.get('web_time_zone')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_time_zone')?.errors?.['required']">TimeZone is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="log-server" class="fw-bold col-form-label">Cache Clear Date</label>
+                            <input type="datetime-local" formControlName="web_cache" class="form-control"
+                                id="log-server"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_cache')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_cache')?.invalid }">
+                            <div *ngIf="WebForm.get('web_cache') && WebForm.get('web_cache')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_cache')?.errors?.['required']">Cache Date is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="server-reset" class="fw-bold col-form-label">Hard Reset Date</label>
+                            <input type="datetime-local" formControlName="web_reset" class="form-control"
+                                id="server-reset"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_reset')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_reset')?.invalid }">
+                            <div *ngIf="WebForm.get('web_reset') && WebForm.get('web_reset')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_reset')?.errors?.['required']">Reset Date is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="newcon-server" class="fw-bold col-form-label">New Config Server</label>
+                            <select id="newcon-server" formControlName="web_config" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_config')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_config')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('web_config') && WebForm.get('web_config')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_config')?.errors?.['required']">Config is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="nag-server" class="fw-bold col-form-label">Nagios</label>
+                            <select id="nag-server" formControlName="web_nagios" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_nagios')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_nagios')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('web_nagios') && WebForm.get('web_nagios')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_nagios')?.errors?.['web_nagios']">Nagios is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    @if(show_java || show_java_angular){
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="jav-server" class="fw-bold col-form-label">Java Version</label>
+                            <select id="jav-server" formControlName="web_java_ver" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_java_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_java_ver')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(jav_v of java_version; track jav_v)
+                                {
+                                <option value="{{jav_v}}">{{jav_v}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_java_ver') && WebForm.get('web_java_ver')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_java_ver')?.errors?.['required']">Java Version is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="tom-server" class="fw-bold col-form-label">Tomcat Version</label>
+                            <select id="tom-server" formControlName="web_tom_ver" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_tom_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_tom_ver')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(tom_ver of tomcat_version; track tom_ver)
+                                {
+                                <option value="{{tom_ver}}">{{tom_ver}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_tom_ver') && WebForm.get('web_tom_ver')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_tom_ver')?.errors?.['required']">Tomcat Version is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="tom-cache" class="fw-bold col-form-label">Tomcat Cache Size</label>
+                            <input type="text" formControlName="web_tom_cache" class="form-control" id="tom-cache"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_tom_cache')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_tom_cache')?.invalid }">
+                            <div *ngIf="WebForm.get('web_tom_cache') && WebForm.get('web_tom_cache')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_tom_cache')?.errors?.['required']">Tomcat Cache is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="tom-log" class="fw-bold col-form-label">Tomcat Log Clear Date</label>
+                            <input type="datetime-local" formControlName="web_tom_log" class="form-control" id="tom-log"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_tom_log')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_tom_log')?.invalid }">
+                            <div *ngIf="WebForm.get('web_tom_log') && WebForm.get('web_tom_log')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_tom_log')?.errors?.['required']">Tomcat Log is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if(show_node || show_node_angular){
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="jav-server" class="fw-bold col-form-label">Node Version</label>
+                            <select id="jav-server" formControlName="web_node_ver" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_node_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_node_ver')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(jav_v of node_version; track jav_v)
+                                {
+                                <option value="{{jav_v}}">{{jav_v}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_node_ver') && WebForm.get('web_node_ver')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_node_ver')?.errors?.['required']">Node Version is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if(show_node_angular || show_java_angular){
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="jav-server" class="fw-bold col-form-label">Angular Version</label>
+                            <select id="jav-server" formControlName="web_angular_ver" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_angular_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_angular_ver')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(jav_v of angular_version; track jav_v)
+                                {
+                                <option value="{{jav_v}}">{{jav_v}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_angular_ver') && WebForm.get('web_angular_ver')?.invalid"  class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_angular_ver')?.errors?.['required']">Angular Version is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="nginx-server" class="fw-bold col-form-label">Nginx Version</label>
+                            <select id="nginx-server" formControlName="web_nginx_ver" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_nginx_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_nginx_ver')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(ngx_version of nginx_version; track ngx_version)
+                                {
+                                <option value="{{ngx_version}}">{{ngx_version}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_nginx_ver') && WebForm.get('web_nginx_ver')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_nginx_ver')?.errors?.['required']">Nginx Version is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="nginx-cache" class="fw-bold col-form-label">Nginx Cache Size</label>
+                            <input type="text" formControlName="web_nginx_cache" class="form-control" id="nginx-cache"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_nginx_cache')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_nginx_cache')?.invalid }">
+                            <div *ngIf="WebForm.get('web_nginx_cache') && WebForm.get('web_nginx_cache')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_nginx_cache')?.errors?.['required']">Nginx Cache is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="nginx-work" class="fw-bold col-form-label">Nginx Worker Connection</label>
+                            <input type="text" formControlName="web_nginx_conn" class="form-control" id="nginx-work"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_nginx_conn')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_nginx_conn')?.invalid }">
+                            <div *ngIf="WebForm.get('web_nginx_conn') && WebForm.get('web_nginx_conn')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_nginx_conn')?.errors?.['required']">Nginx Connection is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="nginx-file" class="fw-bold col-form-label">Nginx Open File</label>
+                            <input type="text" formControlName="web_nginx_file" class="form-control" id="nginx-file"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_nginx_file')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_nginx_file')?.invalid }">
+                            <div *ngIf="WebForm.get('web_nginx_file') && WebForm.get('web_nginx_file')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_nginx_file')?.errors?.['required']">Nginx Open is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="nginx-log" class="fw-bold col-form-label">Nginx Log Clear Date</label>
+                            <input type="datetime-local" formControlName="web_nginx_log" class="form-control"
+                                id="nginx-log"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_nginx_log')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_nginx_log')?.invalid }">
+                            <div *ngIf="WebForm.get('web_nginx_log') && WebForm.get('web_nginx_log')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_nginx_log')?.errors?.['required']">Nginx Log is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="pm2-log" class="fw-bold col-form-label">PM2 Log Clear Date</label>
+                            <input type="datetime-local" formControlName="web_pm_log" class="form-control" id="pm2-log"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_pm_log')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_pm_log')?.invalid }">
+                            <div *ngIf="WebForm.get('web_pm_log') && WebForm.get('web_pm_log')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_pm_log')?.errors?.['required']">PM2 Log is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="max-body" class="fw-bold col-form-label">Max Body Size</label>
+                            <input type="text" formControlName="web_max_body" class="form-control" id="max-body"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_max_body')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_max_body')?.invalid }">
+                            <div *ngIf="WebForm.get('web_max_body') && WebForm.get('web_max_body')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_max_body')?.errors?.['required']">Max Size is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <h5>Socket AND SSL</h5>
+                    <hr>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="socket-ver" class="fw-bold col-form-label">Socket Version</label>
+                            <select id="socket-ver" formControlName="web_socket_ver" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_socket_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_socket_ver')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(soc_v of socket_version; track soc_v)
+                                {
+                                <option value="{{soc_v}}">{{soc_v}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_socket_ver') && WebForm.get('web_socket_ver')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_socket_ver')?.errors?.['required']">Socket Version is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="ssl-server" class="fw-bold col-form-label">SSL</label>
+                            <select id="ssl-server" formControlName="web_ssl" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_ssl')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_ssl')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('web_ssl') && WebForm.get('web_ssl')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_ssl')?.errors?.['required']">SSL is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="ssl-name" class="fw-bold col-form-label">SSL Name</label>
+                            <input type="text" formControlName="web_ssl_name" class="form-control" id="ssl-name"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_ssl_name')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_ssl_name')?.invalid }">
+                            <div *ngIf="WebForm.get('web_ssl_name') && WebForm.get('web_ssl_name')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_ssl_name')?.errors?.['required']">SSL Name is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="ssl-exp" class="fw-bold col-form-label">SSL Expiry</label>
+                            <input type="datetime-local" formControlName="web_ssl_ex" class="form-control" id="ssl-exp"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_ssl_ex')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_ssl_ex')?.invalid }">
+                            <div *ngIf="WebForm.get('web_ssl_ex') && WebForm.get('web_ssl_ex')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_ssl_ex')?.errors?.['required']">SSL Expiry is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="ssl-update" class="fw-bold col-form-label">SSL Updated</label>
+                            <select id="ssl-update" formControlName="web_ssl_up" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_ssl_up')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_ssl_up')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('web_ssl_up') && WebForm.get('web_ssl_up')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_ssl_up')?.errors?.['required']">SSL Update is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="ssl-up" class="fw-bold col-form-label">SSL Update Date</label>
+                            <input type="datetime-local" formControlName="web_ssl_date" class="form-control" id="ssl-up"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_ssl_date')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_ssl_date')?.invalid }">
+                            <div *ngIf="WebForm.get('web_ssl_date') && WebForm.get('web_ssl_date')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_ssl_date')?.errors?.['required']">SSL Update Date is
+                                    required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="ssl-cache" class="fw-bold col-form-label">SSL Cache Size</label>
+                            <input type="text" formControlName="web_ssl_cache" class="form-control" id="ssl-cache"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_ssl_cache')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_ssl_cache')?.invalid }">
+                            <div *ngIf="WebForm.get('web_ssl_cache') && WebForm.get('web_ssl_cache')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_ssl_cache')?.errors?.['required']">SSL Cache is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="server-http" class="fw-bold col-form-label">HTTP/2</label>
+                            <select id="server-http" formControlName="web_http2" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_http2')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_http2')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('web_http2') && WebForm.get('web_http2')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_http2')?.errors?.['required']">HTTP/2 is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="server-gzip" class="fw-bold col-form-label">Gzip</label>
+                            <select id="server-gzip" formControlName="web_gzip" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_gzip')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_gzip')?.invalid }">
+                                <option value="">Choose...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                            <div *ngIf="WebForm.get('web_gzip') && WebForm.get('web_gzip')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_gzip')?.errors?.['required']">Gzip is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary float-end">Submit</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

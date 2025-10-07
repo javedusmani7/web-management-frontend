@@ -23,7 +23,7 @@ export class AddWebsiteComponent implements OnInit {
   show_awc: boolean = false;
   show_saba: boolean = false;
   show_inter: boolean = false;
-  show_web_fields: boolean = true;
+  show_web_fields: boolean = false;
   show_db_fields: boolean = true;
   config_type: boolean = false;
   customers: any = [];
@@ -52,24 +52,13 @@ export class AddWebsiteComponent implements OnInit {
     this.OtherAccounts();
     this.Websites();
     this.WebForm = this.fb.group({
-      region: ['', Validators.required],
       customer: ['', Validators.required],
-      platform: ['', Validators.required],
+      platform: ['website', Validators.required],
       website_name: ['', [Validators.required, ValidatorService.alphanumeric]],
       website_type: ['', Validators.required],
-      website_status: ['', Validators.required],
+      website_status: ['whitelabel', Validators.required],
       mother_panel: ['', Validators.required],
-      che_con: [''],
-      db_ip: [''],
-      db_ubutnu: [''],
-      db_time_zone: [''],
-      db_version: [''],
-      db_index: [''],
-      db_grafana: [''],
-      db_auth: [''],
-      db_firewall: [''],
-      db_log: [''],
-      db_reset: [''],
+      che_con: ['',Validators.required],
       web_technology: [''],
       web_cloud_s: [''],
       web_cloud_ac: [''],
@@ -238,14 +227,8 @@ export class AddWebsiteComponent implements OnInit {
   chec_conf(event: any) {
     const c_value = event.target.value;
 
-    const platformType = this.platformtypevalue;
 
-    console.log('Platform Type:', platformType);
-
-    if(platformType === 'website')
-    {
-      
-      const websiteFields = [
+     const websiteFields = [
         'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'awc_call_back', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache',
         'web_http2', 'web_gzip'
       ];
@@ -256,13 +239,12 @@ export class AddWebsiteComponent implements OnInit {
           const control = this.WebForm.get(field);
           if (control) {
             control.clearValidators();
-            if (this.platformtypevalue === 'website') {
               if (field === 'web_server_ip') {
                 control.setValidators([Validators.required, ValidatorService.ipAddressValidator()]);
               } else {
                 control.setValidators([Validators.required]);
               }
-            }
+            
             control.updateValueAndValidity();
           }
         });
@@ -277,42 +259,6 @@ export class AddWebsiteComponent implements OnInit {
           }
         });
       }
-    }
-     else if(platformType === 'database')
-     {
-      const dbFields = [
-        'db_ip', 'db_ubutnu', 'db_time_zone', 'db_version', 'db_index', 'db_grafana', 'db_auth', 'db_firewall', 'db_log', 'db_reset'
-      ];
-      if (c_value === 'new') {
-        this.show_db_fields = true;
-        dbFields.forEach(field => {
-          const control = this.WebForm.get(field);
-          if (control) {
-            control.clearValidators();
-            if (this.platformtypevalue === 'website') {
-              if (field === 'web_server_ip') {
-                control.setValidators([Validators.required, ValidatorService.ipAddressValidator()]);
-              } else {
-                control.setValidators([Validators.required]);
-              }
-            }
-            control.updateValueAndValidity();
-          }
-        });
-      }
-      else {
-        this.show_db_fields = false;
-  
-        dbFields.forEach(field => {
-          const control = this.WebForm.get(field);
-          if (control) {
-            control.clearValidators();
-            control.updateValueAndValidity();
-          }
-        });
-      }
-     }
-
   }
 
   checkstatus(event: any) {
@@ -430,27 +376,14 @@ export class AddWebsiteComponent implements OnInit {
     if (this.WebForm.get('che_con')?.value === 'copy') {
       if (this.WebForm.valid) {
 
-        let data = { m_detail: this.WebForm.get('mother_panel')?.value,platformType: this.platformtypevalue }
+        let data = { m_detail: this.WebForm.get('mother_panel')?.value }
 
         this.mainService.getWebsiteByMother(data).subscribe({
           next: (res: any) => {
-            this.CopyFields(res, this.platformtypevalue);
+            this.CopyFields(res);
 
             let formdata = this.WebForm.value;
 
-
-            if (this.platformtypevalue === 'database') {
-              const websiteFields = [
-                'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'awc_call_back', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache',
-                'web_http2', 'web_gzip'
-              ];
-              websiteFields.forEach(field => delete formdata[field]);
-            } else if (this.platformtypevalue === 'website') {
-              const dbFields = [
-                'db_ip', 'db_ubutnu', 'db_time_zone', 'db_version', 'db_index', 'db_grafana', 'db_auth', 'db_firewall', 'db_log', 'db_reset'
-              ];
-              dbFields.forEach(field => delete formdata[field]);
-            }
             this.mainService.AddWebsite(formdata).subscribe({
               next: (res: any) => {
                 this.IsSubmit = false;
@@ -468,34 +401,19 @@ export class AddWebsiteComponent implements OnInit {
         })
       }
       else {
-        // console.log('Copy error', this.WebForm)
-        //  console.log('Invalid Form',this.WebForm)
-        // Object.keys(this.WebForm.controls).forEach(controlName => {
-        //   const control = this.WebForm.get(controlName);
-        //   if (control && control.invalid) {
-        //     console.log(`Control: ${controlName}`, control.errors);
-        //   }
-        // });
+        console.log('Copy error', this.WebForm)
+         console.log('Invalid Form',this.WebForm)
+        Object.keys(this.WebForm.controls).forEach(controlName => {
+          const control = this.WebForm.get(controlName);
+          if (control && control.invalid) {
+            console.log(`Control: ${controlName}`, control.errors);
+          }
+        });
       }
     }
     else {
       if (this.WebForm.valid) {
         let data = this.WebForm.value;
-
-
-        if (this.platformtypevalue === 'database') {
-          const websiteFields = [
-            'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'awc_call_back', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache',
-            'web_http2', 'web_gzip'
-          ];
-          websiteFields.forEach(field => delete data[field]);
-        } else if (this.platformtypevalue === 'website') {
-          const dbFields = [
-            'db_ip', 'db_ubutnu', 'db_time_zone', 'db_version', 'db_index', 'db_grafana', 'db_auth', 'db_firewall', 'db_log', 'db_reset'
-          ];
-          dbFields.forEach(field => delete data[field]);
-        }
-
 
         this.mainService.AddWebsite(data).subscribe({
           next: (res: any) => {
@@ -521,10 +439,9 @@ export class AddWebsiteComponent implements OnInit {
   }
 
 
-  CopyFields(data: any, platformType: string) {
+  CopyFields(data: any) {
 
-    if(platformType == 'website')
-    {
+  
       const websiteFields = [
         'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'awc_call_back', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache', 'web_http2', 'web_gzip'
       ];
@@ -538,24 +455,8 @@ export class AddWebsiteComponent implements OnInit {
         }
   
       });
-    }
-    else if(platformType == 'database' )
-    {
-      const dbFields = [
-        'db_ip', 'db_ubutnu', 'che_con', 'db_time_zone', 'db_version', 'db_index', 'db_grafana', 'db_auth', 'db_firewall', 'db_log', 'db_reset'
-      ];
+    
 
-      
-      dbFields.forEach(field => {
-        if (data[field] !== null && data[field] !== undefined && data[field] !== '') {
-          this.WebForm.get(field)?.patchValue(data[field]);
-        }
-        else {
-          this.WebForm.removeControl(field);
-        }
-  
-      });
-    }
     
   }
 

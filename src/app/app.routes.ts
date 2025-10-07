@@ -20,6 +20,10 @@ import { PermissionsComponent } from './permissions/permissions.component';
 import { permissionGuard } from './permission.guard';
 import { OtherAccountsComponent } from './other-accounts/other-accounts.component';
 import { ServerSettingsComponent } from './server-settings/server-settings.component';
+import { AddMotherPanelComponent } from './add-mother-panel/add-mother-panel.component';
+import { AddDatabaseComponent } from './add-database/add-database.component';
+import { AddOtherComponent } from './add-other/add-other.component';
+import { WebDetailsComponent } from './web-details/web-details.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -37,6 +41,10 @@ export const routes: Routes = [
     {path: 'panel-detail', component: MotherPanelComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_PANEL' }},
     {path: 'website-detail', component: WebsiteComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_WEBSITE' }},
     {path: 'website/add', component: AddWebsiteComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'ADD_WEBSITE' }},
+      {path:'website/add-motherpanel',component: AddMotherPanelComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'ADD_WEBSITE' }},
+    {path:'website/add-database',component: AddDatabaseComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'ADD_WEBSITE' }},
+    {path:'website/add-other',component: AddOtherComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'ADD_WEBSITE' }},
+    {path:'details/:type/:id',component: WebDetailsComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'ADD_WEBSITE' }},
     {path: 'website/edit/:id', component: EditwebsiteComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'EDIT_WEBSITE' }},
     {path: 'server-settings', component: ServerSettingsComponent,canActivate:[authGuard,permissionGuard]},
     {path: 'important-information', component: InformationPageComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'VIEW_INFO' }},

@@ -25,21 +25,20 @@
         </div>
         <div class="card-body table-group-divider">
             <form class="row" [formGroup]="WebForm" (ngSubmit)="onSubmitWeb()" novalidate>
-                <div class="col-md-3">
+                 <div class="col-md-3">
                     <div class="mb-3">
-                        <label for="web-region" class="fw-bold col-form-label">Select Region:</label>
-                        <select id="web-region" formControlName="region" class="form-select" [ngClass]="{
-                            'is-valid': IsSubmit && WebForm.get('region')?.valid, 'is-invalid': IsSubmit && WebForm.get('region')?.invalid
-                        }">
+                        <label for="select-panel" class="fw-bold col-form-label">Select MotherPanel</label>
+                        <select id="select-panel" formControlName="mother_panel" (change)="onPanelOrTypeChange()" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('mother_panel')?.valid, 'is-invalid': IsSubmit && WebForm.get('mother_panel')?.invalid }">
                             <option value="">Choose...</option>
-                            <option value="ind">India</option>
-                            <option value="bd">Bangla</option>
-                            <option value="nu">Neutral</option>
+                            @for(pa of panels; track pa)
+                            {
+                                <option value="{{pa._id}}">{{pa.name}}</option>
+                            }
                           </select>
-                          <div *ngIf="WebForm.get('region') && WebForm.get('region')?.invalid" class="invalid-feedback">
-                            <div *ngIf="WebForm.get('region')?.errors?.['required']">Region is required.</div>
+                          <div *ngIf="WebForm.get('mother_panel') && WebForm.get('mother_panel')?.invalid" class="invalid-feedback">
+                            <div *ngIf="WebForm.get('mother_panel')?.errors?.['required']">MotherPanel is required.</div>
                         </div>
-                      </div>
+                    </div>
                 </div>
                 <div class="col-md-3">
                     <div class="mb-3">
@@ -57,39 +56,8 @@
                             <div *ngIf="WebForm.get('customer')?.errors?.['required']">Customer is required.</div>
                         </div>
                     </div>
-                </div>
+                </div>              
                 <div class="col-md-3">
-                    <div class="mb-3">
-                        <label for="select-platform" class="fw-bold col-form-label">Select Paltform:</label>
-                        <select id="select-platform" formControlName="platform" (change)="PaltformType($event)" class="form-select" [ngClass]="{
-                            'is-valid': IsSubmit &&  WebForm.get('platform')?.valid,
-                            'is-invalid': IsSubmit &&  WebForm.get('platform')?.invalid
-                          }">
-                            <option value="">Choose...</option>
-                            <option value="website">Website</option>
-                            <option value="database">Database</option>
-                        </select>
-                        <div *ngIf="WebForm.get('platform') && WebForm.get('platform')?.invalid" class="invalid-feedback">
-                            <div *ngIf="WebForm.get('platform')?.errors?.['required']">Paltform is required.</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="mb-3">
-                        <label for="select-panel" class="fw-bold col-form-label">Select MotherPanel</label>
-                        <select id="select-panel" formControlName="mother_panel" (change)="onPanelOrTypeChange()" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('mother_panel')?.valid, 'is-invalid': IsSubmit && WebForm.get('mother_panel')?.invalid }">
-                            <option value="">Choose...</option>
-                            @for(pa of panels; track pa)
-                            {
-                                <option value="{{pa._id}}">{{pa.name}}</option>
-                            }
-                          </select>
-                          <div *ngIf="WebForm.get('mother_panel') && WebForm.get('mother_panel')?.invalid" class="invalid-feedback">
-                            <div *ngIf="WebForm.get('mother_panel')?.errors?.['required']">MotherPanel is required.</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
                     <div class="mb-3">
                         <label for="select-type" class="fw-bold col-form-label">Select Website Type</label>
                         <select id="select-type" formControlName="website_type" (change)="onPanelOrTypeChange()" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('website_type')?.valid, 'is-invalid': IsSubmit && WebForm.get('website_type')?.invalid }">
@@ -116,7 +84,7 @@
                     </div>
                 </div> -->
                 
-                <div class="col-md-3" *ngIf="platformtypevalue === 'website'">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="website-name" class="fw-bold col-form-label">Website Name</label>
                         <input type="text" formControlName="website_name" class="form-control" id="website-name" [ngClass]="{
@@ -128,41 +96,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-3" *ngIf="platformtypevalue === 'database'">
-                    <div class="mb-3">
-                        <label for="database-name" class="fw-bold col-form-label">Website Name</label>
-                        <select id="database-name" formControlName="website_name" class="form-select" [ngClass]="{
-                            'is-valid': IsSubmit && WebForm.get('website_name')?.valid,
-                            'is-invalid': IsSubmit && WebForm.get('website_name')?.invalid
-                        }">
-                            <option value="">Choose...</option>
-                            <!-- Populate options dynamically if needed -->
-                             @for(webs of website_names; track webs)
-                             {
-                                <option value="{{webs.website_name}}">{{webs.website_name}}</option>
-                             }
-                        </select>
-                        <div *ngIf="WebForm.get('website_name')?.invalid" class="invalid-feedback">
-                            <div *ngIf="WebForm.get('website_name')?.errors?.['required']">Website Name is required.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label for="select-status" class="fw-bold col-form-label">Select Website Status</label>
-                        <select id="select-status" formControlName="website_status" (change)="checkstatus($event)" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('website_status')?.valid, 'is-invalid': IsSubmit && WebForm.get('website_status')?.invalid }">
-                            <option value="">Choose...</option>
-                            <option value="panel">MotherPanel</option>
-                            <option value="label">WhiteLabel</option>
-                          </select>
-                          <div *ngIf="WebForm.get('website_status') && WebForm.get('website_status')?.invalid" class="invalid-feedback">
-                            <div *ngIf="WebForm.get('website_status')?.errors?.['required']">Website Status is required.</div>
-                        </div>
-                    </div>
-                </div>   
-                    <div class="col-md-6" *ngIf="config_type">
+                    <div class="col-md-6">
                         <div class="mb-3">
                             <label for="select-status" class="fw-bold col-form-label">Choose Configuration</label>
                             <div class="form-check form-check-inline m-2">
@@ -178,131 +112,9 @@
                             </div>
                         </div>                      
                     </div>
-                <!-- Database Details -->
-                <div class="row" *ngIf="platformtypevalue === 'database' && show_db_fields">
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="ip-add" class="fw-bold col-form-label">Database IP Address</label>
-                            <input type="text" formControlName="db_ip" class="form-control" id="ip-add" [ngClass]="{'is-valid': WebForm.get('db_ip')?.valid && (WebForm.get('db_ip')?.touched || WebForm.get('db_ip')?.dirty || IsSubmit ), 'is-invalid': WebForm.get('db_ip')?.invalid && (WebForm.get('db_ip')?.touched || WebForm.get('db_ip')?.dirty || IsSubmit ) }">
-                            <div *ngIf="WebForm.get('db_ip') && WebForm.get('db_ip')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('db_ip')?.errors?.['required']">IP Address is required.</div>
-                                <div *ngIf="WebForm.get('db_ip')?.errors?.['invalidIpAddress'] && !WebForm.get('db_ip')?.errors?.['required']">Invalid Format.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="select-ubuntu" class="fw-bold col-form-label">Select Ubuntu Version</label>
-                            <select id="select-ubuntu" formControlName="db_ubutnu" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_ubutnu')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_ubutnu')?.invalid }">
-                                <option value="">Choose...</option>
-                                @for(ub_v of ubuntu_version; track ub_v)
-                                {
-                                    <option value="{{ub_v}}">{{ub_v}}</option>
-                                }
-                              </select>
-                              <div *ngIf="WebForm.get('db_ubutnu') && WebForm.get('db_ubutnu')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('db_ubutnu')?.errors?.['required']">Ubuntu Version is required.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="timezone" class="fw-bold col-form-label">TimeZone</label>
-                            <input type="text" formControlName="db_time_zone" class="form-control" id="timezone" [ngClass]="{'is-valid': WebForm.get('db_time_zone')?.valid && (WebForm.get('db_time_zone')?.touched || WebForm.get('db_time_zone')?.dirty || IsSubmit), 'is-invalid': WebForm.get('db_time_zone')?.invalid && (WebForm.get('db_time_zone')?.touched || WebForm.get('db_time_zone')?.dirty || IsSubmit) }">
-                            <div *ngIf="WebForm.get('db_time_zone') && WebForm.get('db_time_zone')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('db_time_zone')?.errors?.['required']">Timezone is required.</div>
-                                <div *ngIf="WebForm.get('db_time_zone')?.errors?.['alphanumeric'] && !WebForm.get('db_time_zone')?.errors?.['required']">Special Character Not Allowed</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="select-mongo" class="fw-bold col-form-label">Select Mongo Version</label>
-                            <select id="select-mongo" formControlName="db_version" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_version')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_version')?.invalid }">
-                                <option value="">Choose...</option>
-                                @for(mong_v of mongo_version; track mong_v)
-                                {
-                                    <option value="{{mong_v}}">{{mong_v}}</option>
-                                }
-                              </select>
-                              <div *ngIf="WebForm.get('db_version') && WebForm.get('db_version')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('db_version')?.errors?.['required']">Mongo Version is required.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="select-indexing" class="fw-bold col-form-label">Indexing Queries</label>
-                            <select id="select-indexing" formControlName="db_index" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_index')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_index')?.invalid }">
-                                <option value="">Choose...</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                              <div *ngIf="WebForm.get('db_index') && WebForm.get('db_index')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('db_index')?.errors?.['required']">Indexing is required.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="select-grefana" class="fw-bold col-form-label">Prometheus Grafana</label>
-                            <select id="select-grefana" formControlName="db_grafana" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_grafana')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_grafana')?.invalid }">
-                                <option value="">Choose...</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                              <div *ngIf="WebForm.get('db_grafana') && WebForm.get('db_grafana')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('db_grafana')?.errors?.['required']">This Field is required.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="select-auth" class="fw-bold col-form-label">DB Authentication</label>
-                            <select id="select-auth" formControlName="db_auth" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_auth')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_auth')?.invalid }">
-                                <option value="">Choose...</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                              <div *ngIf="WebForm.get('db_auth') && WebForm.get('db_auth')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('db_auth')?.errors?.['required']">Authentication is required.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="select-firewall" class="fw-bold col-form-label">DB Firewall</label>
-                            <select id="select-firewall" formControlName="db_firewall" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_firewall')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_firewall')?.invalid }">
-                                <option value="">Choose...</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                              <div *ngIf="WebForm.get('db_firewall') && WebForm.get('db_firewall')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('db_firewall')?.errors?.['required']">Firewall is required.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="log-clear" class="fw-bold col-form-label">Log Clear Date</label>
-                            <input type="datetime-local" formControlName="db_log" class="form-control" id="log-clear" [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_log')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_log')?.invalid }">
-                            <div *ngIf="WebForm.get('db_log') && WebForm.get('db_log')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('db_log')?.errors?.['required']">Log Date is required.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="log-reset" class="fw-bold col-form-label">Hard Reset Date</label>
-                            <input type="datetime-local" formControlName="db_reset" class="form-control" id="log-reset" [ngClass]="{'is-valid': IsSubmit && WebForm.get('db_reset')?.valid, 'is-invalid': IsSubmit && WebForm.get('db_reset')?.invalid }">
-                            <div *ngIf="WebForm.get('db_reset') && WebForm.get('db_reset')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('db_reset')?.errors?.['required']">Reset Date is required.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 <!-- Website Details -->
-                <div class="row" *ngIf="platformtypevalue === 'website' && show_web_fields">
+                <div class="row" *ngIf="show_web_fields">
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="technology" class="fw-bold col-form-label">Technologies</label>
