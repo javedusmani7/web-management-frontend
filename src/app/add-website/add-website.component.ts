@@ -23,6 +23,11 @@ export class AddWebsiteComponent implements OnInit {
   show_awc: boolean = false;
   show_saba: boolean = false;
   show_inter: boolean = false;
+       show_java: boolean = false;
+  show_node: boolean = false;
+  show_angular: boolean = false;
+  show_java_angular: boolean = false;
+  show_node_angular: boolean = false;
   show_web_fields: boolean = false;
   show_db_fields: boolean = true;
   config_type: boolean = false;
@@ -33,6 +38,7 @@ export class AddWebsiteComponent implements OnInit {
   cloudAccounts: any = [];
   domainManager: any = [];
   awc_account: any = [];
+  awc_agents:any = [];
   saba_account: any = [];
   international_account: any = [];
   server_account: any = [];
@@ -42,6 +48,8 @@ export class AddWebsiteComponent implements OnInit {
   mongo_version: any = ["7.0", "6.0", "5.0", "4.4", "4.2", "4.0", "3.6", "3.4", "3.2", "3.0"];
   socket_version: any = ["4.7.5", "4.7.4", "4.7.3", "4.7.0", "4.6", "4.5", "4.4", "4.1.3", "4.1.2","4.1.1", "4.1.0", "4.0.1", "4.0.0"];
   java_version: any = ["22", "21", "20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10", "9", "8"];
+        node_version: any = ["22", "20", "18"];
+  angular_version: any = ["20", "19", "18", "16", "13"];
 
   constructor(private mainService: MainService, private fb: FormBuilder, private router: Router) { }
 
@@ -67,7 +75,7 @@ export class AddWebsiteComponent implements OnInit {
       web_domain: [''],
       web_awc_s: [''],
       web_awc: [''],
-      awc_call_back: [''],
+      web_awc_agent:[''],
       web_saba_s: [''],
       web_saba: [''],
       saba_call_back: [''],
@@ -185,7 +193,7 @@ export class AddWebsiteComponent implements OnInit {
     ];
 
     const websiteFields = [
-      'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'awc_call_back', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache',
+      'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'web_awc_agent', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache',
       'web_http2', 'web_gzip'
     ];
 
@@ -229,7 +237,7 @@ export class AddWebsiteComponent implements OnInit {
 
 
      const websiteFields = [
-        'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'awc_call_back', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache',
+        'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'web_awc_agent', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache',
         'web_http2', 'web_gzip'
       ];
   
@@ -304,6 +312,7 @@ export class AddWebsiteComponent implements OnInit {
 
   }
 
+
   awcchange(event: any) {
     const awc_status = event.target.value;
 
@@ -311,13 +320,28 @@ export class AddWebsiteComponent implements OnInit {
 
     if (awc_status === 'yes') {
       this.WebForm.get('web_awc')?.setValidators([Validators.required]);
-      this.WebForm.get('awc_call_back')?.setValidators([Validators.required]);
+      this.WebForm.get('web_awc_agent')?.setValidators([Validators.required]);
       this.WebForm.get('web_awc')?.updateValueAndValidity({ emitEvent: false });
     }
     else {
       this.WebForm.removeControl('web_awc');
-      this.WebForm.removeControl('awc_call_back');
+      this.WebForm.removeControl('web_awc_agent');
     }
+  }
+
+  awcMaster(event: any) {
+    const awc_status = event.target.value;
+
+    console.log(awc_status)
+
+    this.mainService.getAWCAgent({master:awc_status}).subscribe({
+      next:(res:any) => {
+        console.log(res)
+        this.awc_agents = res
+           this.WebForm.get('web_awc_agent')?.setValidators([Validators.required]);
+      this.WebForm.get('web_awc_agent')?.updateValueAndValidity({ emitEvent: false });
+      }
+    })
   }
 
   sabachange(event: any) {
@@ -357,17 +381,56 @@ export class AddWebsiteComponent implements OnInit {
 
   }
 
-  onPanelOrTypeChange() {
-    if (this.platformtypevalue === 'database') {
-      const panelId = this.WebForm.get('mother_panel')?.value;
-      const type = this.WebForm.get('website_type')?.value;
+    onPanelOrTypeChange() {
+    const type = this.WebForm.get('website_type')?.value;
+    // Reset all flags first
+    this.show_java = false;
+    this.show_node = false;
+    this.show_node_angular = false;
+    this.show_java_angular = false;
 
-      if (panelId && type) {
-        this.website_names = this.websiteData.filter((d: any) => d.mother_panel._id === panelId && d.website_type === type && d.platform === 'website');
-      } else {
-        this.website_names = [];
-      }
+    this.WebForm.get('web_java_ver')?.clearValidators();
+    this.WebForm.get('web_tom_ver')?.clearValidators();
+    this.WebForm.get('web_tom_cache')?.clearValidators();
+    this.WebForm.get('web_tom_log')?.clearValidators();
+    this.WebForm.get('web_node_ver')?.clearValidators();
+    this.WebForm.get('web_angular_ver')?.clearValidators();
+
+    // Enable based on selection
+
+
+    if (type === "java") {
+      this.show_java = true;
+      this.WebForm.get('web_java_ver')?.setValidators([Validators.required]);
+      this.WebForm.get('web_tom_ver')?.setValidators([Validators.required]);
+      this.WebForm.get('web_tom_cache')?.setValidators([Validators.required]);
+      this.WebForm.get('web_tom_log')?.setValidators([Validators.required]);
     }
+    else if (type === "node") {
+      this.show_node = true;
+      this.WebForm.get('web_node_ver')?.setValidators([Validators.required]);
+    }
+    else if (type === "nodeangular") { // fixed typo: "ndoeangular"
+      this.show_node_angular = true;
+      this.WebForm.get('web_node_ver')?.setValidators([Validators.required]);
+      this.WebForm.get('web_angular_ver')?.setValidators([Validators.required]);
+    }
+    else if (type === "javangular") {
+      this.show_java_angular = true;
+      this.WebForm.get('web_java_ver')?.setValidators([Validators.required]);
+      this.WebForm.get('web_tom_ver')?.setValidators([Validators.required]);
+      this.WebForm.get('web_tom_cache')?.setValidators([Validators.required]);
+      this.WebForm.get('web_tom_log')?.setValidators([Validators.required]);
+      this.WebForm.get('web_angular_ver')?.setValidators([Validators.required]);
+    }
+
+
+    this.WebForm.get('web_java_ver')?.updateValueAndValidity();
+    this.WebForm.get('web_tom_ver')?.updateValueAndValidity();
+    this.WebForm.get('web_tom_cache')?.updateValueAndValidity();
+    this.WebForm.get('web_tom_log')?.updateValueAndValidity();
+    this.WebForm.get('web_node_ver')?.updateValueAndValidity();
+    this.WebForm.get('web_angular_ver')?.updateValueAndValidity();
   }
 
   onSubmitWeb() {
@@ -443,7 +506,7 @@ export class AddWebsiteComponent implements OnInit {
 
   
       const websiteFields = [
-        'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'awc_call_back', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache', 'web_http2', 'web_gzip'
+        'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'web_awc_agent', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache', 'web_http2', 'web_gzip'
       ];
   
       websiteFields.forEach(field => {

@@ -64,10 +64,11 @@
                             <option value="">Choose...</option>
                             <option value="java">Java</option>
                             <option value="node">Node</option>
-                            <option value="javangular">Java+Angular</option>
-                            <option value="api">API</option>
+                          <option value="javangular">Java+Angular</option>
+                            <option value="nodeangular">Node+Angular</option>
+                            <!-- <option value="api">API</option>
                             <option value="central">Central</option>
-                            <option value="Dynamic">Dynamic</option>
+                            <option value="Dynamic">Dynamic</option> -->
                           </select>
                           <div *ngIf="WebForm.get('website_type') && WebForm.get('website_type')?.invalid" class="invalid-feedback">
                             <div *ngIf="WebForm.get('website_type')?.errors?.['required']">Website Type is required.</div>
@@ -202,8 +203,8 @@
                     </div>
                     <div class="col-md-3" [ngClass]="{'d-none': !show_awc}">
                         <div class="mb-3">
-                            <label for="select-awc" class="fw-bold col-form-label">Select AWC</label>
-                            <select id="select-awc" formControlName="web_awc" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_awc')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_awc')?.invalid }">
+                            <label for="select-awc" class="fw-bold col-form-label">Select AWC Master</label>
+                            <select id="select-awc" formControlName="web_awc" (change)="awcMaster($event)" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_awc')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_awc')?.invalid }">
                                 <option value="">Choose...</option>
                                 @for(awc of awc_account; track awc)
                                 {
@@ -215,12 +216,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3" [ngClass]="{'d-none': !show_awc}">
+                         <div class="col-md-3" [ngClass]="{'d-none': !show_awc}">
                         <div class="mb-3">
-                            <label for="awc-callback" class="fw-bold col-form-label">AWC CallBack URL</label>
-                            <input type="text" formControlName="awc_call_back" class="form-control" id="awc-callback" [ngClass]="{'is-valid': IsSubmit && WebForm.get('awc_call_back')?.valid, 'is-invalid': IsSubmit && WebForm.get('awc_call_back')?.invalid }">
-                            <div *ngIf="WebForm.get('awc_call_back') && WebForm.get('awc_call_back')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('awc_call_back')?.errors?.['required']">AWC CallBack is required.</div>
+                            <label for="select-awc" class="fw-bold col-form-label">Select AWC Agent</label>
+                            <select id="select-awc" formControlName="web_awc_agent" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_awc_agent')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_awc_agent')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(awc of awc_agents; track awc)
+                                {
+                                <option value="{{awc._id}}">{{awc.agent_name}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_awc_agent') && WebForm.get('web_awc_agent')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_awc_agent')?.errors?.['required']">AWC Agent is required.</div>
                             </div>
                         </div>
                     </div>
@@ -493,54 +502,108 @@
                             </div>
                         </div>
                     </div>
+                      @if(show_java || show_java_angular){
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="jav-server" class="fw-bold col-form-label">Java Version</label>
-                            <select id="jav-server" formControlName="web_java_ver" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_java_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_java_ver')?.invalid }">
+                            <select id="jav-server" formControlName="web_java_ver" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_java_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_java_ver')?.invalid }">
                                 <option value="">Choose...</option>
                                 @for(jav_v of java_version; track jav_v)
                                 {
-                                    <option value="{{jav_v}}">{{jav_v}}</option>
+                                <option value="{{jav_v}}">{{jav_v}}</option>
                                 }
-                              </select>
-                              <div *ngIf="WebForm.get('web_java_ver') && WebForm.get('web_java_ver')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('web_java_ver')?.errors?.['required']">Java Version is required.</div>
+                            </select>
+                            <div *ngIf="WebForm.get('web_java_ver') && WebForm.get('web_java_ver')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_java_ver')?.errors?.['required']">Java Version is required.
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="tom-server" class="fw-bold col-form-label">Tomcat Version</label>
-                            <select id="tom-server" formControlName="web_tom_ver" class="form-select" [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_tom_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_tom_ver')?.invalid }">
+                            <select id="tom-server" formControlName="web_tom_ver" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_tom_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_tom_ver')?.invalid }">
                                 <option value="">Choose...</option>
                                 @for(tom_ver of tomcat_version; track tom_ver)
                                 {
-                                    <option value="{{tom_ver}}">{{tom_ver}}</option>
+                                <option value="{{tom_ver}}">{{tom_ver}}</option>
                                 }
-                              </select>
-                              <div *ngIf="WebForm.get('web_tom_ver') && WebForm.get('web_tom_ver')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('web_tom_ver')?.errors?.['required']">Tomcat Version is required.</div>
+                            </select>
+                            <div *ngIf="WebForm.get('web_tom_ver') && WebForm.get('web_tom_ver')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_tom_ver')?.errors?.['required']">Tomcat Version is
+                                    required.</div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="tom-cache" class="fw-bold col-form-label">Tomcat Cache Size</label>
-                            <input type="text" formControlName="web_tom_cache" class="form-control" id="tom-cache" [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_tom_cache')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_tom_cache')?.invalid }">
-                            <div *ngIf="WebForm.get('web_tom_cache') && WebForm.get('web_tom_cache')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('web_tom_cache')?.errors?.['required']">Tomcat Cache is required.</div>
+                            <input type="text" formControlName="web_tom_cache" class="form-control" id="tom-cache"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_tom_cache')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_tom_cache')?.invalid }">
+                            <div *ngIf="WebForm.get('web_tom_cache') && WebForm.get('web_tom_cache')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_tom_cache')?.errors?.['required']">Tomcat Cache is
+                                    required.</div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="tom-log" class="fw-bold col-form-label">Tomcat Log Clear Date</label>
-                            <input type="datetime-local" formControlName="web_tom_log" class="form-control" id="tom-log" [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_tom_log')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_tom_log')?.invalid }">
-                            <div *ngIf="WebForm.get('web_tom_log') && WebForm.get('web_tom_log')?.invalid" class="invalid-feedback">
-                                <div *ngIf="WebForm.get('web_tom_log')?.errors?.['required']">Tomcat Log is required.</div>
+                            <input type="datetime-local" formControlName="web_tom_log" class="form-control" id="tom-log"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_tom_log')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_tom_log')?.invalid }">
+                            <div *ngIf="WebForm.get('web_tom_log') && WebForm.get('web_tom_log')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_tom_log')?.errors?.['required']">Tomcat Log is required.
+                                </div>
                             </div>
                         </div>
                     </div>
+                    }
+
+                    @if(show_node || show_node_angular){
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="jav-server" class="fw-bold col-form-label">Node Version</label>
+                            <select id="jav-server" formControlName="web_node_ver" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_node_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_node_ver')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(jav_v of node_version; track jav_v)
+                                {
+                                <option value="{{jav_v}}">{{jav_v}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_node_ver') && WebForm.get('web_node_ver')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_node_ver')?.errors?.['required']">Node Version is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if(show_node_angular || show_java_angular){
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="jav-server" class="fw-bold col-form-label">Angular Version</label>
+                            <select id="jav-server" formControlName="web_angular_ver" class="form-select"
+                                [ngClass]="{'is-valid': IsSubmit && WebForm.get('web_angular_ver')?.valid, 'is-invalid': IsSubmit && WebForm.get('web_angular_ver')?.invalid }">
+                                <option value="">Choose...</option>
+                                @for(jav_v of angular_version; track jav_v)
+                                {
+                                <option value="{{jav_v}}">{{jav_v}}</option>
+                                }
+                            </select>
+                            <div *ngIf="WebForm.get('web_angular_ver') && WebForm.get('web_angular_ver')?.invalid"  class="invalid-feedback">
+                                <div *ngIf="WebForm.get('web_angular_ver')?.errors?.['required']">Angular Version is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="nginx-server" class="fw-bold col-form-label">Nginx Version</label>
