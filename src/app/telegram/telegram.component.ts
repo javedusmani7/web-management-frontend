@@ -43,12 +43,21 @@ export class TelegramComponent {
     this.canAddAccount = this.userservice.hasPermission('ADD_TELEGRAM');
     this.canEditAccount = this.userservice.hasPermission('EDIT_TELEGRAM');
     
+    this.initForm();
+  }
+
+  initForm() {
     this.ModalForm = this.fb.group({
       type: ['', [Validators.required]],
-      name: ['', Validators.required, Validators.minLength(3)],
-      link: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/)]],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      link: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([\/\w.-]*)*\/?$/)]],
       admin_name: ['', [Validators.required]],
-      admin_number: ['', [Validators.required, Validators.minLength(10),Validators.maxLength(10)]],
+      admin_number: ['', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(10),
+        Validators.pattern(/^\d{10}$/) // only digits
+      ]],
       admin_email: ['', [Validators.required, Validators.email]],
       purpose: ['', Validators.required]
     });
@@ -63,9 +72,9 @@ export class TelegramComponent {
   }
 
   openAddModule() {
+    this.initForm(); // reset the form cleanly
     this.showModal = true;
     this.editData = false;
-    this.ModalForm.reset();
   }
 
   openEdit(data: any) {
@@ -107,7 +116,6 @@ export class TelegramComponent {
     
     this.isSubmit = true;
     this.isLoading = true;
-
     const payload = this.ModalForm.value;
     payload.admin_number = String(payload.admin_number);
 

@@ -138,7 +138,7 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="fw-bold">Admin Number</label>
-              <input type="text" formControlName="admin_number" class="form-control"
+              <input type="text"  maxlength="10" formControlName="admin_number" class="form-control"
                 [ngClass]="{'is-invalid': ModalForm.get('admin_number')?.invalid && (ModalForm.get('admin_number')?.touched || ModalForm.get('admin_number')?.dirty || isSubmit)}" />
               <div class="invalid-feedback"
                 *ngIf="ModalForm.get('admin_number')?.invalid && (ModalForm.get('admin_number')?.touched || ModalForm.get('admin_number')?.dirty || isSubmit)">

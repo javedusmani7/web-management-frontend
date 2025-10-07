@@ -34,23 +34,31 @@ export class WhatsappComponent {
     private fb: FormBuilder,
     private alert: AlertService
   ) {
-    
-    this.ModalForm = this.fb.group({
-      type: ['', [Validators.required]],
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      link: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/)]],
-      admin_name: ['', [Validators.required]],
-      admin_number: ['', [Validators.required, Validators.minLength(10),Validators.maxLength(10)]],
-      admin_email: ['', [Validators.required, Validators.email]],
-      purpose: ['', Validators.required]
-    });
-
     this.getWhatsappData();
   }
 
   ngOnInit(): void {
     this.canAddAccount = this.userservice.hasPermission('ADD_WHATSAPP');
     this.canEditAccount = this.userservice.hasPermission('EDIT_WHATSAPP');
+
+    this.initForm();
+  }
+
+  initForm() {
+    this.ModalForm = this.fb.group({
+      type: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      link: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/)]],
+      admin_name: ['', [Validators.required]],
+      admin_number: ['', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(10),
+        Validators.pattern(/^\d{10}$/) // only digits
+      ]],
+      admin_email: ['', [Validators.required, Validators.email]],
+      purpose: ['', Validators.required]
+    });
   }
 
   getWhatsappData() {
@@ -62,7 +70,8 @@ export class WhatsappComponent {
   }
 
   openAddModule() {
-    this.ModalForm.reset();         // reset the form
+    this.initForm(); // reset the form cleanly
+    // this.ModalForm.reset();         // reset the form
     this.isSubmit = false;          // reset validation tracking
     this.showModal = true;
     this.editData = false;
