@@ -42,7 +42,7 @@ export class TelegramComponent {
   ngOnInit(): void {
     this.canAddAccount = this.userservice.hasPermission('ADD_TELEGRAM');
     this.canEditAccount = this.userservice.hasPermission('EDIT_TELEGRAM');
-
+    
     this.ModalForm = this.fb.group({
       type: ['', [Validators.required]],
       name: ['', Validators.required, Validators.minLength(3)],

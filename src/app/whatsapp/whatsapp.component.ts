@@ -37,7 +37,7 @@ export class WhatsappComponent {
     
     this.ModalForm = this.fb.group({
       type: ['', [Validators.required]],
-      name: ['', Validators.required, Validators.minLength(3)],
+      name: ['', [Validators.required, Validators.minLength(3)]],
       link: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/)]],
       admin_name: ['', [Validators.required]],
       admin_number: ['', [Validators.required, Validators.minLength(10),Validators.maxLength(10)]],

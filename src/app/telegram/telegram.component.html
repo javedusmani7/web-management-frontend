@@ -1,78 +1,78 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12 mt-5">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
-                    <li class="breadcrumb-item">
-                        <a class="link-body-emphasis text-decoration-none" href="#">
-                            Home
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Telegram
-                    </li>
-                </ol>
-            </nav>
-        </div>
+  <div class="row">
+    <div class="col-md-12 mt-5">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
+          <li class="breadcrumb-item">
+            <a class="link-body-emphasis text-decoration-none" href="#">
+              Home
+            </a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            Telegram
+          </li>
+        </ol>
+      </nav>
     </div>
-    <div class="card border-primary">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-md-6">
-                    <h4>Telegram Account List</h4>
-                </div>
-                <div class="col-md-6" *ngIf="canAddAccount">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button class="btn btn-primary me-md-2" type="button" (click)="openAddModule()">Add Telegram</button>
-                    </div>
-                </div>
-            </div>
+  </div>
+  <div class="card border-primary">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-6">
+          <h4>Telegram Account List</h4>
         </div>
-        <div class="card-body table-group-divider">
-            <div class="table-responsive">
-                <table class="table table-bordered border-primary table-striped">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Link</th>
-                            <th scope="col">Admin Name</th>
-                            <th scope="col">Admin Number</th>
-                            <th scope="col">Admin Email</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        @for(item of accounts; let i=$index; track item.company_name)
-                        {
-                        <tr>
-                            <th scope="row">{{i+1}}</th>
-                            <td>{{item.name}}</td>
-                            <td>{{item.type}}</td>
-                            <td>{{item.link}}</td>
-                            <td>{{item.admin_name}}</td>
-                            <td>{{item.admin_number}}</td>
-                            <td>{{item.admin_email}}</td>
-                            <td *ngIf="canEditAccount">
-                                <div class="d-flex gap-2 col-4 mx-auto">
-                                    <button class="btn btn-primary" type="button" (click)="openEdit(item)">Edit</button>
-                                </div>
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+        <div class="col-md-6" *ngIf="canAddAccount">
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-primary me-md-2" type="button" (click)="openAddModule()">Add Telegram</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body table-group-divider">
+      <div class="table-responsive">
+        <table class="table table-bordered border-primary table-striped">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Link</th>
+              <th scope="col">Admin Name</th>
+              <th scope="col">Admin Number</th>
+              <th scope="col">Admin Email</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            @for(item of accounts; let i=$index; track item.company_name)
+            {
+            <tr>
+              <th scope="row">{{i+1}}</th>
+              <td>{{item.name}}</td>
+              <td>{{item.type}}</td>
+              <td>{{item.link}}</td>
+              <td>{{item.admin_name}}</td>
+              <td>{{item.admin_number}}</td>
+              <td>{{item.admin_email}}</td>
+              <td *ngIf="canEditAccount">
+                <div class="d-flex gap-2 col-4 mx-auto">
+                  <button class="btn btn-primary" type="button" (click)="openEdit(item)">Edit</button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
 
-        </div>
     </div>
+  </div>
 </div>
 
 
 
 <!-- Modal -->
- <div class="modal fade show" [class.d-block]="showModal" tabindex="-1">
+<div class="modal fade show" [class.d-block]="showModal" tabindex="-1">
   <div class="modal-dialog modal-lg"> <!-- Make modal wider for 2-column layout -->
     <div class="modal-content">
       <div class="modal-header">
@@ -87,12 +87,12 @@
             <div class="col-md-6 mb-3">
               <label class="form-label fw-bold">Select Type</label>
               <select formControlName="type" class="form-select"
-                [ngClass]="{ 'is-invalid': isSubmit && ModalForm.get('type')?.invalid }">
+                [ngClass]="{'is-invalid': ModalForm.get('type')?.invalid && (ModalForm.get('type')?.touched || ModalForm.get('type')?.dirty || isSubmit)}">
                 <option value="">Choose...</option>
                 <option value="channel">Channel</option>
                 <option value="group">Group</option>
               </select>
-              <div class="invalid-feedback" *ngIf="isSubmit && ModalForm.get('type')?.errors?.['required']">
+              <div class="invalid-feedback" *ngIf="ModalForm.get('type')?.errors?.['required']">
                 Type is required.
               </div>
             </div>
@@ -100,9 +100,10 @@
             <div class="col-md-6 mb-3">
               <label class="fw-bold">Name</label>
               <input type="text" formControlName="name" class="form-control"
-                [ngClass]="{ 'is-invalid': isSubmit && ModalForm.get('name')?.invalid }" />
-              <div class="invalid-feedback" *ngIf="isSubmit && ModalForm.get('name')?.errors?.['required']">
-                Name is required.
+                [ngClass]="{'is-invalid': ModalForm.get('name')?.invalid && (ModalForm.get('name')?.touched || ModalForm.get('name')?.dirty || isSubmit)}" />
+              <div class="invalid-feedback"
+                *ngIf="ModalForm.get('name')?.invalid && (ModalForm.get('name')?.touched || ModalForm.get('name')?.dirty || isSubmit)">
+                <div *ngIf="ModalForm.get('name')?.errors?.['required']">Name is required.</div>
               </div>
             </div>
           </div>
@@ -113,20 +114,22 @@
               <label class="fw-bold">Link</label>
               <input type="text" formControlName="link" class="form-control"
                 [ngClass]="{'is-invalid': ModalForm.get('link')?.invalid && (ModalForm.get('link')?.touched || ModalForm.get('link')?.dirty || isSubmit)}" />
-                
-                <div class="invalid-feedback"
-                    *ngIf="ModalForm.get('link')?.invalid && (ModalForm.get('link')?.touched || ModalForm.get('link')?.dirty || isSubmit)">
-                    <div *ngIf="ModalForm.get('link')?.errors?.['required']">Link is required.</div>
-                    <div *ngIf="ModalForm.get('link')?.errors?.['pattern']">Enter a valid URL starting with http:// or https://</div>
-                </div>
+
+              <div class="invalid-feedback"
+                *ngIf="ModalForm.get('link')?.invalid && (ModalForm.get('link')?.touched || ModalForm.get('link')?.dirty || isSubmit)">
+                <div *ngIf="ModalForm.get('link')?.errors?.['required']">Link is required.</div>
+                <div *ngIf="ModalForm.get('link')?.errors?.['pattern']">Enter a valid URL starting with http:// or
+                  https://</div>
+              </div>
             </div>
 
             <div class="col-md-6 mb-3">
               <label class="fw-bold">Admin Name</label>
               <input type="text" formControlName="admin_name" class="form-control"
-                [ngClass]="{ 'is-invalid': isSubmit && ModalForm.get('admin_name')?.invalid }" />
-              <div class="invalid-feedback" *ngIf="isSubmit && ModalForm.get('admin_name')?.errors?.['required']">
-                Admin Name is required.
+                [ngClass]="{'is-invalid': ModalForm.get('admin_name')?.invalid && (ModalForm.get('admin_name')?.touched || ModalForm.get('admin_name')?.dirty || isSubmit)}" />
+              <div class="invalid-feedback"
+                *ngIf="ModalForm.get('admin_name')?.invalid && (ModalForm.get('admin_name')?.touched || ModalForm.get('admin_name')?.dirty || isSubmit)">
+                <div *ngIf="ModalForm.get('admin_name')?.errors?.['required']">Admin Name is required.</div>
               </div>
             </div>
           </div>
@@ -135,21 +138,22 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="fw-bold">Admin Number</label>
-              <input type="text" formControlName="admin_number" class="form-control"
-                [ngClass]="{ 'is-invalid': isSubmit && ModalForm.get('admin_number')?.invalid }" />
-              <div class="invalid-feedback" *ngIf="isSubmit && ModalForm.get('admin_number')?.invalid">
-                <div *ngIf="ModalForm.get('admin_number')?.errors?.['required']">Admin Number is required.</div>
-                <div *ngIf="ModalForm.get('admin_number')?.errors?.['pattern']">Enter a valid number (10–15 digits).</div>
+              <input type="text" maxlength="10" formControlName="admin_number" class="form-control"
+                [ngClass]="{'is-invalid': ModalForm.get('admin_number')?.invalid && (ModalForm.get('admin_number')?.touched || ModalForm.get('admin_number')?.dirty || isSubmit)}" />
+              <div class="invalid-feedback"
+                *ngIf="ModalForm.get('admin_number')?.invalid && (ModalForm.get('admin_number')?.touched || ModalForm.get('admin_number')?.dirty || isSubmit)">
+                  <div *ngIf="ModalForm.get('admin_number')?.errors?.['required']">Admin Number is required.</div>
+                  <div *ngIf="ModalForm.get('admin_number')?.errors?.['pattern']">Enter a valid number (10 digits).</div>
               </div>
             </div>
 
             <div class="col-md-6 mb-3">
               <label class="fw-bold">Admin Email</label>
               <input type="email" formControlName="admin_email" class="form-control"
-                [ngClass]="{ 'is-invalid': isSubmit && ModalForm.get('admin_email')?.invalid }" />
-              <div class="invalid-feedback" *ngIf="isSubmit && ModalForm.get('admin_email')?.invalid">
-                <div *ngIf="ModalForm.get('admin_email')?.errors?.['required']">Admin Email is required.</div>
-                <div *ngIf="ModalForm.get('admin_email')?.errors?.['email']">Enter a valid email address.</div>
+                [ngClass]="{'is-invalid': ModalForm.get('admin_email')?.invalid && (ModalForm.get('admin_email')?.touched || ModalForm.get('admin_email')?.dirty || isSubmit)}" />
+              <div class="invalid-feedback" *ngIf="ModalForm.get('admin_email')?.invalid && (ModalForm.get('admin_email')?.touched || ModalForm.get('admin_email')?.dirty || isSubmit)">
+                  <div *ngIf="ModalForm.get('admin_email')?.errors?.['required']">Admin Email is required.</div>               
+                  <div *ngIf="ModalForm.get('admin_email')?.errors?.['email']">Enter a valid email address.</div>
               </div>
             </div>
           </div>
@@ -159,9 +163,10 @@
             <div class="col-12 mb-3">
               <label class="fw-bold">Purpose</label>
               <textarea formControlName="purpose" class="form-control" rows="3"
-                [ngClass]="{ 'is-invalid': isSubmit && ModalForm.get('purpose')?.invalid }"></textarea>
-              <div class="invalid-feedback" *ngIf="isSubmit && ModalForm.get('purpose')?.errors?.['required']">
-                Purpose is required.
+                [ngClass]="{'is-invalid': ModalForm.get('purpose')?.invalid && (ModalForm.get('purpose')?.touched || ModalForm.get('purpose')?.dirty || isSubmit)}">
+              </textarea>
+              <div class="invalid-feedback" *ngIf="ModalForm.get('purpose')?.invalid && (ModalForm.get('purpose')?.touched || ModalForm.get('purpose')?.dirty || isSubmit)">
+                  <div *ngIf="ModalForm.get('purpose')?.errors?.['required']">Purpose is required.</div>
               </div>
             </div>
           </div>
