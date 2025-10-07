@@ -255,7 +255,7 @@
                     <div class="col-md-6" *ngIf="!editMode">
                         <div class="mb-3">
                             <label for="user-password" class="fw-bold col-form-label">Your Password</label>
-                            <input type="text" *ngIf="!editMode" formControlName="password" class="form-control"
+                            <input type="password" *ngIf="!editMode" formControlName="password" class="form-control"
                                 id="user-password" [ngClass]="{
                                 'is-valid': PassFormModel.get('password')?.valid && (PassFormModel.get('password')?.touched || PassFormModel.get('password')?.dirty || passButtonClicked),
                                 'is-invalid': PassFormModel.get('password')?.invalid && (PassFormModel.get('password')?.touched || PassFormModel.get('password')?.dirty || passButtonClicked)
@@ -270,7 +270,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="new-password" class="fw-bold col-form-label">New Password</label>
-                            <input type="text" formControlName="newpassword" class="form-control" id="new-password"
+                            <input type="password" formControlName="newpassword" class="form-control" id="new-password"
                                 [ngClass]="{
                                 'is-valid':PassFormModel.get('newpassword')?.valid && (PassFormModel.get('newpassword')?.touched || PassFormModel.get('newpassword')?.dirty || passButtonClicked),
                                 'is-invalid': PassFormModel.get('newpassword')?.invalid && (PassFormModel.get('newpassword')?.touched || PassFormModel.get('newpassword')?.dirty || passButtonClicked)
@@ -289,7 +289,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="confirm-password" class="fw-bold col-form-label">Confirm Password</label>
-                            <input type="text" formControlName="confirm_password" class="form-control"
+                            <input type="password" formControlName="confirm_password" class="form-control"
                                 id="confirm-password" [ngClass]="{
                                 'is-valid':PassFormModel.get('confirm_password')?.valid && (PassFormModel.get('confirm_password')?.touched || PassFormModel.get('confirm_password')?.dirty || passButtonClicked), 'is-invalid': PassFormModel.get('confirm_password')?.invalid && (PassFormModel.get('confirm_password')?.touched || PassFormModel.get('confirm_password')?.dirty || passButtonClicked)
                               }">

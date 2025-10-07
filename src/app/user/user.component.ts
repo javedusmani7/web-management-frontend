@@ -284,29 +284,64 @@ export class UserComponent implements OnInit {
     }
   }
 
-  deleteUser(item: any) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.userService.deleteUser({ id: item._id }).subscribe({
-          next: (res: any) => {
-            this.msgSuccess(res.message);
-            this.getUsers();
-          },
-          error: (e) => {
-            this.msgFailure(e.error.message);
+  
+deleteUser(item: any) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Show OTP input prompt
+      Swal.fire({
+        title: 'Enter 6-digit OTP',
+        input: 'text',
+        inputAttributes: {
+          maxlength: '6',
+          inputmode: 'numeric', 
+          autocapitalize: 'off',
+          autocorrect: 'off',
+          pattern: '\\d{6}'
+        },
+        inputValidator: (value) => {
+          if (!value || !/^\d{6}$/.test(value)) {
+            return 'Please enter a valid 6-digit OTP';
           }
-        })
-      }
-    })
-  }
+          return null;
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Verify OTP',
+        cancelButtonText: 'Cancel'
+      }).then((otpResult) => {
+        if (otpResult.isConfirmed) {
+          const enteredOtp = otpResult.value;
+
+          // TODO: Verify OTP here with backend or your verification logic
+          // For demonstration, let's assume OTP verification is successful if OTP is '123456'
+          if (enteredOtp === '123456') {
+            // Proceed with delete
+            this.userService.deleteUser({ id: item._id }).subscribe({
+              next: (res: any) => {
+                this.msgSuccess(res.message);
+                this.getUsers();
+              },
+              error: (e) => {
+                this.msgFailure(e.error.message);
+              }
+            });
+          } else {
+            Swal.fire('Error', 'Invalid OTP entered', 'error');
+          }
+        }
+      });
+    }
+  });
+}
+
 
   onUpdate() {
     this.passButtonClicked = true;
