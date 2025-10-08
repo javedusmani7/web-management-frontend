@@ -194,7 +194,8 @@ export class UserComponent implements OnInit {
     this.UserFormModel.updateValueAndValidity({ onlySelf: true, emitEvent: false });
   }
 
-  Inactive(item: any) {
+  
+Inactive(item: any) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -202,22 +203,48 @@ export class UserComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Change it!'
+      confirmButtonText: 'Yes, active it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.userService.UserStatus({ id: item._id }).subscribe({
-          next: (res: any) => {
-            this.msgSuccess(res.message);
-            this.getUsers();
+        // Show OTP input prompt
+        Swal.fire({
+          title: 'Enter 6-digit OTP',
+          input: 'text',
+          inputAttributes: {
+            maxlength: '6',
+            inputmode: 'numeric',
+            autocapitalize: 'off',
+            autocorrect: 'off',
+            pattern: '\\d{6}'
           },
-          error: (e) => {
-            this.msgFailure(e.error.message);
+          inputValidator: (value) => {
+            if (!value || !/^\d{6}$/.test(value)) {
+              return 'Please enter a valid 6-digit OTP';
+            }
+            return null;
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Verify OTP',
+          cancelButtonText: 'Cancel'
+        }).then((otpResult) => {
+          if (otpResult.isConfirmed) {
+            const enteredOtp = otpResult.value;
+            this.userService.UserStatus({ id: item._id, googleOtp: enteredOtp }).subscribe({
+              next: (res: any) => {
+                this.msgSuccess(res.message);
+                this.getUsers();
+              },
+              error: (e) => {
+                Swal.fire('Error', e.error.message, 'error');
+              }
+            });
+            // 
           }
-        })
+        });
       }
-    })
+    });
   }
-
+  
   Activate(item: any) {
     Swal.fire({
       title: 'Are you sure?',
@@ -226,20 +253,46 @@ export class UserComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Change it!'
+      confirmButtonText: 'Yes, inactive it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.userService.ActiveUser({ id: item._id }).subscribe({
-          next: (res: any) => {
-            this.msgSuccess(res.message);
-            this.getUsers();
+        // Show OTP input prompt
+        Swal.fire({
+          title: 'Enter 6-digit OTP',
+          input: 'text',
+          inputAttributes: {
+            maxlength: '6',
+            inputmode: 'numeric',
+            autocapitalize: 'off',
+            autocorrect: 'off',
+            pattern: '\\d{6}'
           },
-          error: (e) => {
-            this.msgFailure(e.error.message);
+          inputValidator: (value) => {
+            if (!value || !/^\d{6}$/.test(value)) {
+              return 'Please enter a valid 6-digit OTP';
+            }
+            return null;
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Verify OTP',
+          cancelButtonText: 'Cancel'
+        }).then((otpResult) => {
+          if (otpResult.isConfirmed) {
+            const enteredOtp = otpResult.value;
+            this.userService.ActiveUser({ id: item._id, googleOtp: enteredOtp }).subscribe({
+              next: (res: any) => {
+                this.msgSuccess(res.message);
+                this.getUsers();
+              },
+              error: (e) => {
+                Swal.fire('Error', e.error.message, 'error');
+              }
+            });
+            // 
           }
-        })
+        });
       }
-    })
+    });
   }
 
   onSubmit() {
