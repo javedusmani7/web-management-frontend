@@ -64,30 +64,6 @@ export class MotherPanelComponent implements OnInit {
         validators: [Validators.required, ValidatorService.alphanumeric],
         updateOn: 'blur'
       }),
-      server_account: new FormControl("", {
-        validators: [Validators.required],
-        updateOn: 'blur'
-      }),
-      cloudflore_account: new FormControl("", {
-        validators: [Validators.required],
-        updateOn: 'blur'
-      }),
-      domain_account: new FormControl("", {
-        validators: [Validators.required],
-        updateOn: 'blur'
-      }),
-      company_name: new FormControl("", {
-        validators: [Validators.required],
-        updateOn: 'blur'
-      }),
-      company_master_account: new FormControl("", {
-        validators: [Validators.required],
-        updateOn: 'blur'
-      }),
-      company_agent_account: new FormControl("", {
-        validators: [Validators.required],
-        updateOn: 'blur'
-      })
     })
   }
 
@@ -215,12 +191,6 @@ export class MotherPanelComponent implements OnInit {
         url_address1: PanelData.url_address1,
         url_address2: PanelData.url_address2,
         country: PanelData.country,
-        server_account: PanelData?.server_account?._id,
-        cloudflore_account: PanelData?.cloudflore_account?._id,
-        domain_account: PanelData?.domain_account?._id,
-        company_name: PanelData?.company_name,
-        company_master_account: PanelData?.company_master_account?._id,
-        company_agent_account: PanelData?.company_agent_account?._id
       });
 
       this.onCompanyNameChange(PanelData.company_name);
