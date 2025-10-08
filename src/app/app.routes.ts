@@ -27,6 +27,11 @@ import { UserComponent } from './user/user.component';
 import { WebsiteComponent } from './website/website.component';
 import { WhatsappComponent } from './whatsapp/whatsapp.component';
 
+import { AddMotherPanelComponent } from './add-mother-panel/add-mother-panel.component';
+import { AddDatabaseComponent } from './add-database/add-database.component';
+import { AddOtherComponent } from './add-other/add-other.component';
+import { WebDetailsComponent } from './web-details/web-details.component';
+
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'email-verification', component: EmailVerficationComponent },
@@ -51,4 +56,8 @@ export const routes: Routes = [
     { path: 'statements', component: StatementsComponent, canActivate: [authGuard, permissionGuard], data: { permission: 'VIEW_STATEMENT' } },
     { path: 'telegram', component: TelegramComponent, canActivate: [authGuard, permissionGuard], data: { permission: 'VIEW_TELEGRAM' }},
     { path: 'whatsapp', component: WhatsappComponent, canActivate: [authGuard, permissionGuard], data: { permission: 'VIEW_WHATSAPP' }},
+    {path:'website/add-motherpanel',component: AddMotherPanelComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'ADD_WEBSITE' }},
+    {path:'website/add-database',component: AddDatabaseComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'ADD_WEBSITE' }},
+    {path:'website/add-other',component: AddOtherComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'ADD_WEBSITE' }},
+    {path:'details/:type/:id',component: WebDetailsComponent,canActivate:[authGuard,permissionGuard],data: { permission: 'ADD_WEBSITE' }},
 ];

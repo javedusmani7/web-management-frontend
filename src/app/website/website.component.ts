@@ -27,14 +27,25 @@ export class WebsiteComponent implements OnInit {
   WebDetail: boolean = false;
   canAddWeb: boolean = false;
   canEditWeb: boolean = false;
+  activeTab: string = 'motherpanel';
+  motherPanel:any = [];
+  webDetail:any = [];
+  dataBaseDetail:any=[];
+  otherDetail:any=[];
+
+
 
   constructor(private mainservice: MainService, private userservice: UserService, private router: Router, private datePipe: DatePipe, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.canAddWeb = this.userservice.hasPermission('ADD_WEBSITE');
     this.canEditWeb = this.userservice.hasPermission('EDIT_WEBSITE');
-    this.getCustomers();
-    this.Websites();
+
+    this.GetWebDetails();
+  }
+
+    setActiveTab(tab: string) {
+    this.activeTab = tab;
   }
 
   getCustomers() {
@@ -67,6 +78,19 @@ export class WebsiteComponent implements OnInit {
         return ddt.find((item: any) => item._id === id);
       });
 
+  }
+
+  GetWebDetails()
+  {
+    this.mainservice.GetAllWebDetails().subscribe({
+      next:(res:any) => {
+        console.log(res)
+        this.motherPanel = res?.panel;
+        this.webDetail = res?.web;
+        this.dataBaseDetail = res?.data;
+        this.otherDetail = res?.other
+      }
+    })
   }
 
   GetPlatform(event: any) {

@@ -1,34 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MainService } from '../services/main.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
+import { MainService } from '../services/main.service';
 import { Router } from '@angular/router';
 import { ValidatorService } from '../services/validator.service';
-import { TagInputModule } from 'ngx-chips';
-
-
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-add-website',
+  selector: 'app-add-other',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TagInputModule],
-  templateUrl: './add-website.component.html',
-  styleUrl: './add-website.component.css'
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './add-other.component.html',
+  styleUrl: './add-other.component.css'
 })
-export class AddWebsiteComponent implements OnInit {
+export class AddOtherComponent implements OnInit {
+
   IsSubmit = false; websiteData: any = [];
   platformtypevalue: string = '';
   show_cloud: boolean = false;
-  show_awc: boolean = false;
-  show_saba: boolean = false;
-  show_inter: boolean = false;
-       show_java: boolean = false;
+  show_java: boolean = false;
   show_node: boolean = false;
   show_angular: boolean = false;
   show_java_angular: boolean = false;
   show_node_angular: boolean = false;
-  show_web_fields: boolean = false;
+  show_web_fields: boolean = true;
   show_db_fields: boolean = true;
   config_type: boolean = false;
   customers: any = [];
@@ -38,17 +33,16 @@ export class AddWebsiteComponent implements OnInit {
   cloudAccounts: any = [];
   domainManager: any = [];
   awc_account: any = [];
-  awc_agents:any = [];
   saba_account: any = [];
   international_account: any = [];
   server_account: any = [];
   tomcat_version: any = ["10", "9", "8.5", "8.0", "7.0", "6.0", "5.5", "5.0", "4.1", "4.0"];
   ubuntu_version: any = ["24.04", "23.10", "23.04", "22.10", "22.04", "21.10", "21.04", "20.10", "20.04", "19.10"];
   nginx_version: any = ["1.27", "1.26", "1.25", "1.24", "1.23", "1.22", "1.21", "1.20", "1.19", "1.18"];
-  mongo_version: any = ["7.0", "6.0", "5.0", "4.4", "4.2", "4.0", "3.6", "3.4", "3.2", "3.0"];
-  socket_version: any = ["4.7.5", "4.7.4", "4.7.3", "4.7.0", "4.6", "4.5", "4.4", "4.1.3", "4.1.2","4.1.1", "4.1.0", "4.0.1", "4.0.0"];
+  mongo_version: any = ["8.0", "7.0", "6.0", "5.0", "4.4", "4.2", "4.0", "3.6", "3.4", "3.2", "3.0"];
+  socket_version: any = ["4.7.5", "4.7.4", "4.7.3", "4.7.0", "4.6", "4.5", "4.4", "4.1.3", "4.1.2", "4.1.1", "4.1.0", "4.0.1", "4.0.0"];
   java_version: any = ["22", "21", "20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10", "9", "8"];
-        node_version: any = ["22", "20", "18"];
+  node_version: any = ["22", "20", "18"];
   angular_version: any = ["20", "19", "18", "16", "13"];
 
   constructor(private mainService: MainService, private fb: FormBuilder, private router: Router) { }
@@ -60,33 +54,26 @@ export class AddWebsiteComponent implements OnInit {
     this.OtherAccounts();
     this.Websites();
     this.WebForm = this.fb.group({
-      customer: ['', Validators.required],
-      platform: ['website', Validators.required],
+      platform: ['', Validators.required],
       website_name: ['', [Validators.required, ValidatorService.alphanumeric]],
       website_type: ['', Validators.required],
-      website_status: ['whitelabel', Validators.required],
-      mother_panel: ['', Validators.required],
-      che_con: ['',Validators.required],
+      db_ip: [''],
+      db_ubutnu: [''],
+      db_time_zone: [''],
+      db_version: [''],
+      db_index: [''],
+      db_grafana: [''],
+      db_auth: [''],
+      db_firewall: [''],
+      db_log: [''],
+      db_reset: [''],
       web_technology: [''],
       web_cloud_s: [''],
       web_cloud_ac: [''],
-      web_data_source: [''],
-      web_bet_match: [''],
       web_domain: [''],
-      web_awc_s: [''],
-      web_awc: [''],
-      web_awc_agent:[''],
-      web_saba_s: [''],
-      web_saba: [''],
-      saba_call_back: [''],
-      web_inter_s: [''],
-      web_inter: [''],
-      inter_call_back: [''],
       web_domain_whitelist: [''],
       web_redis_allow: [''],
       web_main_link: [''],
-      web_mgt_link: [''],
-      web_diff_server: [''],
       web_project_name: [''],
       web_server_name: [''],
       web_server_comp: [''],
@@ -103,6 +90,8 @@ export class AddWebsiteComponent implements OnInit {
       web_tom_ver: [''],
       web_tom_cache: [''],
       web_tom_log: [''],
+      web_node_ver: [''],
+      web_angular_ver: [''],
       web_nginx_ver: [''],
       web_nginx_cache: [''],
       web_nginx_conn: [''],
@@ -178,7 +167,7 @@ export class AddWebsiteComponent implements OnInit {
 
   SelectAccount(event: any): void {
     const server_name = event.target.value
-    console.log(server_name)
+    // console.log(server_name)
   }
 
   PaltformType(event: any): void {
@@ -193,8 +182,7 @@ export class AddWebsiteComponent implements OnInit {
     ];
 
     const websiteFields = [
-      'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'web_awc_agent', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache',
-      'web_http2', 'web_gzip'
+      'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_domain', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_node_ver', 'web_angular_ver', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache', 'web_http2', 'web_gzip'
     ];
 
     dbFields.forEach(field => {
@@ -232,71 +220,9 @@ export class AddWebsiteComponent implements OnInit {
 
   }
 
-  chec_conf(event: any) {
-    const c_value = event.target.value;
-
-
-     const websiteFields = [
-        'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'web_awc_agent', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache',
-        'web_http2', 'web_gzip'
-      ];
-  
-      if (c_value === 'new') {
-        this.show_web_fields = true;
-        websiteFields.forEach(field => {
-          const control = this.WebForm.get(field);
-          if (control) {
-            control.clearValidators();
-              if (field === 'web_server_ip') {
-                control.setValidators([Validators.required, ValidatorService.ipAddressValidator()]);
-              } else {
-                control.setValidators([Validators.required]);
-              }
-            
-            control.updateValueAndValidity();
-          }
-        });
-      }
-      else {
-        this.show_web_fields = false;
-        websiteFields.forEach(field => {
-          const control = this.WebForm.get(field);
-          if (control) {
-            control.clearValidators();
-            control.updateValueAndValidity();
-          }
-        });
-      }
-  }
-
-  checkstatus(event: any) {
-    const web_status = event.target.value;
-    const selectedMotherPanel = this.WebForm.get('mother_panel')?.value;
-    
-    if (web_status === 'label') {
-      this.show_web_fields = false;
-      this.config_type = true;
-      const cheConControl = this.WebForm.get('che_con');
-      if (!cheConControl) {
-        // Add the control with validators if it doesn't exist
-        this.WebForm.addControl('che_con', this.fb.control('', Validators.required));
-      } else {
-        // Update validators if the control already exists
-        cheConControl.setValidators([Validators.required]);
-        cheConControl.updateValueAndValidity({ emitEvent: false });
-      }
-    }
-    else {
-      this.show_web_fields = true;
-      this.config_type = false;
-      this.WebForm.removeControl('che_con');
-    }
-  }
 
   cloudchange(event: any) {
     const cloud_status = event.target.value;
-
-
     this.show_cloud = cloud_status === 'yes'
 
     if (cloud_status === 'yes') {
@@ -308,80 +234,10 @@ export class AddWebsiteComponent implements OnInit {
       this.WebForm.removeControl('web_cloud_ac');
     }
 
-
-
   }
 
 
-  awcchange(event: any) {
-    const awc_status = event.target.value;
-
-    this.show_awc = awc_status === 'yes'
-
-    if (awc_status === 'yes') {
-      this.WebForm.get('web_awc')?.setValidators([Validators.required]);
-      this.WebForm.get('web_awc_agent')?.setValidators([Validators.required]);
-      this.WebForm.get('web_awc')?.updateValueAndValidity({ emitEvent: false });
-    }
-    else {
-      this.WebForm.removeControl('web_awc');
-      this.WebForm.removeControl('web_awc_agent');
-    }
-  }
-
-  awcMaster(event: any) {
-    const awc_status = event.target.value;
-
-    console.log(awc_status)
-
-    this.mainService.getAWCAgent({master:awc_status}).subscribe({
-      next:(res:any) => {
-        console.log(res)
-        this.awc_agents = res
-           this.WebForm.get('web_awc_agent')?.setValidators([Validators.required]);
-      this.WebForm.get('web_awc_agent')?.updateValueAndValidity({ emitEvent: false });
-      }
-    })
-  }
-
-  sabachange(event: any) {
-    const saba_status = event.target.value;
-
-    this.show_saba = saba_status === 'yes'
-
-    if (saba_status === 'yes') {
-      this.WebForm.get('web_saba')?.setValidators([Validators.required]);
-      this.WebForm.get('saba_call_back')?.setValidators([Validators.required]);
-      this.WebForm.get('web_saba')?.updateValueAndValidity({ emitEvent: false });
-    }
-    else {
-      this.WebForm.removeControl('web_saba');
-      this.WebForm.removeControl('saba_call_back');
-    }
-
-
-
-  }
-
-  interchange(event: any) {
-    const inter_status = event.target.value;
-
-    this.show_inter = inter_status === 'yes'
-
-    if (inter_status === 'yes') {
-      this.WebForm.get('web_inter')?.setValidators([Validators.required]);
-      this.WebForm.get('inter_call_back')?.setValidators([Validators.required]);
-      this.WebForm.get('web_inter')?.updateValueAndValidity({ emitEvent: false });
-    }
-    else {
-      this.WebForm.removeControl('web_inter');
-      this.WebForm.removeControl('inter_call_back');
-    }
-
-
-  }
-
-    onPanelOrTypeChange() {
+  onPanelOrTypeChange() {
     const type = this.WebForm.get('website_type')?.value;
     // Reset all flags first
     this.show_java = false;
@@ -398,7 +254,7 @@ export class AddWebsiteComponent implements OnInit {
 
     // Enable based on selection
 
-
+    if (this.platformtypevalue === 'website') {
     if (type === "java") {
       this.show_java = true;
       this.WebForm.get('web_java_ver')?.setValidators([Validators.required]);
@@ -423,7 +279,7 @@ export class AddWebsiteComponent implements OnInit {
       this.WebForm.get('web_tom_log')?.setValidators([Validators.required]);
       this.WebForm.get('web_angular_ver')?.setValidators([Validators.required]);
     }
-
+  }
 
     this.WebForm.get('web_java_ver')?.updateValueAndValidity();
     this.WebForm.get('web_tom_ver')?.updateValueAndValidity();
@@ -433,39 +289,42 @@ export class AddWebsiteComponent implements OnInit {
     this.WebForm.get('web_angular_ver')?.updateValueAndValidity();
   }
 
+
   onSubmitWeb() {
     this.IsSubmit = true;
 
-    if (this.WebForm.get('che_con')?.value === 'copy') {
+ 
+
       if (this.WebForm.valid) {
+        let data = this.WebForm.value;
 
-        let data = { m_detail: this.WebForm.get('mother_panel')?.value }
 
-        this.mainService.getWebsiteByMother(data).subscribe({
+        if (this.platformtypevalue === 'database') {
+          const websiteFields = [
+            'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_domain', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_node_ver', 'web_angular_ver', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache',
+            'web_http2', 'web_gzip'
+          ];
+          websiteFields.forEach(field => delete data[field]);
+        } else if (this.platformtypevalue === 'website') {
+          const dbFields = [
+            'db_ip', 'db_ubutnu', 'db_time_zone', 'db_version', 'db_index', 'db_grafana', 'db_auth', 'db_firewall', 'db_log', 'db_reset'
+          ];
+          dbFields.forEach(field => delete data[field]);
+        }
+
+
+        this.mainService.AddOtherWebsite(data).subscribe({
           next: (res: any) => {
-            this.CopyFields(res);
+            this.IsSubmit = false;
+            this.msgSuccess();
 
-            let formdata = this.WebForm.value;
-
-            this.mainService.AddWebsite(formdata).subscribe({
-              next: (res: any) => {
-                this.IsSubmit = false;
-                this.msgSuccess();
-
-              }, error: (e) => {
-                this.msgFailure();
-              }
-            })
-
-          },
-          error: (e) => {
+          }, error: (e:any) => {
             this.msgFailure();
           }
         })
       }
       else {
-        console.log('Copy error', this.WebForm)
-         console.log('Invalid Form',this.WebForm)
+        console.log('Invalid Form',this.WebForm)
         Object.keys(this.WebForm.controls).forEach(controlName => {
           const control = this.WebForm.get(controlName);
           if (control && control.invalid) {
@@ -473,42 +332,18 @@ export class AddWebsiteComponent implements OnInit {
           }
         });
       }
-    }
-    else {
-      if (this.WebForm.valid) {
-        let data = this.WebForm.value;
-
-        this.mainService.AddWebsite(data).subscribe({
-          next: (res: any) => {
-            this.IsSubmit = false;
-            this.msgSuccess();
-
-          }, error: (e) => {
-            this.msgFailure();
-          }
-        })
-      }
-      else {
-        // console.log('Invalid Form',this.WebForm)
-        // Object.keys(this.WebForm.controls).forEach(controlName => {
-        //   const control = this.WebForm.get(controlName);
-        //   if (control && control.invalid) {
-        //     console.log(`Control: ${controlName}`, control.errors);
-        //   }
-        // });
-      }
-    }
+    
 
   }
 
 
-  CopyFields(data: any) {
+  CopyFields(data: any, platformType: string) {
 
-  
+    if (platformType == 'website') {
       const websiteFields = [
-        'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_data_source', 'web_bet_match', 'web_domain', 'web_awc_s', 'web_awc', 'web_awc_agent', 'web_saba_s', 'web_saba', 'saba_call_back', 'web_inter_s', 'web_inter', 'inter_call_back', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_mgt_link', 'web_diff_server', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache', 'web_http2', 'web_gzip'
+        'web_technology', 'web_cloud_s', 'web_cloud_ac', 'web_domain', 'web_domain_whitelist', 'web_redis_allow', 'web_main_link', 'web_project_name', 'web_server_name', 'web_server_comp', 'web_server_acc', 'web_server_password', 'web_server_ip', 'web_ubuntu', 'web_time_zone', 'web_cache', 'web_reset', 'web_config', 'web_nagios', 'web_node_ver', 'web_angular_ver', 'web_java_ver', 'web_tom_ver', 'web_tom_cache', 'web_tom_log', 'web_nginx_ver', 'web_nginx_cache', 'web_nginx_conn', 'web_nginx_file', 'web_nginx_log', 'web_pm_log', 'web_max_body', 'web_socket_ver', 'web_ssl', 'web_ssl_name', 'web_ssl_ex', 'web_ssl_up', 'web_ssl_date', 'web_ssl_cache', 'web_http2', 'web_gzip'
       ];
-  
+
       websiteFields.forEach(field => {
         if (data[field] !== null && data[field] !== undefined && data[field] !== '') {
           this.WebForm.get(field)?.patchValue(data[field]);
@@ -516,11 +351,26 @@ export class AddWebsiteComponent implements OnInit {
         else {
           this.WebForm.removeControl(field);
         }
-  
-      });
-    
 
-    
+      });
+    }
+    else if (platformType == 'database') {
+      const dbFields = [
+        'db_ip', 'db_ubutnu', 'db_time_zone', 'db_version', 'db_index', 'db_grafana', 'db_auth', 'db_firewall', 'db_log', 'db_reset'
+      ];
+
+
+      dbFields.forEach(field => {
+        if (data[field] !== null && data[field] !== undefined && data[field] !== '') {
+          this.WebForm.get(field)?.patchValue(data[field]);
+        }
+        else {
+          this.WebForm.removeControl(field);
+        }
+
+      });
+    }
+
   }
 
 

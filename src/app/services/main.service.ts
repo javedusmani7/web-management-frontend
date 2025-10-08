@@ -97,8 +97,24 @@ export class MainService {
     return this.http.post(Backend_URL_Website + '/add-website', data);
   }
 
-  GetWebsite() {
-    return this.http.get(Backend_URL_Website + '/get-website');
+  AddMotherPanel(data:any)
+  {
+    return this.http.post(Backend_URL_Website+'/add-mother-panel', data);
+  }
+
+  AddDatabase(data:any)
+  {
+    return this.http.post(Backend_URL_Website+'/add-database', data);
+  }
+
+  AddOtherWebsite(data:any)
+  {
+    return this.http.post(Backend_URL_Website+'/add-other-website', data);
+  }
+
+  GetWebsite()
+  {
+    return this.http.get(Backend_URL_Website+'/get-website');
   }
 
   getWebsiteById(data: string) {
@@ -109,8 +125,14 @@ export class MainService {
     return this.http.post(Backend_URL_Website + '/website-mother', data);
   }
 
-  UpdateWebsite(data: any) {
-    return this.http.post(Backend_URL_Website + '/update-website', data);
+  getDatabaseByMother(data:any)
+  {
+    return this.http.post(Backend_URL_Website+'/database-mother',data);
+  }
+
+  UpdateWebsite(data:any)
+  {
+    return this.http.post(Backend_URL_Website+'/update-website',data);
   }
 
   PanelByCustomer(c_id: any) {
@@ -125,6 +147,10 @@ export class MainService {
     return this.http.get(Backend_URL_Custom + '/getLog/' + string);
   }
 
+  GetAllWebDetails()
+  {
+    return this.http.get(Backend_URL_Website + '/get-all-details');
+  }
 
   AddMasterAccount(data: any) {
     return this.http.post(Backend_URL_Account + '/addotherAccount', data);
@@ -226,4 +252,14 @@ export class MainService {
   }
 
   
+  getAWCAgent(data:any)
+  {
+    return this.http.post(Backend_URL_Account+'/get-awc-agents',data)
+  }
+
+
+  getTypeDetail(data:any)
+  {
+    return this.http.post(Backend_URL_Website+'/get-type-detail',data);
+  }
 }

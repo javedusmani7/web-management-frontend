@@ -1,0 +1,81 @@
+<div class="container-fluid">
+
+    <div class="card border-primary mt-2">
+        <div class="card-header ">
+            <div class="row">
+                <div class="col-md-2">
+                    <h4>Website List</h4>
+                </div>               
+            </div>
+        </div>
+        <div class="card-body table-group-divider">
+
+            <div class="row" *ngIf="DbDetail">
+                <div class="col-md-4">
+                    <div class="table-responsive">
+                        <h4 style="background: #184e5d;color: #fff;margin: 0px;line-height: 41px;">{{innerTitle}}</h4>
+                        <table class="table table-striped" style="border:1px solid #0d6efd">
+                            @for(db_detail of databaseDetail; track db_detail)
+                            {
+                                <tr class="table-primary" style="border:1px solid #0d6efd">
+                                    <td class="fw-bold text-capitalize" style="width: 50%;padding-left: 10px;background-color: #0c3c26;color: #fff;">{{db_detail[0]}}</td>
+                                    <td class="fw-bold  text-capitalize" style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{db_detail[1]}}</td>
+                                </tr>
+                            }
+                            
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row" *ngIf="WebDetail">
+                <div class="col-md-4">
+                    <div class="table-responsive">
+                        <h4 style="background: #184e5d;color: #fff;margin: 0px;padding-left: 10px;line-height: 41px;">{{innerTitle}}</h4>
+                        <table class="table table-striped" style="border:1px solid #0d6efd">
+                            @for(db_detail of databaseDetail; track db_detail)
+                            {
+                                <tr class="table-primary" style="border:1px solid #0d6efd">
+                                    <td class="fw-bold text-left text-capitalize" style="width: 50%;padding-left: 10px;background-color: #0c3c26;color: #fff;">{{db_detail[0]}}</td>
+                                    <td class="fw-bold text-left text-capitalize" style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{db_detail[1]}}</td>
+                                </tr>
+                            }
+                            
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-responsive">
+                        <h4 style="background: #184e5d;color: #fff;margin: 0px;padding-left: 10px;line-height: 41px;">Server Detail</h4>
+                        <table class="table table-striped" style="border:1px solid #0d6efd">
+                            @for(server_detail of serverDetail; track server_detail)
+                            {
+                                <tr class="table-primary" style="border:1px solid #0d6efd">
+                                    <td class="fw-bold text-left text-capitalize" style="width: 50%;padding-left: 10px;background-color: #a739a5;color: #fff;">{{server_detail[0]}}</td>
+                                    <td class="fw-bold text-left text-capitalize" style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{server_detail[1]}}</td>
+                                </tr>
+                            }
+                            
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-responsive">
+                        <h4 style="background: #184e5d;color: #fff;margin: 0px;padding-left: 10px;line-height: 41px;">SSL Detail</h4>
+                        <table class="table table-bordered border-primary" >
+                            @for(ssl_detail of sslDetail; track ssl_detail)
+                            {
+                                <tr class="table-primary" style="border:1px solid #0d6efd">
+                                    <td class="fw-bold text-left text-capitalize" style="width: 40%;padding-left: 10px;background-color: #1d39b9a8;color: #fff;">{{ssl_detail[0]}}</td>
+                                    <td class="fw-bold text-left text-capitalize" style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{ssl_detail[1]}}</td>
+                                </tr>
+                            }
+                            
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

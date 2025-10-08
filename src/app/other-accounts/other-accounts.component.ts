@@ -38,6 +38,7 @@ export class OtherAccountsComponent implements OnInit {
   CanDeleteAccount: boolean = false;
   showPassword: boolean = false;
   passwordData: any;
+
   constructor(private mainService: MainService, private userservice: UserService) { }
 
   ngOnInit(): void {
@@ -62,9 +63,26 @@ export class OtherAccountsComponent implements OnInit {
       account_password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       agent_name: new FormControl('', [Validators.required]),
       user_id: new FormControl('', Validators.required),
-      company_name: new FormControl('', Validators.required)
+      company_name: new FormControl('', Validators.required),
+      agent_currency: new FormControl('', Validators.required),
+      cert_id: new FormControl('')
     })
+
+    this.AgentForm.get('company_name')?.valueChanges.subscribe(value => {
+      const certControl = this.AgentForm.get('cert_id');
+
+      if (value === 'awc') {
+        certControl?.setValidators([Validators.required]); // make it required
+      } else {
+        certControl?.clearValidators(); // remove required
+        certControl?.setValue(''); // optional: clear value
+      }
+
+      certControl?.updateValueAndValidity();
+    });
   }
+
+
 
   GetAccounts() {
     this.mainService.MasterAccountList().subscribe({
@@ -210,6 +228,15 @@ export class OtherAccountsComponent implements OnInit {
       })
 
     }
+      else {
+        console.log('Invalid Form',this.AgentForm)
+        Object.keys(this.AgentForm.controls).forEach(controlName => {
+          const control = this.AgentForm.get(controlName);
+          if (control && control.invalid) {
+            console.log(`Control: ${controlName}`, control.errors);
+          }
+        });
+      }
   }
 
   onSubmit() {
@@ -246,6 +273,7 @@ export class OtherAccountsComponent implements OnInit {
       }
 
     }
+    
   }
 
   msgSuccess(message: string) {

@@ -191,27 +191,23 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label for="google-auth-email" class="fw-bold col-form-label">Google Auth Email</label>
-              <input
-                type="email"
-                formControlName="google_authenticator_email"
-                id="google-auth-email"
-                class="form-control"
-                [ngClass]="{
+              <input type="email" formControlName="google_authenticator_email" id="google-auth-email"
+                class="form-control" [ngClass]="{
                   'is-valid': isSubmit && ModalForm.get('google_authenticator_email')?.valid,
                   'is-invalid': isSubmit && ModalForm.get('google_authenticator_email')?.invalid
-                }"
-              >
+                }">
               <div
                 *ngIf="ModalForm.get('google_authenticator_email')?.invalid && (ModalForm.get('google_authenticator_email')?.touched || ModalForm.get('google_authenticator_email')?.dirty || isSubmit)"
-                class="invalid-feedback"
-              >
-                <div *ngIf="ModalForm.get('google_authenticator_email')?.errors?.['required']">Google Auth Email is required.</div>
+                class="invalid-feedback">
+                <div *ngIf="ModalForm.get('google_authenticator_email')?.errors?.['required']">Google Auth Email is
+                  required.</div>
                 <div *ngIf="ModalForm.get('google_authenticator_email')?.errors?.['email']">Invalid email format.</div>
-                <div *ngIf="ModalForm.get('google_authenticator_email')?.errors?.['gmailDomain']">Only Gmail addresses are allowed.</div>
+                <div *ngIf="ModalForm.get('google_authenticator_email')?.errors?.['gmailDomain']">Only Gmail addresses
+                  are allowed.</div>
               </div>
             </div>
           </div>
-          
+
           <div class="col-md-6">
             <div class="mb-3">
               <label for="user-number" class="fw-bold col-form-label">UserId</label>
@@ -301,24 +297,6 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="website-name" class="fw-bold col-form-label">Website Name:</label>
-              <select id="website-name" formControlName="website_name" class="form-select" [ngClass]="{
-                        'is-valid': AgentForm.get('website_name')?.valid && (AgentForm.get('website_name')?.touched || AgentForm.get('website_name')?.dirty || isAgnetSubmit),
-                        'is-invalid': ModalForm.get('website_name')?.invalid && (AgentForm.get('website_name')?.touched || AgentForm.get('website_name')?.dirty || isAgnetSubmit)
-                      }">
-                <option value="">Choose...</option>
-                @for(web of websList; track web)
-                {
-                <option value="{{web}}">{{web}}</option>
-                }
-              </select>
-              <div *ngIf="AgentForm.get('website_name')?.invalid" class="invalid-feedback">
-                <div *ngIf="AgentForm.get('website_name')?.errors?.['required']">Website Name is required.</div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
               <label for="agent-name" class="fw-bold col-form-label">Agent Name</label>
               <input type="text" formControlName="agent_name" class="form-control" id="agent-name" [ngClass]="{
                       'is-valid': AgentForm.get('agent_name')?.valid && (AgentForm.get('agent_name')?.touched || AgentForm.get('agent_name')?.dirty || isAgnetSubmit),
@@ -326,6 +304,30 @@
                     }">
               <div *ngIf="AgentForm.get('agent_name')?.invalid" class="invalid-feedback">
                 <div *ngIf="AgentForm.get('agent_name')?.errors?.['required']">Agent Name is required.</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="agent-name" class="fw-bold col-form-label">Currency</label>
+              <input type="text" formControlName="agent_currency" class="form-control" id="agent-name" [ngClass]="{
+                      'is-valid': AgentForm.get('agent_currency')?.valid && (AgentForm.get('agent_currency')?.touched || AgentForm.get('agent_currency')?.dirty || isAgnetSubmit),
+                      'is-invalid': AgentForm.get('agent_currency')?.invalid && (AgentForm.get('agent_currency')?.touched || AgentForm.get('agent_currency')?.dirty || isAgnetSubmit)
+                    }">
+              <div *ngIf="AgentForm.get('agent_currency')?.invalid" class="invalid-feedback">
+                <div *ngIf="AgentForm.get('agent_currency')?.errors?.['required']">Currency is required.</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6" *ngIf="AgentForm.get('company_name')?.value === 'awc'">
+            <div class="mb-3">
+              <label for="user-number" class="fw-bold col-form-label">Cert Id</label>
+              <input type="text" formControlName="cert_id" class="form-control" id="user-number" [ngClass]="{
+                          'is-valid': AgentForm.get('cert_id')?.valid && (AgentForm.get('cert_id')?.touched || AgentForm.get('cert_id')?.dirty || isAgnetSubmit),
+                          'is-invalid': AgentForm.get('cert_id')?.invalid && (AgentForm.get('cert_id')?.touched || AgentForm.get('cert_id')?.dirty || isAgnetSubmit)
+                        }">
+              <div *ngIf="AgentForm.get('cert_id')?.invalid" class="invalid-feedback">
+                <div *ngIf="AgentForm.get('cert_id')?.errors?.['required']">CertId is required.</div>
               </div>
             </div>
           </div>
@@ -380,4 +382,4 @@
 </div>
 
 
-<app-show-password [showModal]="showPassword" [data]="passwordData" (close) = "closeModal2()"></app-show-password>
+<app-show-password [showModal]="showPassword" [data]="passwordData" (close)="closeModal2()"></app-show-password>

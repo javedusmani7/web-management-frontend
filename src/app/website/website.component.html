@@ -1,76 +1,224 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12 mt-5">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
-                    <li class="breadcrumb-item">
-                        <a class="link-body-emphasis text-decoration-none" href="#">
-                            Home
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Website
-                    </li>
-                </ol>
-            </nav>
-        </div>
-    </div>
-    <div class="card border-primary">
+
+    <div class="card border-primary mt-2">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-2">
                     <h4>Website List</h4>
                 </div>
-                <div class="col-md-6" *ngIf="canAddWeb">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button routerLink="/website/add" class="btn btn-primary me-md-2">Add Website</button>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-2" *ngIf="canAddWeb">
+                            <div class="d-grid d-md-flex justify-content-md-end">
+                                <button routerLink="/website/add-motherpanel" class="btn btn-primary me-md-2">Add
+                                    MotherPanel</button>
+                            </div>
+                        </div>
+                        <div class="col-md-2" *ngIf="canAddWeb">
+                            <div class="d-grid d-md-flex justify-content-md-end">
+                                <button routerLink="/website/add" class="btn btn-primary me-md-2">Add Website</button>
+                            </div>
+                        </div>
+                        <div class="col-md-2" *ngIf="canAddWeb">
+                            <div class="d-grid d-md-flex justify-content-md-end">
+                                <button routerLink="/website/add-database" class="btn btn-primary me-md-2">Add
+                                    Database</button>
+                            </div>
+                        </div>
+                        <div class="col-md-2" *ngIf="canAddWeb">
+                            <div class="d-grid d-md-flex justify-content-md-end">
+                                <button routerLink="/website/add-other" class="btn btn-primary me-md-2">Add
+                                    Other</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="card-body table-group-divider">
-            <div class="row">
-                <div class="col-md-2">
-                    <select class="form-select" (change)="GetPanel($event)" aria-label="Default select example">
-                        <option value="">Select Customer</option>
-                        @for(cust of customers; let i=$index; track cust.name)
-                        {
-                            <option value="{{cust._id}}">{{cust.name}}</option>
-                        }
-                      </select>
+
+            <ul class="nav nav-pills mb-3" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" [class.active]="activeTab === 'motherpanel'"
+                        (click)="setActiveTab('motherpanel')" type="button">
+                        MotherPanel
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" [class.active]="activeTab === 'website'" (click)="setActiveTab('website')"
+                        type="button">
+                        Website
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" [class.active]="activeTab === 'database'"
+                        (click)="setActiveTab('database')" type="button">
+                        Database
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" [class.active]="activeTab === 'other'" (click)="setActiveTab('other')"
+                        type="button">
+                        Other Website
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane fade" [class.show]="activeTab === 'motherpanel'"
+                    [class.active]="activeTab === 'motherpanel'">
+                    <div class="card-body table-group-divider">
+                        <div class="table-responsive">
+                            <table class="table table-bordered border-primary table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">MotherPanel Name</th>
+                                        <th scope="col">Customer</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    @for(item of motherPanel; let i=$index; track $index)
+                                    {
+                                    <tr>
+                                        <th scope="row">{{i+1}}</th>
+                                        <td>{{item?.mother_panel?.name}}</td>
+                                        <td>{{item?.customer?.name}}</td>
+                                        <td>
+                                            <div class="d-flex gap-2 mx-auto justify-content-end">
+                                                <button class="btn btn-sm btn-primary" type="button" routerLink="/details/panel/{{item._id}}"> View</button>
+                                                <!-- <button class="btn btn-sm btn-primary" type="button">Edit</button> -->
+                                                <button class="btn btn-sm btn-danger" type="button">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <select class="form-select" (change)="GetPlatform($event)" aria-label="Default select example">
-                        <option value="">Select MotherPanel</option>
-                        @for(pan of panels;let i=$index; track pan)
-                        {
-                            <option value="{{pan._id}}">{{pan.name}}</option>
-                        }
-                      </select>
+
+                <div class="tab-pane fade" [class.show]="activeTab === 'website'"
+                    [class.active]="activeTab === 'website'">
+                    <div class="card-body table-group-divider">
+                        <div class="table-responsive">
+                            <table class="table table-bordered border-primary table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Website Name</th>
+                                        <th scope="col">MotherPanel Name</th>
+                                        <th scope="col">Customer</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    @for(item of webDetail; let i=$index; track $index)
+                                    {
+                                    <tr>
+                                        <th scope="row">{{i+1}}</th>
+                                        <td>{{item?.website_name}}</td>
+                                        <td>{{item?.mother_panel?.name}}</td>
+                                        <td>{{item?.customer?.name}}</td>
+                                        <td>
+                                            <div class="d-flex gap-2 mx-auto justify-content-end">
+                                                <button class="btn btn-sm btn-primary" routerLink="/details/web/{{item._id}}" type="button"> View</button>
+                                                <!-- <button class="btn btn-sm btn-primary" type="button">Edit</button> -->
+                                                <button class="btn btn-sm btn-danger" type="button">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
                 </div>
-                <div class="col-md-2">
-                    <select class="form-select" (change)="GetWebsite($event)" aria-label="Default select example">
-                        <option value="">Select Platform</option>
-                        @for(plat of platforms; let i=$index; track plat)
-                        {
-                            <option value="{{plat}}">{{plat}}</option>
-                        }
-                      </select>
+
+                <div class="tab-pane fade" [class.show]="activeTab === 'database'"
+                    [class.active]="activeTab === 'database'">
+                    <div class="card-body table-group-divider">
+                        <div class="table-responsive">
+                            <table class="table table-bordered border-primary table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Website Name</th>
+                                        <th scope="col">MotherPanel Name</th>
+                                        <th scope="col">Customer</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    @for(item of dataBaseDetail; let i=$index; track $index)
+                                    {
+                                    <tr>
+                                        <th scope="row">{{i+1}}</th>
+                                        <td>{{item?.website_name}}</td>
+                                        <td>{{item?.mother_panel?.name}}</td>
+                                        <td>{{item?.customer?.name}}</td>
+                                        <td>
+                                            <div class="d-flex gap-2 mx-auto justify-content-end">
+                                                <button class="btn btn-sm btn-primary" routerLink="/details/data/{{item._id}}" type="button"> View</button>
+                                                <!-- <button class="btn btn-sm btn-primary" type="button">Edit</button> -->
+                                                <button class="btn btn-sm btn-danger" type="button">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
                 </div>
-                <div class="col-md-2">
-                    <select class="form-select" (change)="WebsiteD($event)" aria-label="Default select example">
-                        <option value="">Select Website</option>
-                        @for(web of websites; let i=$index; track web[i])
-                        {
-                            <option value="{{web}}">{{web}}</option>
-                        }
-                      </select>
-                </div>
-                <div class="col-md-4">
-                    <button type="button" [disabled]="!isAllSelected()" (click)="ViewData()" class="btn btn-primary me-2 btn-md">View</button>
-                    <button type="button" *ngIf="canEditWeb" [disabled]="!isAllSelected()" (click)="EditPage()" class="btn btn-info btn-md">Edit Detail</button>
+
+                <div class="tab-pane fade" [class.show]="activeTab === 'other'" [class.active]="activeTab === 'other'">
+                    <div class="card-body table-group-divider">
+                        <div class="table-responsive">
+                            <table class="table table-bordered border-primary table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Website Name</th>
+                                        <th scope="col">Website Type</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    @for(item of otherDetail; let i=$index; track $index)
+                                    {
+                                    <tr>
+                                        <th scope="row">{{i+1}}</th>
+                                        <td>{{item?.website_name}}</td>
+                                        <td>{{item?.platform}}</td>
+                                        <td>
+                                            <div class="d-flex gap-2 mx-auto justify-content-end">
+                                                <button class="btn btn-sm btn-primary" routerLink="/details/other/{{item._id}}" type="button"> View</button>
+                                                <!-- <button class="btn btn-sm btn-primary" type="button">Edit</button> -->
+                                                <button class="btn btn-sm btn-danger" type="button">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
+
 
             <div class="row mt-5" *ngIf="DbDetail">
                 <div class="col-md-4">
@@ -79,64 +227,79 @@
                         <table class="table table-striped" style="border:1px solid #0d6efd">
                             @for(db_detail of databaseDetail; track db_detail)
                             {
-                                <tr class="table-primary" style="border:1px solid #0d6efd">
-                                    <td class="fw-bold text-capitalize" style="width: 50%;padding-left: 10px;background-color: #0c3c26;color: #fff;">{{db_detail[0]}}</td>
-                                    <td class="fw-bold  text-capitalize" style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{db_detail[1]}}</td>
-                                </tr>
+                            <tr class="table-primary" style="border:1px solid #0d6efd">
+                                <td class="fw-bold text-capitalize"
+                                    style="width: 50%;padding-left: 10px;background-color: #0c3c26;color: #fff;">
+                                    {{db_detail[0]}}</td>
+                                <td class="fw-bold  text-capitalize"
+                                    style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{db_detail[1]}}</td>
+                            </tr>
                             }
-                            
+
                         </table>
                     </div>
                 </div>
-                
+
             </div>
             <div class="row mt-5" *ngIf="WebDetail">
                 <div class="col-md-4">
                     <div class="table-responsive">
-                        <h4 style="background: #184e5d;color: #fff;margin: 0px;padding-left: 10px;line-height: 41px;">{{innerTitle}}</h4>
+                        <h4 style="background: #184e5d;color: #fff;margin: 0px;padding-left: 10px;line-height: 41px;">
+                            {{innerTitle}}</h4>
                         <table class="table table-striped" style="border:1px solid #0d6efd">
                             @for(db_detail of databaseDetail; track db_detail)
                             {
-                                <tr class="table-primary" style="border:1px solid #0d6efd">
-                                    <td class="fw-bold text-left text-capitalize" style="width: 50%;padding-left: 10px;background-color: #0c3c26;color: #fff;">{{db_detail[0]}}</td>
-                                    <td class="fw-bold text-left text-capitalize" style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{db_detail[1]}}</td>
-                                </tr>
+                            <tr class="table-primary" style="border:1px solid #0d6efd">
+                                <td class="fw-bold text-left text-capitalize"
+                                    style="width: 50%;padding-left: 10px;background-color: #0c3c26;color: #fff;">
+                                    {{db_detail[0]}}</td>
+                                <td class="fw-bold text-left text-capitalize"
+                                    style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{db_detail[1]}}</td>
+                            </tr>
                             }
-                            
+
                         </table>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="table-responsive">
-                        <h4 style="background: #184e5d;color: #fff;margin: 0px;padding-left: 10px;line-height: 41px;">Server Detail</h4>
+                        <h4 style="background: #184e5d;color: #fff;margin: 0px;padding-left: 10px;line-height: 41px;">
+                            Server Detail</h4>
                         <table class="table table-striped" style="border:1px solid #0d6efd">
                             @for(server_detail of serverDetail; track server_detail)
                             {
-                                <tr class="table-primary" style="border:1px solid #0d6efd">
-                                    <td class="fw-bold text-left text-capitalize" style="width: 50%;padding-left: 10px;background-color: #a739a5;color: #fff;">{{server_detail[0]}}</td>
-                                    <td class="fw-bold text-left text-capitalize" style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{server_detail[1]}}</td>
-                                </tr>
+                            <tr class="table-primary" style="border:1px solid #0d6efd">
+                                <td class="fw-bold text-left text-capitalize"
+                                    style="width: 50%;padding-left: 10px;background-color: #a739a5;color: #fff;">
+                                    {{server_detail[0]}}</td>
+                                <td class="fw-bold text-left text-capitalize"
+                                    style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{server_detail[1]}}</td>
+                            </tr>
                             }
-                            
+
                         </table>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="table-responsive">
-                        <h4 style="background: #184e5d;color: #fff;margin: 0px;padding-left: 10px;line-height: 41px;">SSL Detail</h4>
-                        <table class="table table-bordered border-primary" >
+                        <h4 style="background: #184e5d;color: #fff;margin: 0px;padding-left: 10px;line-height: 41px;">
+                            SSL Detail</h4>
+                        <table class="table table-bordered border-primary">
                             @for(ssl_detail of sslDetail; track ssl_detail)
                             {
-                                <tr class="table-primary" style="border:1px solid #0d6efd">
-                                    <td class="fw-bold text-left text-capitalize" style="width: 40%;padding-left: 10px;background-color: #1d39b9a8;color: #fff;">{{ssl_detail[0]}}</td>
-                                    <td class="fw-bold text-left text-capitalize" style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{ssl_detail[1]}}</td>
-                                </tr>
+                            <tr class="table-primary" style="border:1px solid #0d6efd">
+                                <td class="fw-bold text-left text-capitalize"
+                                    style="width: 40%;padding-left: 10px;background-color: #1d39b9a8;color: #fff;">
+                                    {{ssl_detail[0]}}</td>
+                                <td class="fw-bold text-left text-capitalize"
+                                    style="border-left: 1px solid #0d6efd;padding-left: 10px;">{{ssl_detail[1]}}</td>
+                            </tr>
                             }
-                            
+
                         </table>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
